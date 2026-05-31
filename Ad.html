@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Объявление — KARO Market</title>
+  <meta name="description" content="Объявление на KARO Market — бесплатные объявления Караганды.">
+
+  <meta property="og:title" content="KARO Market — объявление">
+  <meta property="og:description" content="Смотрите объявление на KARO Market — бесплатные объявления Караганды.">
+  <meta property="og:image" content="https://movixstudio-kz.github.io/karo-market/karo-market-preview.png">
+  <meta property="og:url" content="https://movixstudio-kz.github.io/karo-market/ad.html">
+  <meta property="og:type" content="article">
+
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:Arial,sans-serif;background:#f4f5f7;color:#111827}
+    header{background:linear-gradient(135deg,#111827,#2563eb);color:white;padding:26px 20px}
+    header .wrap{max-width:1100px;margin:auto;display:flex;justify-content:space-between;align-items:center;gap:15px}
+    header a{color:white;text-decoration:none;font-weight:bold}
+    .container{max-width:1100px;margin:auto;padding:24px 15px}
+    .ad-page{display:grid;grid-template-columns:1.3fr .7fr;gap:20px}
+    .card{background:white;border-radius:18px;box-shadow:0 4px 15px rgba(0,0,0,.08);padding:18px}
+    .main-photo{height:460px;background:#d1d5db;border-radius:16px;overflow:hidden;display:flex;align-items:center;justify-content:center}
+    .main-photo img{width:100%;height:100%;object-fit:contain;background:#111}
+    .thumbs{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+    .thumbs img{width:80px;height:70px;object-fit:cover;border-radius:10px;cursor:pointer;border:2px solid transparent}
+    .thumbs img.active{border-color:#2563eb}
+    h1{font-size:30px;margin-bottom:12px}
+    .price{font-size:30px;color:#16a34a;font-weight:bold;margin-bottom:14px}
+    .meta{color:#666;margin-bottom:14px;line-height:1.6}
+    .desc{line-height:1.7;white-space:pre-line;margin-top:16px}
+    .btn{display:block;text-align:center;padding:15px 18px;border-radius:12px;text-decoration:none;font-weight:bold;color:white;background:#16a34a;margin-top:14px}
+    .btn.dark{background:#111827}
+    .not-found{text-align:center;padding:60px;background:white;border-radius:18px}
+    footer{text-align:center;padding:25px;color:#666;font-size:14px}
+    @media(max-width:800px){
+      .ad-page{grid-template-columns:1fr}
+      .main-photo{height:320px}
+      header .wrap{flex-direction:column;align-items:flex-start}
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <a href="index.html">← KARO Market</a>
+    <span>Бесплатные объявления Караганды</span>
+  </div>
+</header>
+
+<div class="container">
+  <div id="content">Загружаем объявление...</div>
+</div>
+
+<footer>
+  KARO Market © 2026
+</footer>
+
+<script>
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbw9WM_RGBvHZPkbqkp4cFF_PwHkAsQy8dEkOOj5Vbyh1l2ePpBlhaV8QDxjX4HZKp8x/exec";
+
+let currentAd = null;
+let currentPhoto = 0;
+
+function getId() {
+  return new URLSearchParams(window.location.search).get("id");
+}
+
+function normalizePhone(phone) {
+  return String(phone || "").replace(/\D/g, "").replace(/^8/, "7");
+}
+
+function formatDate(value) {
+  if (!value) return "";
+  const d = new Date(value);
+  if (isNaN(d)) return "";
+  return d.toLocaleDateString("ru-RU") + " " + d.toLocaleTimeString("ru-RU", {hour:"2-digit", minute:"2-digit"});
+}
+
+function setPhoto(index) {
+  currentPhoto = index;
+  const img = document.getElementById("mainPhoto");
+  img.src = currentAd.photos[index];
+
+  document.querySelectorAll(".thumbs img").forEach((el,i) => {
+    el.classList.toggle("active", i === index);
+  });
+}
+
+function renderAd(ad) {
+  const content = document.getElementById("content");
+
+  if (!ad || !ad.id) {
+    content.innerHTML = `
+      <div class="not-found">
+        <h2>Объявление не найдено</h2>
+        <p>Возможно, оно ещё не одобрено модератором или было удалено.</p>
+        <br>
+        <a href="index.html">Вернуться на главную</a>
+      </div>
+    `;
+    return;
+  }
+
+  currentAd = ad;
+
+  const photos = ad.photos || [];
+  const phone = normalizePhone(ad.phone);
+  const whatsappText = encodeURIComponent("Здравствуйте! Интересует объявление #" + ad.id + ": " + (ad.title || ""));
+  const wa = phone ? "https://wa.me/" + phone + "?text=" + whatsappText : "#";
+
+  document.title = (ad.title || "Объявление") + " — KARO Market";
+
+  content.innerHTML = `
+    <div class="ad-page">
+      <div class="card">
+        <div class="main-photo">
+          ${photos.length ? `<img id="mainPhoto" src="${photos[0]}" alt="Фото объявления">` : "Фото нет"}
+        </div>
+
+        ${photos.length > 1 ? `
+          <div class="thumbs">
+            ${photos.map((p,i)=>`<img src="${p}" class="${i===0?'active':''}" onclick="setPhoto(${i})">`).join("")}
+          </div>
+        ` : ""}
+      </div>
+
+      <div class="card">
+        <h1>${ad.title || "Без названия"}</h1>
+        <div class="price">${ad.price || "Цена не указана"}</div>
+
+        <div class="meta">
+          № объявления: <b>#${ad.id}</b><br>
+          Категория: ${ad.category || "Разное"}<br>
+          Город: Караганда<br>
+          Дата: ${formatDate(ad.date)}<br>
+          Просмотры: 👁 ${ad.views || 0}
+        </div>
+
+        <a class="btn" href="${wa}" target="_blank">Написать в WhatsApp</a>
+        <a class="btn dark" href="index.html">Назад к объявлениям</a>
+
+        <div class="desc">${ad.description || ""}</div>
+      </div>
+    </div>
+  `;
+}
+
+async function incrementViews(id) {
+  try {
+    await fetch(WEB_APP_URL, {
+      method: "POST",
+      mode: "no-cors",
+      body: JSON.stringify({action:"view", id:id})
+    });
+  } catch(e) {}
+}
+
+async function loadAd() {
+  const id = getId();
+
+  if (!id) {
+    renderAd(null);
+    return;
+  }
+
+  try {
+    const res = await fetch(WEB_APP_URL + "?id=" + encodeURIComponent(id) + "&t=" + Date.now(), {method:"GET", redirect:"follow"});
+    const text = await res.text();
+    const ad = JSON.parse(text);
+
+    renderAd(ad);
+    incrementViews(id);
+
+  } catch(e) {
+    console.log(e);
+    document.getElementById("content").innerHTML = "<p>Не удалось загрузить объявление.</p>";
+  }
+}
+
+loadAd();
+</script>
+
+</body>
+</html>
