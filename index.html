@@ -122,7 +122,7 @@
   <div id="cabinetBlock" class="hidden">
     <h2 class="section-title">Личный кабинет</h2>
     <div class="cabinet">
-      <input id="cabinetPhone" placeholder="Введите ваш телефон, например 77009904003">
+      <input id="cabinetPhone" placeholder="Введите ваш телефон, например +77001234567">
       <button class="btn" onclick="loadMyAds()">Показать мои объявления</button>
       <div id="myAds"></div>
     </div>
@@ -166,6 +166,11 @@ function showCabinet() {
 }
 function normalizePhone(phone){return String(phone||"").replace(/\D/g,"").replace(/^8/,"7")}
 function parsePrice(price){return Number(String(price||"").replace(/\D/g,""))||0}
+  function formatPrice(price){
+  const num = Number(String(price || "").replace(/\D/g, ""));
+  if (!num) return price || "Цена не указана";
+  return num.toLocaleString("ru-RU") + " ₸";
+}
 function isNew(date){const d=new Date(date);return !isNaN(d)&&((new Date()-d)/(1000*60*60*24)<=3)}
 function formatDate(value){const d=new Date(value);return isNaN(d)?"":d.toLocaleDateString("ru-RU")}
 function getFavs(){return JSON.parse(localStorage.getItem("karoFavs")||"[]")}
@@ -237,7 +242,7 @@ function renderAds(){
         <div class="ad-img">${firstPhoto?`<img src="${firstPhoto}">`:"Фото скоро добавим"}</div>
         <div class="ad-content">
           <h3>${ad.title||"Без названия"}</h3>
-          <div class="price">${ad.price||"Цена не указана"}</div>
+         <div class="price">${formatPrice(ad.price)}</div>
           <div class="meta">#${ad.id} • Караганда • ${ad.category||"Разное"}</div>
           <div class="desc">${String(ad.description||"").substring(0,90)}...</div>
           <div class="ad-footer">
