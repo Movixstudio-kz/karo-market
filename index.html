@@ -274,7 +274,65 @@ async function loadAds(){
     renderAds();
   }catch(e){adsList.innerHTML="<p>Не удалось загрузить объявления.</p>"}
 }
+function escapeText(text) {
+  return String(text || "")
+    .replace(/\\/g, "\\\\")
+    .replace(/'/g, "\\'")
+    .replace(/\n/g, "\\n")
+    .replace(/\r/g, "");
+}
 
+function openEditForm(id, title, price, description) {
+  const newTitle = prompt("Новый заголовок:", title);
+  if (newTitle === null) return;
+
+  const newPrice = prompt("Новая цена:", price);
+  if (newPrice === null) return;
+
+  const newDescription = prompt("Новое описание:", description);
+  if (newDescription === null) return;
+
+  editMyAd(id, newTitle, newPrice, newDescription);
+}
+
+async function editMyAd(id, title, price, description) {
+  const phone = normalizePhone(document.getElementById("cabinetPhone").value);
+
+  await fetch(WEB_APP_URL, {
+    method: "POST",
+    mode: "no-cors",
+    body: JSON.stringify({
+      action: "editAd",
+      id,
+      phone,
+      title,
+      price,
+      description
+    })
+  });
+
+  alert("Объявление отправлено на повторную модерацию.");
+  loadMyAds();
+}
+
+async function deleteMyAd(id) {
+  if (!confirm("Удалить объявление #" + id + "?")) return;
+
+  const phone = normalizePhone(document.getElementById("cabinetPhone").value);
+
+  await fetch(WEB_APP_URL, {
+    method: "POST",
+    mode: "no-cors",
+    body: JSON.stringify({
+      action: "deleteAd",
+      id,
+      phone
+    })
+  });
+
+  alert("Объявление удалено.");
+  loadMyAds();
+}
 async function loadMyAds(){
   const phone=normalizePhone(document.getElementById("cabinetPhone").value);
   const box=document.getElementById("myAds");
@@ -285,19 +343,27 @@ async function loadMyAds(){
 
   if(!ads.length){box.innerHTML="<p>По этому номеру объявлений не найдено.</p>";return;}
 
-  box.innerHTML=ads.map(ad=>{
-    const st=ad.status==="Одобрено"?"ok":ad.status==="Отклонено"?"bad":"wait";
-    return `
-      <div style="padding:12px;border-bottom:1px solid #eee">
-        <b>#${ad.id} — ${ad.title||"Без названия"}</b><br>
-        <span class="status ${st}">${ad.status}</span><br>
-        Просмотры: ${ad.views||0}<br>
-        Дата: ${formatDate(ad.date)}<br>
-        ${ad.status==="Одобрено"?`<a href="ad.html?id=${ad.id}">Открыть объявление</a>`:""}
-        ${ad.status==="Отклонено"?`<p>Причина: ${ad.reason||"Не указана"}</p>`:""}
-      </div>`;
-  }).join("");
-}
+ box.innerHTML = ads.map(ad => {
+  const st = ad.status === "Одобрено" ? "ok" : ad.status === "Отклонено" ? "bad" : "wait";
+
+  return `
+    <div style="padding:14px;border-bottom:1px solid #eee">
+      <b>#${ad.id} — ${ad.title || "Без названия"}</b><br>
+      <span class="status ${st}">${ad.status}</span><br>
+      Цена: ${formatPrice(ad.price)}<br>
+      Просмотры: ${ad.views || 0}<br>
+      Дата: ${formatDate(ad.date)}<br>
+
+      ${ad.status === "Одобрено" ? `<a href="ad.html?id=${ad.id}">Открыть объявление</a><br>` : ""}
+      ${ad.status === "Отклонено" ? `<p>Причина: ${ad.reason || "Не указана"}</p>` : ""}
+
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
+        <button class="btn gray" onclick="openEditForm('${ad.id}', '${escapeText(ad.title)}', '${escapeText(ad.price)}', '${escapeText(ad.description)}')">✏️ Редактировать</button>
+        <button class="btn dark" onclick="deleteMyAd('${ad.id}')">🗑 Удалить</button>
+      </div>
+    </div>
+  `;
+}).join("");
 
 function toBase64(file){
   return new Promise((resolve,reject)=>{
