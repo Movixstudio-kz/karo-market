@@ -145,10 +145,18 @@ function filterAds(category, el) {
 
 async function loadAds() {
   try {
-    const res = await fetch(WEB_APP_URL);
-    allAds = await res.json();
+    const url = WEB_APP_URL + "?t=" + new Date().getTime();
+    const res = await fetch(url, {
+      method: "GET",
+      redirect: "follow"
+    });
+
+    const text = await res.text();
+    allAds = JSON.parse(text);
+
     renderAds();
   } catch (e) {
+    console.log("Ошибка загрузки:", e);
     document.getElementById("adsList").innerHTML = "<p>Не удалось загрузить объявления.</p>";
   }
 }
