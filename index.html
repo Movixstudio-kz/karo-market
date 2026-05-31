@@ -182,9 +182,21 @@ function toggleFav(id,event){
 }
 
 function showFavorites(){
-  favoritesMode=!favoritesMode;
-  document.getElementById("listTitle").textContent=favoritesMode?"Избранные объявления":"Свежие объявления";
+  favoritesMode = !favoritesMode;
+
+  document.getElementById("listTitle").textContent =
+    favoritesMode
+      ? "❤️ Избранные объявления"
+      : "Свежие объявления";
+
   renderAds();
+
+  setTimeout(() => {
+    document.getElementById("listTitle").scrollIntoView({
+      behavior: "smooth",
+      block: "start"
+    });
+  }, 100);
 }
 
 function clearFilters(){
