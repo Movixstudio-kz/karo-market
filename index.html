@@ -250,7 +250,10 @@ function renderAds(){
   }).join("");
 }
 
-function openAd(id){window.location.href="ad.html?id="+encodeURIComponent(id)}
+function openAd(id){
+  if (!id) return;
+  window.location.href = "./ad.html?id=" + encodeURIComponent(id);
+}
 
 function filterAds(category,el){
   currentCategory=category;
