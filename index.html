@@ -30,10 +30,10 @@
     .filters{background:white;padding:16px;border-radius:18px;box-shadow:0 4px 14px rgba(0,0,0,.06);display:grid;grid-template-columns:2fr 1fr 1fr auto;gap:10px;margin-top:20px}
     input,select,textarea{width:100%;padding:13px;border:1px solid #ddd;border-radius:10px;font-size:15px}
     textarea{min-height:95px}
-    form{background:white;padding:20px;border-radius:18px;box-shadow:0 4px 14px rgba(0,0,0,.06);display:grid;gap:12px}
+    form,.cabinet{background:white;padding:20px;border-radius:18px;box-shadow:0 4px 14px rgba(0,0,0,.06);display:grid;gap:12px}
     small{color:#666}
     .ads{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px;margin-top:15px}
-    .ad-card{background:white;border-radius:18px;overflow:hidden;box-shadow:0 4px 15px rgba(0,0,0,.08);cursor:pointer;transition:.2s}
+    .ad-card{background:white;border-radius:18px;overflow:hidden;box-shadow:0 4px 15px rgba(0,0,0,.08);cursor:pointer;transition:.2s;position:relative}
     .ad-card:hover{transform:translateY(-3px)}
     .ad-img{height:190px;background:#d1d5db;display:flex;align-items:center;justify-content:center;color:#555;overflow:hidden}
     .ad-img img{width:100%;height:100%;object-fit:cover}
@@ -42,8 +42,15 @@
     .price{font-size:22px;color:#16a34a;font-weight:bold;margin-bottom:8px}
     .meta{color:#666;font-size:14px;margin-bottom:10px}
     .desc{font-size:14px;line-height:1.5;margin-bottom:12px}
-    .ad-footer{display:flex;justify-content:space-between;gap:10px;color:#666;font-size:13px;margin-top:12px}
+    .ad-footer{display:flex;justify-content:space-between;gap:10px;color:#666;font-size:13px;margin-top:12px;flex-wrap:wrap}
     .photo-count{background:#111827;color:white;padding:5px 8px;border-radius:999px;font-size:12px}
+    .new-badge{position:absolute;top:10px;left:10px;background:#16a34a;color:white;padding:6px 9px;border-radius:999px;font-size:12px;font-weight:bold}
+    .fav{position:absolute;top:10px;right:10px;background:white;color:#111827;border:0;border-radius:999px;width:38px;height:38px;font-size:22px;cursor:pointer;box-shadow:0 3px 10px rgba(0,0,0,.18)}
+    .fav.active{color:red}
+    .status{display:inline-block;padding:5px 8px;border-radius:999px;font-size:12px;font-weight:bold}
+    .status.ok{background:#dcfce7;color:#166534}
+    .status.wait{background:#fef9c3;color:#854d0e}
+    .status.bad{background:#fee2e2;color:#991b1b}
     .hidden{display:none}
     footer{text-align:center;padding:25px;color:#666;font-size:14px}
     @media(max-width:700px){
@@ -59,6 +66,8 @@
   <p>Бесплатные объявления Караганды</p>
   <div class="actions">
     <button class="btn" onclick="showForm()">+ Подать объявление</button>
+    <button class="btn dark" onclick="showCabinet()">Личный кабинет</button>
+    <button class="btn gray" onclick="showFavorites()">❤️ Избранное</button>
     <a class="btn blue" href="https://t.me/auto_importKZ" target="_blank">Telegram</a>
   </div>
 </header>
@@ -79,7 +88,7 @@
   </div>
 
   <div class="filters">
-    <input id="searchInput" placeholder="Поиск по заголовку, например Toyota, квартира, отбойник" oninput="renderAds()">
+    <input id="searchInput" placeholder="Поиск по заголовку или описанию" oninput="renderAds()">
     <input id="minPrice" type="number" placeholder="Цена от" oninput="renderAds()">
     <input id="maxPrice" type="number" placeholder="Цена до" oninput="renderAds()">
     <button class="btn gray" onclick="clearFilters()">Сброс</button>
@@ -90,219 +99,213 @@
     <form id="adForm">
       <input id="name" placeholder="Ваше имя" required>
       <input id="phone" placeholder="Телефон / WhatsApp" required>
-
       <select id="category" required>
         <option value="">Выберите категорию</option>
-        <option>Авто</option>
-        <option>Недвижимость</option>
-        <option>Работа</option>
-        <option>Услуги</option>
-        <option>Аренда</option>
-        <option>Техника</option>
-        <option>Животные</option>
-        <option>Разное</option>
+        <option>Авто</option><option>Недвижимость</option><option>Работа</option><option>Услуги</option>
+        <option>Аренда</option><option>Техника</option><option>Животные</option><option>Разное</option>
       </select>
-
       <input id="title" placeholder="Заголовок объявления" required>
       <input id="price" placeholder="Цена, например 150 000 ₸">
       <textarea id="description" placeholder="Описание объявления" required></textarea>
 
-      <input id="photo" type="file" accept="image/*" multiple>
-      <small>Можно загрузить до 10 фото. Максимум 1.5 МБ каждое.</small>
+      <input class="photoInput" type="file" accept="image/*">
+      <input class="photoInput" type="file" accept="image/*">
+      <input class="photoInput" type="file" accept="image/*">
+      <input class="photoInput" type="file" accept="image/*">
+      <input class="photoInput" type="file" accept="image/*">
+      <small>Можно загрузить до 5 фото. Максимум 1.5 МБ каждое.</small>
 
       <button class="btn" type="submit">Отправить на модерацию</button>
     </form>
   </div>
 
-  <h2 class="section-title">Свежие объявления</h2>
+  <div id="cabinetBlock" class="hidden">
+    <h2 class="section-title">Личный кабинет</h2>
+    <div class="cabinet">
+      <input id="cabinetPhone" placeholder="Введите ваш телефон, например 77009904003">
+      <button class="btn" onclick="loadMyAds()">Показать мои объявления</button>
+      <div id="myAds"></div>
+    </div>
+  </div>
+
+  <h2 class="section-title" id="listTitle">Свежие объявления</h2>
   <div id="adsList" class="ads">Загружаем объявления...</div>
 
 </div>
 
-<footer>
-  KARO Market © 2026 — бесплатные объявления Караганды
-</footer>
+<footer>KARO Market © 2026 — бесплатные объявления Караганды</footer>
 
 <script>
 const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbw9WM_RGBvHZPkbqkp4cFF_PwHkAsQy8dEkOOj5Vbyh1l2ePpBlhaV8QDxjX4HZKp8x/exec";
 
 let allAds = [];
 let currentCategory = "Все";
+let favoritesMode = false;
 
-function showForm() {
-  document.getElementById("formBlock").classList.toggle("hidden");
-  window.scrollTo({top: document.getElementById("formBlock").offsetTop - 20, behavior: "smooth"});
-}
+function showForm(){document.getElementById("formBlock").classList.toggle("hidden")}
+function showCabinet(){document.getElementById("cabinetBlock").classList.toggle("hidden")}
+function normalizePhone(phone){return String(phone||"").replace(/\D/g,"").replace(/^8/,"7")}
+function parsePrice(price){return Number(String(price||"").replace(/\D/g,""))||0}
+function isNew(date){const d=new Date(date);return !isNaN(d)&&((new Date()-d)/(1000*60*60*24)<=3)}
+function formatDate(value){const d=new Date(value);return isNaN(d)?"":d.toLocaleDateString("ru-RU")}
+function getFavs(){return JSON.parse(localStorage.getItem("karoFavs")||"[]")}
+function saveFavs(favs){localStorage.setItem("karoFavs",JSON.stringify(favs))}
+function isFav(id){return getFavs().includes(String(id))}
 
-function normalizePhone(phone) {
-  return String(phone || "").replace(/\D/g, "").replace(/^8/, "7");
-}
-
-function parsePrice(price) {
-  return Number(String(price || "").replace(/\D/g, "")) || 0;
-}
-
-function formatDate(value) {
-  if (!value) return "";
-  const d = new Date(value);
-  if (isNaN(d)) return "";
-  return d.toLocaleDateString("ru-RU");
-}
-
-function clearFilters() {
-  document.getElementById("searchInput").value = "";
-  document.getElementById("minPrice").value = "";
-  document.getElementById("maxPrice").value = "";
+function toggleFav(id,event){
+  event.stopPropagation();
+  let favs=getFavs();
+  const sid=String(id);
+  favs=favs.includes(sid)?favs.filter(x=>x!==sid):[...favs,sid];
+  saveFavs(favs);
   renderAds();
 }
 
-function renderAds() {
-  const adsList = document.getElementById("adsList");
-  const search = document.getElementById("searchInput").value.toLowerCase().trim();
-  const min = Number(document.getElementById("minPrice").value) || 0;
-  const max = Number(document.getElementById("maxPrice").value) || 0;
+function showFavorites(){
+  favoritesMode=!favoritesMode;
+  document.getElementById("listTitle").textContent=favoritesMode?"Избранные объявления":"Свежие объявления";
+  renderAds();
+}
 
-  let filtered = allAds.filter(ad => {
-    const title = String(ad.title || "").toLowerCase();
-    const price = parsePrice(ad.price);
-    const byCategory = currentCategory === "Все" || ad.category === currentCategory;
-    const bySearch = !search || title.includes(search);
-    const byMin = !min || price >= min;
-    const byMax = !max || price <= max;
+function clearFilters(){
+  searchInput.value="";minPrice.value="";maxPrice.value="";
+  favoritesMode=false;
+  document.getElementById("listTitle").textContent="Свежие объявления";
+  renderAds();
+}
 
-    return byCategory && bySearch && byMin && byMax;
+function renderAds(){
+  const adsList=document.getElementById("adsList");
+  const search=searchInput.value.toLowerCase().trim();
+  const min=Number(minPrice.value)||0;
+  const max=Number(maxPrice.value)||0;
+  const favs=getFavs();
+
+  let filtered=allAds.filter(ad=>{
+    const text=(String(ad.title||"")+" "+String(ad.description||"")).toLowerCase();
+    const price=parsePrice(ad.price);
+    return (currentCategory==="Все"||ad.category===currentCategory)
+      && (!search||text.includes(search))
+      && (!min||price>=min)
+      && (!max||price<=max)
+      && (!favoritesMode||favs.includes(String(ad.id)));
   });
 
-  filtered.sort((a,b) => Number(b.id) - Number(a.id));
+  filtered.sort((a,b)=>Number(b.id)-Number(a.id));
 
-  if (!filtered.length) {
-    adsList.innerHTML = "<p>Пока нет подходящих объявлений.</p>";
-    return;
-  }
+  if(!filtered.length){adsList.innerHTML="<p>Пока нет подходящих объявлений.</p>";return;}
 
-  adsList.innerHTML = filtered.map(ad => {
-    const firstPhoto = ad.photos && ad.photos.length ? ad.photos[0] : "";
-    const count = ad.photos ? ad.photos.length : 0;
-
+  adsList.innerHTML=filtered.map(ad=>{
+    const firstPhoto=ad.photos&&ad.photos.length?ad.photos[0]:"";
+    const count=ad.photos?ad.photos.length:0;
     return `
       <div class="ad-card" onclick="openAd('${ad.id}')">
-        <div class="ad-img">
-          ${firstPhoto ? `<img src="${firstPhoto}" alt="Фото объявления">` : "Фото скоро добавим"}
-        </div>
+        ${isNew(ad.date)?`<div class="new-badge">NEW</div>`:""}
+        <button class="fav ${isFav(ad.id)?"active":""}" onclick="toggleFav('${ad.id}',event)">♥</button>
+        <div class="ad-img">${firstPhoto?`<img src="${firstPhoto}">`:"Фото скоро добавим"}</div>
         <div class="ad-content">
-          <h3>${ad.title || "Без названия"}</h3>
-          <div class="price">${ad.price || "Цена не указана"}</div>
-          <div class="meta">#${ad.id} • Караганда • ${ad.category || "Разное"}</div>
-          <div class="desc">${String(ad.description || "").substring(0, 90)}...</div>
+          <h3>${ad.title||"Без названия"}</h3>
+          <div class="price">${ad.price||"Цена не указана"}</div>
+          <div class="meta">#${ad.id} • Караганда • ${ad.category||"Разное"}</div>
+          <div class="desc">${String(ad.description||"").substring(0,90)}...</div>
           <div class="ad-footer">
             <span>${formatDate(ad.date)}</span>
-            <span>👁 ${ad.views || 0}</span>
-            ${count ? `<span class="photo-count">📷 ${count}</span>` : ""}
+            <span>👁 ${ad.views||0}</span>
+            ${count?`<span class="photo-count">📷 ${count}</span>`:""}
           </div>
         </div>
-      </div>
-    `;
+      </div>`;
   }).join("");
 }
 
-function openAd(id) {
-  window.location.href = "ad.html?id=" + encodeURIComponent(id);
-}
+function openAd(id){window.location.href="ad.html?id="+encodeURIComponent(id)}
 
-function filterAds(category, el) {
-  currentCategory = category;
-  document.querySelectorAll(".category").forEach(c => c.classList.remove("active"));
+function filterAds(category,el){
+  currentCategory=category;
+  document.querySelectorAll(".category").forEach(c=>c.classList.remove("active"));
   el.classList.add("active");
   renderAds();
 }
 
-async function loadAds() {
-  try {
-    const res = await fetch(WEB_APP_URL + "?t=" + Date.now(), {method:"GET", redirect:"follow"});
-    const text = await res.text();
-    allAds = JSON.parse(text);
+async function loadAds(){
+  try{
+    const res=await fetch(WEB_APP_URL+"?t="+Date.now(),{method:"GET",redirect:"follow"});
+    allAds=JSON.parse(await res.text());
     renderAds();
-  } catch (e) {
-    console.log(e);
-    document.getElementById("adsList").innerHTML = "<p>Не удалось загрузить объявления.</p>";
-  }
+  }catch(e){adsList.innerHTML="<p>Не удалось загрузить объявления.</p>"}
 }
 
-function toBase64(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = reject;
+async function loadMyAds(){
+  const phone=normalizePhone(document.getElementById("cabinetPhone").value);
+  const box=document.getElementById("myAds");
+  if(!phone){box.innerHTML="<p>Введите телефон.</p>";return;}
+  box.innerHTML="Загружаем...";
+  const res=await fetch(WEB_APP_URL+"?phone="+phone+"&t="+Date.now(),{method:"GET",redirect:"follow"});
+  const ads=JSON.parse(await res.text());
+
+  if(!ads.length){box.innerHTML="<p>По этому номеру объявлений не найдено.</p>";return;}
+
+  box.innerHTML=ads.map(ad=>{
+    const st=ad.status==="Одобрено"?"ok":ad.status==="Отклонено"?"bad":"wait";
+    return `
+      <div style="padding:12px;border-bottom:1px solid #eee">
+        <b>#${ad.id} — ${ad.title||"Без названия"}</b><br>
+        <span class="status ${st}">${ad.status}</span><br>
+        Просмотры: ${ad.views||0}<br>
+        Дата: ${formatDate(ad.date)}<br>
+        ${ad.status==="Одобрено"?`<a href="ad.html?id=${ad.id}">Открыть объявление</a>`:""}
+        ${ad.status==="Отклонено"?`<p>Причина: ${ad.reason||"Не указана"}</p>`:""}
+      </div>`;
+  }).join("");
+}
+
+function toBase64(file){
+  return new Promise((resolve,reject)=>{
+    const reader=new FileReader();
+    reader.onload=()=>resolve(reader.result);
+    reader.onerror=reject;
     reader.readAsDataURL(file);
   });
 }
 
-document.getElementById("adForm").addEventListener("submit", async function(e) {
+document.getElementById("adForm").addEventListener("submit",async function(e){
   e.preventDefault();
+  const submitBtn=this.querySelector("button[type='submit']");
+  submitBtn.disabled=true;submitBtn.textContent="Отправляем...";
 
-  const submitBtn = this.querySelector("button[type='submit']");
-  submitBtn.disabled = true;
-  submitBtn.textContent = "Отправляем...";
+  const photos=[];
+  const photoInputs=document.querySelectorAll(".photoInput");
 
-  const photoInput = document.getElementById("photo");
-  const photos = [];
-
-  if (photoInput.files.length > 10) {
-    alert("Можно загрузить максимум 10 фото.");
-    submitBtn.disabled = false;
-    submitBtn.textContent = "Отправить на модерацию";
-    return;
-  }
-
-  for (let i = 0; i < photoInput.files.length; i++) {
-    const file = photoInput.files[i];
-
-    if (file.size > 1500000) {
-      alert("Фото " + file.name + " слишком большое. Нужно до 1.5 МБ.");
-      submitBtn.disabled = false;
-      submitBtn.textContent = "Отправить на модерацию";
-      return;
+  for(let input of photoInputs){
+    if(input.files.length>0){
+      const file=input.files[0];
+      if(file.size>1500000){
+        alert("Фото "+file.name+" слишком большое. Нужно до 1.5 МБ.");
+        submitBtn.disabled=false;submitBtn.textContent="Отправить на модерацию";return;
+      }
+      const base64=await toBase64(file);
+      photos.push({name:file.name,type:file.type,data:base64.split(",")[1]});
     }
-
-    const base64 = await toBase64(file);
-    photos.push({
-      name: file.name,
-      type: file.type,
-      data: base64.split(",")[1]
-    });
   }
 
-  const data = {
-    name: document.getElementById("name").value,
-    phone: document.getElementById("phone").value,
-    category: document.getElementById("category").value,
-    title: document.getElementById("title").value,
-    price: document.getElementById("price").value,
-    description: document.getElementById("description").value,
-    photos: photos
+  const data={
+    name:name.value,
+    phone:phone.value,
+    category:category.value,
+    title:title.value,
+    price:price.value,
+    description:description.value,
+    photos:photos
   };
 
-  try {
-    await fetch(WEB_APP_URL, {
-      method: "POST",
-      mode: "no-cors",
-      body: JSON.stringify(data)
-    });
-
-    alert("Объявление отправлено на модерацию!");
-    this.reset();
-    document.getElementById("formBlock").classList.add("hidden");
-
-  } catch (e) {
-    alert("Ошибка отправки. Попробуйте позже.");
-  }
-
-  submitBtn.disabled = false;
-  submitBtn.textContent = "Отправить на модерацию";
+  await fetch(WEB_APP_URL,{method:"POST",mode:"no-cors",body:JSON.stringify(data)});
+  alert("Объявление отправлено на модерацию!");
+  this.reset();
+  document.getElementById("formBlock").classList.add("hidden");
+  submitBtn.disabled=false;submitBtn.textContent="Отправить на модерацию";
 });
 
 loadAds();
 </script>
-
 </body>
 </html>
