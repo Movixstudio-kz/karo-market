@@ -458,9 +458,17 @@ async function editMyAd(id, title, price, description) {
   });
 
   alert("Объявление отправлено на повторную модерацию.");
+  
   loadMyAds();
 }
-
+function escapeText(text) {
+  return String(text || "")
+    .replace(/\\/g, "\\\\")
+    .replace(/'/g, "\\'")
+    .replace(/"/g, "&quot;")
+    .replace(/\n/g, "\\n")
+    .replace(/\r/g, "");
+}
 async function deleteMyAd(id) {
   if (!confirm("Удалить объявление #" + id + "?")) return;
 
