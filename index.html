@@ -1,53 +1,55 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>KARO Market — бесплатные объявления Караганды</title>
-  <style>
-.photo-thumbs{
-  display:flex;
-  gap:6px;
-  flex-wrap:wrap;
-  margin-bottom:12px;
-}
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-.photo-thumbs img{
-  width:52px;
-  height:52px;
-  object-fit:cover;
-  border-radius:8px;
-  cursor:pointer;
-  border:1px solid #ddd;
-}
+  <title>KARO Market — бесплатные объявления Караганды</title>
+  <meta name="description" content="KARO Market — бесплатные объявления Караганды. Авто, недвижимость, работа, услуги, аренда, техника и многое другое.">
+
+  <meta property="og:title" content="KARO Market — бесплатные объявления Караганды">
+  <meta property="og:description" content="Подавайте и находите объявления в Караганде: авто, недвижимость, работа, услуги, техника и многое другое.">
+  <meta property="og:image" content="https://movixstudio-kz.github.io/karo-market/karo-market-preview.png">
+  <meta property="og:url" content="https://movixstudio-kz.github.io/karo-market/">
+  <meta property="og:type" content="website">
+
+  <style>
     *{box-sizing:border-box;margin:0;padding:0}
-    body{font-family:Arial,sans-serif;background:#f4f5f7;color:#222}
-    header{background:linear-gradient(135deg,#111827,#2563eb);color:white;padding:35px 20px;text-align:center}
-    header h1{font-size:34px;margin-bottom:10px}
-    header p{font-size:17px;opacity:.9}
-    .container{max-width:1100px;margin:auto;padding:25px 15px}
+    body{font-family:Arial,sans-serif;background:#f4f5f7;color:#111827}
+    header{background:linear-gradient(135deg,#111827,#2563eb);color:white;padding:38px 20px;text-align:center}
+    header h1{font-size:40px;margin-bottom:10px}
+    header p{font-size:18px;opacity:.9}
+    .container{max-width:1150px;margin:auto;padding:24px 15px}
+    .actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:22px}
     .btn{border:0;cursor:pointer;display:inline-block;padding:13px 20px;border-radius:12px;text-decoration:none;font-weight:bold;color:white;background:#16a34a}
-    .btn.blue{background:#229ed9}.btn.dark{background:#111827}
-    .actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:20px}
-    .section-title{font-size:24px;margin:30px 0 15px}
+    .btn.blue{background:#229ed9}.btn.dark{background:#111827}.btn.gray{background:#6b7280}
+    .section-title{font-size:25px;margin:28px 0 15px}
     .categories{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:12px}
-    .category{background:white;padding:16px;border-radius:16px;box-shadow:0 4px 14px rgba(0,0,0,.06);text-align:center;font-weight:bold;cursor:pointer}
+    .category{background:white;padding:18px;border-radius:16px;box-shadow:0 4px 14px rgba(0,0,0,.06);text-align:center;font-weight:bold;cursor:pointer}
     .category.active{outline:3px solid #2563eb}
-    .ads{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px;margin-top:15px}
-    .ad-card{background:white;border-radius:18px;overflow:hidden;box-shadow:0 4px 15px rgba(0,0,0,.08)}
-    .ad-img{height:170px;background:#d1d5db;display:flex;align-items:center;justify-content:center;color:#555;overflow:hidden}
-    .ad-img img{width:100%;height:100%;object-fit:cover}
-    .ad-content{padding:16px}
-    .ad-content h3{font-size:19px;margin-bottom:8px}
-    .price{font-size:20px;color:#16a34a;font-weight:bold;margin-bottom:8px}
-    .meta{color:#666;font-size:14px;margin-bottom:12px}
-    .desc{font-size:14px;line-height:1.5;margin-bottom:14px}
-    form{background:white;padding:20px;border-radius:18px;box-shadow:0 4px 14px rgba(0,0,0,.06);display:grid;gap:12px}
+    .filters{background:white;padding:16px;border-radius:18px;box-shadow:0 4px 14px rgba(0,0,0,.06);display:grid;grid-template-columns:2fr 1fr 1fr auto;gap:10px;margin-top:20px}
     input,select,textarea{width:100%;padding:13px;border:1px solid #ddd;border-radius:10px;font-size:15px}
     textarea{min-height:95px}
+    form{background:white;padding:20px;border-radius:18px;box-shadow:0 4px 14px rgba(0,0,0,.06);display:grid;gap:12px}
     small{color:#666}
-    footer{text-align:center;padding:25px;color:#666;font-size:14px}
+    .ads{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px;margin-top:15px}
+    .ad-card{background:white;border-radius:18px;overflow:hidden;box-shadow:0 4px 15px rgba(0,0,0,.08);cursor:pointer;transition:.2s}
+    .ad-card:hover{transform:translateY(-3px)}
+    .ad-img{height:190px;background:#d1d5db;display:flex;align-items:center;justify-content:center;color:#555;overflow:hidden}
+    .ad-img img{width:100%;height:100%;object-fit:cover}
+    .ad-content{padding:16px}
+    .ad-content h3{font-size:20px;margin-bottom:8px}
+    .price{font-size:22px;color:#16a34a;font-weight:bold;margin-bottom:8px}
+    .meta{color:#666;font-size:14px;margin-bottom:10px}
+    .desc{font-size:14px;line-height:1.5;margin-bottom:12px}
+    .ad-footer{display:flex;justify-content:space-between;gap:10px;color:#666;font-size:13px;margin-top:12px}
+    .photo-count{background:#111827;color:white;padding:5px 8px;border-radius:999px;font-size:12px}
     .hidden{display:none}
+    footer{text-align:center;padding:25px;color:#666;font-size:14px}
+    @media(max-width:700px){
+      header h1{font-size:32px}
+      .filters{grid-template-columns:1fr}
+    }
   </style>
 </head>
 <body>
@@ -76,9 +78,15 @@
     <div class="category" onclick="filterAds('Разное', this)">📦 Разное</div>
   </div>
 
+  <div class="filters">
+    <input id="searchInput" placeholder="Поиск по заголовку, например Toyota, квартира, отбойник" oninput="renderAds()">
+    <input id="minPrice" type="number" placeholder="Цена от" oninput="renderAds()">
+    <input id="maxPrice" type="number" placeholder="Цена до" oninput="renderAds()">
+    <button class="btn gray" onclick="clearFilters()">Сброс</button>
+  </div>
+
   <div id="formBlock" class="hidden">
     <h2 class="section-title">Подать объявление</h2>
-
     <form id="adForm">
       <input id="name" placeholder="Ваше имя" required>
       <input id="phone" placeholder="Телефон / WhatsApp" required>
@@ -96,7 +104,7 @@
       </select>
 
       <input id="title" placeholder="Заголовок объявления" required>
-      <input id="price" placeholder="Цена, например 15 000 ₸">
+      <input id="price" placeholder="Цена, например 150 000 ₸">
       <textarea id="description" placeholder="Описание объявления" required></textarea>
 
       <input id="photo" type="file" accept="image/*" multiple>
@@ -123,57 +131,82 @@ let currentCategory = "Все";
 
 function showForm() {
   document.getElementById("formBlock").classList.toggle("hidden");
-  window.scrollTo({
-    top: document.getElementById("formBlock").offsetTop - 20,
-    behavior: "smooth"
-  });
+  window.scrollTo({top: document.getElementById("formBlock").offsetTop - 20, behavior: "smooth"});
 }
 
 function normalizePhone(phone) {
   return String(phone || "").replace(/\D/g, "").replace(/^8/, "7");
 }
 
+function parsePrice(price) {
+  return Number(String(price || "").replace(/\D/g, "")) || 0;
+}
+
+function formatDate(value) {
+  if (!value) return "";
+  const d = new Date(value);
+  if (isNaN(d)) return "";
+  return d.toLocaleDateString("ru-RU");
+}
+
+function clearFilters() {
+  document.getElementById("searchInput").value = "";
+  document.getElementById("minPrice").value = "";
+  document.getElementById("maxPrice").value = "";
+  renderAds();
+}
+
 function renderAds() {
   const adsList = document.getElementById("adsList");
+  const search = document.getElementById("searchInput").value.toLowerCase().trim();
+  const min = Number(document.getElementById("minPrice").value) || 0;
+  const max = Number(document.getElementById("maxPrice").value) || 0;
 
-  let filtered = currentCategory === "Все"
-    ? allAds
-    : allAds.filter(ad => ad.category === currentCategory);
+  let filtered = allAds.filter(ad => {
+    const title = String(ad.title || "").toLowerCase();
+    const price = parsePrice(ad.price);
+    const byCategory = currentCategory === "Все" || ad.category === currentCategory;
+    const bySearch = !search || title.includes(search);
+    const byMin = !min || price >= min;
+    const byMax = !max || price <= max;
+
+    return byCategory && bySearch && byMin && byMax;
+  });
+
+  filtered.sort((a,b) => Number(b.id) - Number(a.id));
 
   if (!filtered.length) {
-    adsList.innerHTML = "<p>Пока нет одобренных объявлений в этой категории.</p>";
+    adsList.innerHTML = "<p>Пока нет подходящих объявлений.</p>";
     return;
   }
 
   adsList.innerHTML = filtered.map(ad => {
-    const phone = normalizePhone(ad.phone || "");
-    const firstPhoto = ad.photos && ad.photos.length > 0 ? ad.photos[0] : "";
+    const firstPhoto = ad.photos && ad.photos.length ? ad.photos[0] : "";
+    const count = ad.photos ? ad.photos.length : 0;
 
     return `
-      <div class="ad-card">
+      <div class="ad-card" onclick="openAd('${ad.id}')">
         <div class="ad-img">
           ${firstPhoto ? `<img src="${firstPhoto}" alt="Фото объявления">` : "Фото скоро добавим"}
         </div>
-
         <div class="ad-content">
           <h3>${ad.title || "Без названия"}</h3>
           <div class="price">${ad.price || "Цена не указана"}</div>
-          <div class="meta">Караганда • ${ad.category || "Разное"}</div>
-          <div class="desc">${ad.description || ""}</div>
-          <div class="photo-thumbs">
-  ${ad.photos && ad.photos.length > 1
-    ? ad.photos.map(photo => `<img src="${photo}" onclick="window.open('${photo}', '_blank')">`).join("")
-    : ""}
-</div>
-
-          <a class="btn dark" target="_blank"
-             href="https://wa.me/${phone}?text=Здравствуйте! Интересует объявление: ${encodeURIComponent(ad.title || "")}">
-            Связаться
-          </a>
+          <div class="meta">#${ad.id} • Караганда • ${ad.category || "Разное"}</div>
+          <div class="desc">${String(ad.description || "").substring(0, 90)}...</div>
+          <div class="ad-footer">
+            <span>${formatDate(ad.date)}</span>
+            <span>👁 ${ad.views || 0}</span>
+            ${count ? `<span class="photo-count">📷 ${count}</span>` : ""}
+          </div>
         </div>
       </div>
     `;
   }).join("");
+}
+
+function openAd(id) {
+  window.location.href = "ad.html?id=" + encodeURIComponent(id);
 }
 
 function filterAds(category, el) {
@@ -185,20 +218,12 @@ function filterAds(category, el) {
 
 async function loadAds() {
   try {
-    const url = WEB_APP_URL + "?t=" + new Date().getTime();
-
-    const res = await fetch(url, {
-      method: "GET",
-      redirect: "follow"
-    });
-
+    const res = await fetch(WEB_APP_URL + "?t=" + Date.now(), {method:"GET", redirect:"follow"});
     const text = await res.text();
     allAds = JSON.parse(text);
-
     renderAds();
-
   } catch (e) {
-    console.log("Ошибка загрузки:", e);
+    console.log(e);
     document.getElementById("adsList").innerHTML = "<p>Не удалось загрузить объявления.</p>";
   }
 }
@@ -240,7 +265,6 @@ document.getElementById("adForm").addEventListener("submit", async function(e) {
     }
 
     const base64 = await toBase64(file);
-
     photos.push({
       name: file.name,
       type: file.type,
