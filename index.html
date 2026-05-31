@@ -408,19 +408,24 @@ function filterAds(category,el){
   renderAds();
 }
 
-async function loadAds(){
-  try{
-    const res=await fetch(WEB_APP_URL+"?t="+Date.now(),{method:"GET",redirect:"follow"});
-    allAds=JSON.parse(await res.text());
+function loadAds() {
+  const callbackName = "jsonpCallback_" + Date.now();
+
+  window[callbackName] = function(data) {
+    allAds = data;
     renderAds();
-  }catch(e){adsList.innerHTML="<p>Не удалось загрузить объявления.</p>"}
-}
-function escapeText(text) {
-  return String(text || "")
-    .replace(/\\/g, "\\\\")
-    .replace(/'/g, "\\'")
-    .replace(/\n/g, "\\n")
-    .replace(/\r/g, "");
+    delete window[callbackName];
+    script.remove();
+  };
+
+  const script = document.createElement("script");
+  script.src = WEB_APP_URL + "?callback=" + callbackName + "&t=" + Date.now();
+
+  script.onerror = function() {
+    document.getElementById("adsList").innerHTML = "<p>Не удалось загрузить объявления.</p>";
+  };
+
+  document.body.appendChild(script);
 }
 
 function openEditForm(id, title, price, description) {
