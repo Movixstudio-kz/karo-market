@@ -142,8 +142,28 @@ let allAds = [];
 let currentCategory = "Все";
 let favoritesMode = false;
 
-function showForm(){document.getElementById("formBlock").classList.toggle("hidden")}
-function showCabinet(){document.getElementById("cabinetBlock").classList.toggle("hidden")}
+function showForm() {
+  const formBlock = document.getElementById("formBlock");
+  formBlock.classList.remove("hidden");
+
+  setTimeout(() => {
+    formBlock.scrollIntoView({
+      behavior: "smooth",
+      block: "start"
+    });
+  }, 100);
+}
+function showCabinet() {
+  const cabinetBlock = document.getElementById("cabinetBlock");
+  cabinetBlock.classList.remove("hidden");
+
+  setTimeout(() => {
+    cabinetBlock.scrollIntoView({
+      behavior: "smooth",
+      block: "start"
+    });
+  }, 100);
+}
 function normalizePhone(phone){return String(phone||"").replace(/\D/g,"").replace(/^8/,"7")}
 function parsePrice(price){return Number(String(price||"").replace(/\D/g,""))||0}
 function isNew(date){const d=new Date(date);return !isNaN(d)&&((new Date()-d)/(1000*60*60*24)<=3)}
