@@ -118,12 +118,12 @@ function renderAd(ad) {
     <div class="ad-page">
       <div class="card">
         <div class="main-photo">
-          ${photos.length ? `<img id="mainPhoto" src="${photos[0]}" alt="Фото объявления">` : "Фото нет"}
+          ${photos.length ? `<img id="mainPhoto" src="${photos[0]}" alt="Фото объявления" onclick="trackPhotoClick()">` : "Фото нет"}
         </div>
 
         ${photos.length > 1 ? `
           <div class="thumbs">
-            ${photos.map((p,i)=>`<img src="${p}" class="${i===0?'active':''}" onclick="setPhoto(${i})">`).join("")}
+            ${photos.map((p,i)=>`<img src="${p}" class="${i===0?'active':''}" onclick="setPhoto(${i}); trackPhotoClick();">`).join("")}
           </div>
         ` : ""}
       </div>
@@ -140,7 +140,7 @@ function renderAd(ad) {
           Просмотры: 👁 ${ad.views || 0}
         </div>
 
-        <a class="btn" href="${wa}" target="_blank">Написать в WhatsApp</a>
+       <a class="btn" href="${wa}" target="_blank" onclick="trackWhatsAppClick()">Написать в WhatsApp</a>
         <a class="btn dark" href="index.html">Назад к объявлениям</a>
 
         <div class="desc">${ad.description || ""}</div>
@@ -180,7 +180,31 @@ async function loadAd() {
     document.getElementById("content").innerHTML = "<p>Не удалось загрузить объявление.</p>";
   }
 }
+async function trackWhatsAppClick() {
+  if (!currentAd || !currentAd.id) return;
 
+  await fetch(WEB_APP_URL, {
+    method: "POST",
+    mode: "no-cors",
+    body: JSON.stringify({
+      action: "whatsappClick",
+      id: currentAd.id
+    })
+  });
+}
+
+async function trackPhotoClick() {
+  if (!currentAd || !currentAd.id) return;
+
+  await fetch(WEB_APP_URL, {
+    method: "POST",
+    mode: "no-cors",
+    body: JSON.stringify({
+      action: "photoClick",
+      id: currentAd.id
+    })
+  });
+}
 loadAd();
 </script>
 
