@@ -20,6 +20,78 @@
 <meta name="twitter:description" content="Авто, недвижимость, работа, услуги, аренда и многое другое.">
 <meta name="twitter:image" content="https://movixstudio-kz.github.io/karo-market/karo-market-preview.png">
   <style>
+    .hero{
+  background:linear-gradient(135deg,#2563eb,#1e40af);
+  color:#fff;
+  padding:50px 30px;
+  border-radius:20px;
+  margin-bottom:25px;
+  text-align:center;
+}
+
+.hero h2{
+  font-size:42px;
+  margin-bottom:15px;
+}
+
+.hero p{
+  max-width:800px;
+  margin:auto;
+  font-size:18px;
+  line-height:1.6;
+}
+
+.hero-buttons{
+  margin-top:25px;
+  display:flex;
+  justify-content:center;
+  gap:15px;
+  flex-wrap:wrap;
+}
+
+.btn-secondary{
+  background:#fff;
+  color:#2563eb;
+}
+
+.info-block{
+  background:#fff;
+  padding:30px;
+  border-radius:20px;
+  margin-bottom:25px;
+}
+
+.steps{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:20px;
+  margin-top:20px;
+}
+
+.step{
+  text-align:center;
+  padding:20px;
+  border-radius:15px;
+  background:#f8fafc;
+}
+
+.step span{
+  font-size:42px;
+  display:block;
+  margin-bottom:10px;
+}
+
+.safety{
+  background:#fff8e1;
+  border-left:6px solid #f59e0b;
+  padding:20px;
+  border-radius:12px;
+  margin-bottom:25px;
+}
+
+.safety h3{
+  margin-bottom:10px;
+}
     *{box-sizing:border-box;margin:0;padding:0}
     body{font-family:Arial,sans-serif;background:#f4f5f7;color:#111827}
     header{background:linear-gradient(135deg,#111827,#2563eb);color:white;padding:38px 20px;text-align:center}
@@ -80,6 +152,57 @@
 
 <div class="container">
 
+  <!-- HERO -->
+<section class="hero">
+  <div class="hero-content">
+    <h2>Бесплатные объявления Караганды</h2>
+    <p>
+      Покупайте, продавайте, сдавайте в аренду, находите работу и услуги.
+      Размещайте объявления бесплатно и связывайтесь напрямую через WhatsApp.
+    </p>
+
+    <div class="hero-buttons">
+      <button class="btn" onclick="showForm()">➕ Подать объявление</button>
+      <a href="#adsList" class="btn btn-secondary">🔍 Смотреть объявления</a>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="info-block">
+  <h2>Как это работает?</h2>
+
+  <div class="steps">
+    <div class="step">
+      <span>1️⃣</span>
+      <h3>Подайте объявление</h3>
+      <p>Заполните простую форму и добавьте фотографии.</p>
+    </div>
+
+    <div class="step">
+      <span>2️⃣</span>
+      <h3>Модерация</h3>
+      <p>Мы проверяем объявление перед публикацией.</p>
+    </div>
+
+    <div class="step">
+      <span>3️⃣</span>
+      <h3>Получайте сообщения</h3>
+      <p>Покупатели связываются с вами напрямую через WhatsApp.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SAFETY -->
+<section class="safety">
+  <h3>🛡 Безопасность</h3>
+
+  <p>
+    Не переводите предоплату незнакомым людям.
+    Проверяйте товар лично перед оплатой.
+    KARO Market не участвует в сделках между пользователями.
+  </p>
+</section>
   <h2 class="section-title">Категории</h2>
   <div class="categories">
     <div class="category active" onclick="filterAds('Все', this)">Все</div>
