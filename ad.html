@@ -168,7 +168,7 @@ async function loadAd() {
   }
 
   try {
-    const res = await fetch(WEB_APP_URL + "?t=" + Date.now(), {
+    const res = await fetch(WEB_APP_URL + "?id=" + encodeURIComponent(id) + "&t=" + Date.now(), {
       method: "GET",
       redirect: "follow"
     });
@@ -176,16 +176,17 @@ async function loadAd() {
     const text = await res.text();
     const ad = JSON.parse(text);
 
-renderAd(ad || null);
+    renderAd(ad && ad.id ? ad : null);
 
-if (ad && ad.id) {
-  incrementViews(id);
-}
+    if (ad && ad.id) {
+      incrementViews(id);
+    }
 
   } catch(e) {
     console.log(e);
     document.getElementById("content").innerHTML = "<p>Не удалось загрузить объявление.</p>";
   }
+}
 
 async function trackWhatsAppClick() {
   if (!currentAd || !currentAd.id) return;
@@ -198,6 +199,7 @@ async function trackWhatsAppClick() {
       id: currentAd.id
     })
   });
+}
 
 async function trackPhotoClick() {
   if (!currentAd || !currentAd.id) return;
@@ -211,6 +213,7 @@ async function trackPhotoClick() {
     })
   });
 }
+
 loadAd();
 </script>
 
