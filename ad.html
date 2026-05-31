@@ -188,8 +188,7 @@ async function loadAd() {
     console.log(e);
     document.getElementById("content").innerHTML = "<p>Не удалось загрузить объявление.</p>";
   }
-}
-}
+
 async function trackWhatsAppClick() {
   if (!currentAd || !currentAd.id) return;
 
@@ -201,7 +200,6 @@ async function trackWhatsAppClick() {
       id: currentAd.id
     })
   });
-}
 
 async function trackPhotoClick() {
   if (!currentAd || !currentAd.id) return;
