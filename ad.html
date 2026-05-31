@@ -174,15 +174,13 @@ async function loadAd() {
     });
 
     const text = await res.text();
-    const ads = JSON.parse(text);
+    const ad = JSON.parse(text);
 
-    const ad = ads.find(item => String(item.id).trim() === String(id).trim());
+renderAd(ad || null);
 
-    renderAd(ad || null);
-
-    if (ad) {
-      incrementViews(id);
-    }
+if (ad && ad.id) {
+  incrementViews(id);
+}
 
   } catch(e) {
     console.log(e);
