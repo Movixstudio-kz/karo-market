@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KARO Market — бесплатные объявления Караганды</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f5f7;
+      color: #222;
+    }
+    header {
+      background: linear-gradient(135deg, #111827, #2563eb);
+      color: white;
+      padding: 35px 20px;
+      text-align: center;
+    }
+    header h1 { font-size: 34px; margin-bottom: 10px; }
+    header p { font-size: 17px; opacity: 0.9; }
+
+    .container {
+      max-width: 1100px;
+      margin: auto;
+      padding: 25px 15px;
+    }
+
+    .actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 20px;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 14px 22px;
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: bold;
+      color: white;
+      background: #16a34a;
+    }
+
+    .btn.telegram { background: #229ed9; }
+    .btn.dark { background: #111827; }
+
+    .section-title {
+      font-size: 24px;
+      margin: 30px 0 15px;
+    }
+
+    .categories {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 14px;
+    }
+
+    .category {
+      background: white;
+      padding: 18px;
+      border-radius: 16px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.06);
+      text-align: center;
+      font-weight: bold;
+    }
+
+    .ads {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 18px;
+      margin-top: 15px;
+    }
+
+    .ad-card {
+      background: white;
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    }
+
+    .ad-img {
+      height: 170px;
+      background: #d1d5db;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #555;
+      font-size: 15px;
+    }
+
+    .ad-content {
+      padding: 16px;
+    }
+
+    .ad-content h3 {
+      font-size: 19px;
+      margin-bottom: 8px;
+    }
+
+    .price {
+      font-size: 20px;
+      color: #16a34a;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+
+    .meta {
+      color: #666;
+      font-size: 14px;
+      margin-bottom: 12px;
+    }
+
+    .how {
+      background: white;
+      padding: 22px;
+      border-radius: 18px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.06);
+      line-height: 1.7;
+    }
+
+    footer {
+      text-align: center;
+      padding: 25px;
+      color: #666;
+      font-size: 14px;
+    }
+
+    .floating {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      background: #16a34a;
+      color: white;
+      padding: 15px 18px;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: bold;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+      z-index: 99;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>KARO Market</h1>
+  <p>Бесплатные объявления Караганды: купи, продай, сдай в аренду или найди услугу рядом</p>
+
+  <div class="actions">
+    <a class="btn" href="https://wa.me/77009904003?text=Здравствуйте! Хочу подать объявление на KARO Market" target="_blank">
+      Подать объявление в WhatsApp
+    </a>
+    <a class="btn telegram" href="https://t.me/auto_importKZ" target="_blank">
+      Написать в Telegram
+    </a>
+  </div>
+</header>
+
+<div class="container">
+
+  <h2 class="section-title">Категории</h2>
+  <div class="categories">
+    <div class="category">🚗 Авто</div>
+    <div class="category">🏠 Недвижимость</div>
+    <div class="category">🛠 Услуги</div>
+    <div class="category">🔨 Аренда инструмента</div>
+    <div class="category">📱 Техника</div>
+    <div class="category">👕 Одежда</div>
+    <div class="category">🐶 Животные</div>
+    <div class="category">📦 Разное</div>
+  </div>
+
+  <h2 class="section-title">Свежие объявления</h2>
+  <div class="ads">
+
+    <div class="ad-card">
+      <div class="ad-img">Фото объявления</div>
+      <div class="ad-content">
+        <h3>Сдается отбойник 2150 Вт</h3>
+        <div class="price">8 000 ₸ / сутки</div>
+        <div class="meta">Караганда • Аренда инструмента</div>
+        <a class="btn dark" href="https://wa.me/77009904003?text=Здравствуйте! Интересует объявление: Сдается отбойник" target="_blank">Связаться</a>
+      </div>
+    </div>
+
+    <div class="ad-card">
+      <div class="ad-img">Фото объявления</div>
+      <div class="ad-content">
+        <h3>Пылесос строительный</h3>
+        <div class="price">7 000 ₸ / сутки</div>
+        <div class="meta">Караганда • Аренда</div>
+        <a class="btn dark" href="https://wa.me/77009904003?text=Здравствуйте! Интересует строительный пылесос" target="_blank">Связаться</a>
+      </div>
+    </div>
+
+    <div class="ad-card">
+      <div class="ad-img">Фото объявления</div>
+      <div class="ad-content">
+        <h3>Торцовка диск 255</h3>
+        <div class="price">10 000 ₸ / сутки</div>
+        <div class="meta">Караганда • Инструменты</div>
+        <a class="btn dark" href="https://wa.me/77009904003?text=Здравствуйте! Интересует торцовка диск 255" target="_blank">Связаться</a>
+      </div>
+    </div>
+
+  </div>
+
+  <h2 class="section-title">Как подать объявление?</h2>
+  <div class="how">
+    <p><b>1.</b> Напишите нам в WhatsApp или Telegram.</p>
+    <p><b>2.</b> Отправьте фото, описание, цену и номер телефона.</p>
+    <p><b>3.</b> Мы бесплатно разместим объявление на сайте.</p>
+    <p><b>4.</b> Покупатели будут связываться с вами напрямую.</p>
+  </div>
+
+</div>
+
+<a class="floating" href="https://wa.me/77001337397?text=Здравствуйте! Хочу подать объявление на KARO Market" target="_blank">
+  + Подать объявление
+</a>
+
+<footer>
+  KARO Market © 2026 — бесплатные объявления Караганды
+</footer>
+
+</body>
+</html>
