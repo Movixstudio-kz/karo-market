@@ -103,7 +103,7 @@ function showForm() {
 }
 
 function normalizePhone(phone) {
-  return phone.replace(/\D/g, "").replace(/^8/, "7");
+  return String(phone || "").replace(/\D/g, "").replace(/^8/, "7");
 }
 
 function renderAds() {
