@@ -510,7 +510,11 @@ async function loadMyAds(){
       <b>#${ad.id} — ${ad.title || "Без названия"}</b><br>
       <span class="status ${st}">${ad.status}</span><br>
       Цена: ${formatPrice(ad.price)}<br>
-      Просмотры: ${ad.views || 0}<br>
+     <div style="margin:8px 0 10px;font-size:16px;line-height:1.5;">
+  👁 Просмотры: ${ad.views || 0}<br>
+  💬 WhatsApp: ${ad.whatsappClicks || 0}<br>
+  📷 Фото: ${ad.photoClicks || 0}
+</div>
       Дата: ${formatDate(ad.date)}<br>
 
       ${ad.status === "Одобрено" ? `<a href="ad.html?id=${ad.id}">Открыть объявление</a><br>` : ""}
