@@ -35,6 +35,38 @@
     .btn.dark{background:#111827}
     .not-found{text-align:center;padding:60px;background:white;border-radius:18px}
     footer{text-align:center;padding:25px;color:#666;font-size:14px}
+    .related{
+  margin-top:25px;
+}
+.related h2{
+  margin-bottom:15px;
+}
+.related-list{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:15px;
+}
+.related-item{
+  background:white;
+  border-radius:14px;
+  padding:12px;
+  box-shadow:0 4px 12px rgba(0,0,0,.08);
+  cursor:pointer;
+}
+.related-item:hover{
+  transform:translateY(-2px);
+}
+.related-item img{
+  width:100%;
+  height:140px;
+  object-fit:cover;
+  border-radius:10px;
+}
+.related-price{
+  color:#16a34a;
+  font-weight:bold;
+  margin-top:8px;
+}
     @media(max-width:800px){
       .ad-page{grid-template-columns:1fr}
       .main-photo{height:320px}
@@ -101,7 +133,12 @@ function renderAd(ad) {
         <br>
         <a href="index.html">Вернуться на главную</a>
       </div>
-    `;
+  <div class="related">
+  <h2>Похожие объявления</h2>
+  <div id="relatedAds" class="related-list">
+    Загружаем...
+  </div>
+</div>  `;
     return;
   }
 
@@ -177,7 +214,7 @@ async function loadAd() {
     const ad = JSON.parse(text);
 
     renderAd(ad && ad.id ? ad : null);
-
+loadRelatedAds();
     if (ad && ad.id) {
       incrementViews(id);
     }
@@ -201,17 +238,42 @@ async function trackWhatsAppClick() {
   });
 }
 
-async function trackPhotoClick() {
-  if (!currentAd || !currentAd.id) return;
+async function loadRelatedAds() {
+  if (!currentAd) return;
 
-  await fetch(WEB_APP_URL, {
-    method: "POST",
-    mode: "no-cors",
-    body: JSON.stringify({
-      action: "photoClick",
-      id: currentAd.id
-    })
-  });
+  try {
+    const res = await fetch(WEB_APP_URL + "?t=" + Date.now());
+    const ads = await res.json();
+
+    const related = ads
+      .filter(a =>
+        a.id !== currentAd.id &&
+        a.category === currentAd.category
+      )
+      .slice(0, 4);
+
+    const box = document.getElementById("relatedAds");
+    if (!box) return;
+
+    if (!related.length) {
+      box.innerHTML = "Похожих объявлений пока нет";
+      return;
+    }
+
+    box.innerHTML = related.map(ad => `
+      <div class="related-item" onclick="location.href='ad.html?id=${ad.id}'">
+        ${ad.photos && ad.photos[0]
+          ? `<img src="${ad.photos[0]}">`
+          : ""
+        }
+        <h3>${ad.title}</h3>
+        <div class="related-price">${ad.price || ""} ₸</div>
+      </div>
+    `).join("");
+
+  } catch(e) {
+    console.log(e);
+  }
 }
 
 loadAd();
