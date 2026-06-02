@@ -541,7 +541,9 @@ filtered = [...vipAds, ...regularAds];
     ? "🎁 Бесплатно"
     : formatPrice(ad.price)}
 </div>
-          <div class="meta">#${ad.id} • ${ad.city || "Караганда"} • ${ad.category || "Разное"}</div>
+          <div class="meta">
+  ${ad.city || "Караганда"} • ${formatDate(ad.date)}
+</div> • ${ad.city || "Караганда"} • ${ad.category || "Разное"}</div>
           <div class="desc">${String(ad.description||"").substring(0,90)}...</div>
           <div class="ad-footer">
             <span>${formatDate(ad.date)}</span>
