@@ -305,6 +305,7 @@
     <div class="category" onclick="filterAds('Техника', this)">📱 Техника</div>
     <div class="category" onclick="filterAds('Животные', this)">🐶 Животные</div>
     <div class="category" onclick="filterAds('Разное', this)">📦 Разное</div>
+    <div class="category" onclick="filterAds('Отдам даром', this)">🎁 Отдам даром</div>
   </div>
 
   <div class="filters">
@@ -322,7 +323,11 @@
       <select id="category" required>
         <option value="">Выберите категорию</option>
         <option>Авто</option><option>Недвижимость</option><option>Работа</option><option>Услуги</option>
-        <option>Аренда</option><option>Техника</option><option>Животные</option><option>Разное</option>
+       <option>Аренда</option>
+<option>Техника</option>
+<option>Животные</option>
+<option>Разное</option>
+<option>Отдам даром</option>
       </select>
       <input id="title" placeholder="Заголовок объявления" required>
       <input id="price" placeholder="Цена, например 150 000 ₸">
@@ -725,7 +730,18 @@ document.getElementById("adForm").addEventListener("submit",async function(e){
   document.getElementById("formBlock").classList.add("hidden");
   submitBtn.disabled=false;submitBtn.textContent="Отправить на модерацию";
 });
+document.getElementById("category").addEventListener("change", function () {
+  const priceField = document.getElementById("price");
 
+  if (this.value === "Отдам даром") {
+    priceField.value = "";
+    priceField.disabled = true;
+    priceField.placeholder = "🎁 Бесплатно";
+  } else {
+    priceField.disabled = false;
+    priceField.placeholder = "Цена, например 150 000 ₸";
+  }
+});
 loadAds();
 loadPromoStats();
 </script>
