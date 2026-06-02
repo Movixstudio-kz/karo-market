@@ -921,7 +921,7 @@ document.getElementById("category").addEventListener("change", function () {
   this.reset();
     });
   function openTopic(id){
-  alert("Страница обсуждения будет добавлена следующим шагом. ID темы: " + id);
+  window.location.href = "topic.html?id=" + encodeURIComponent(id);
 }
   function loadTopics() {
 
