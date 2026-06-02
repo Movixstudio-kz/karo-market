@@ -337,6 +337,8 @@
   
   <form id="topicForm">
     <input id="topicName" placeholder="Ваше имя" required>
+    <input id="topicPhone" placeholder="Ваш WhatsApp, его не увидят другие пользователи" required>
+<small>Номер нужен только для модерации и не публикуется на сайте.</small>
     <select id="topicCategory" required>
       <option value="Общение">💬 Общение</option>
       <option value="Новости">📢 Новости</option>
@@ -717,8 +719,9 @@ function escapeText(text) {
     mode: "no-cors",
     body: JSON.stringify({
       action: "addTopic",
-      name: topicName.value,
-      category: topicCategory.value,
+     name: topicName.value,
+phone: topicPhone.value,
+category: topicCategory.value,
       title: topicTitle.value,
       text: topicText.value
     })
