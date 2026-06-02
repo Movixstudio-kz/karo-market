@@ -557,19 +557,25 @@ function openEditForm(id, title, price, description) {
 
 async function editMyAd(id, title, price, description) {
   const phone = normalizePhone(document.getElementById("cabinetPhone").value);
+  const ownerCode = document.getElementById("cabinetCode").value.trim();
+
+  if (!ownerCode) {
+    alert("Введите код владельца объявления.");
+    return;
+  }
 
   await fetch(WEB_APP_URL, {
     method: "POST",
     mode: "no-cors",
-    body: JSON.stringify({
-      action: "editAd",
-      id,
-      phone,
-      title,
-      price,
-      description
-    })
-  });
+  body: JSON.stringify({
+  action: "editAd",
+  id,
+  phone,
+  ownerCode,
+  title,
+  price,
+  description
+})
 
   alert("Объявление отправлено на повторную модерацию.");
   
