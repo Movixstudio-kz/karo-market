@@ -320,6 +320,8 @@
     <form id="adForm">
       <input id="name" placeholder="Ваше имя" required>
       <input id="phone" placeholder="Телефон / WhatsApp" required>
+      <input id="ownerCode" placeholder="Придумайте код владельца, например 123456" required>
+<small>Сохраните этот код. Он нужен для редактирования и удаления объявления.</small>
       <select id="category" required>
         <option value="">Выберите категорию</option>
         <option>Авто</option><option>Недвижимость</option><option>Работа</option><option>Услуги</option>
@@ -727,14 +729,15 @@ document.getElementById("adForm").addEventListener("submit",async function(e){
   }
 
   const data={
-    name:name.value,
-    phone:phone.value,
-    category:category.value,
-    title:title.value,
-    price:price.value,
-    description:description.value,
-    photos:photos
-  };
+  name:name.value,
+  phone:phone.value,
+  ownerCode: ownerCode.value,
+  category:category.value,
+  title:title.value,
+  price:price.value,
+  description:description.value,
+  photos:photos
+};
 
   await fetch(WEB_APP_URL,{method:"POST",mode:"no-cors",body:JSON.stringify(data)});
   alert("Объявление отправлено на модерацию!");
