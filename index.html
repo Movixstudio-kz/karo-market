@@ -950,6 +950,11 @@ document.getElementById("category").addEventListener("change", function () {
         <div style="line-height:1.6;">
           ${topic.text}
         </div>
+        <div style="margin-top:15px;padding-top:12px;border-top:1px solid #e5e7eb;">
+  <input id="commentName_${topic.id}" placeholder="Ваше имя">
+  <textarea id="commentText_${topic.id}" placeholder="Написать комментарий"></textarea>
+  <button class="btn blue" onclick="addComment('${topic.id}')">Отправить комментарий</button>
+</div>
       </div>
     `).join("");
 
@@ -967,6 +972,30 @@ document.getElementById("category").addEventListener("change", function () {
     Date.now();
 
   document.body.appendChild(script);
+}
+  async function addComment(topicId){
+  const name = document.getElementById("commentName_" + topicId).value;
+  const text = document.getElementById("commentText_" + topicId).value;
+
+  if (!name || !text) {
+    alert("Введите имя и комментарий.");
+    return;
+  }
+
+  await fetch(WEB_APP_URL, {
+    method: "POST",
+    mode: "no-cors",
+    body: JSON.stringify({
+      action: "addComment",
+      topicId: topicId,
+      name: name,
+      text: text
+    })
+  });
+
+  alert("Комментарий отправлен на модерацию.");
+  document.getElementById("commentName_" + topicId).value = "";
+  document.getElementById("commentText_" + topicId).value = "";
 }
 loadAds();
 loadTopics();
