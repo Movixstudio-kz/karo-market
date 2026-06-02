@@ -140,21 +140,8 @@
     @media(max-width:700px){
       header h1{font-size:32px}
       .filters{grid-template-columns:1fr}
-      <select id="cityFilter" onchange="renderAds()">
-  <option value="">Все города</option>
-  <option>Караганда</option>
-  <option>Темиртау</option>
-  <option>Сарань</option>
-  <option>Шахтинск</option>
-  <option>Абай</option>
-  <option>Актас</option>
-  <option>Долинка</option>
-  <option>Топар</option>
-  <option>Осакаровка</option>
-  <option>Ботакара</option>
-  <option>Молодёжный</option>
-</select>
-    }
+       }
+    
     .promo{
   background:linear-gradient(135deg,#f59e0b,#ef4444);
   color:white;
@@ -323,11 +310,28 @@
   </div>
 
   <div class="filters">
-    <input id="searchInput" placeholder="Поиск по заголовку или описанию" oninput="renderAds()">
-    <input id="minPrice" type="number" placeholder="Цена от" oninput="renderAds()">
-    <input id="maxPrice" type="number" placeholder="Цена до" oninput="renderAds()">
-    <button class="btn gray" onclick="clearFilters()">Сброс</button>
-  </div>
+  <input id="searchInput" placeholder="Поиск по заголовку или описанию" oninput="renderAds()">
+
+  <select id="cityFilter" onchange="renderAds()">
+    <option value="">Все города</option>
+    <option>Караганда</option>
+    <option>Темиртау</option>
+    <option>Сарань</option>
+    <option>Шахтинск</option>
+    <option>Абай</option>
+    <option>Актас</option>
+    <option>Долинка</option>
+    <option>Топар</option>
+    <option>Осакаровка</option>
+    <option>Ботакара</option>
+    <option>Молодёжный</option>
+  </select>
+
+  <input id="minPrice" type="number" placeholder="Цена от" oninput="renderAds()">
+  <input id="maxPrice" type="number" placeholder="Цена до" oninput="renderAds()">
+
+  <button class="btn gray" onclick="clearFilters()">Сброс</button>
+</div>
 
   <div id="formBlock" class="hidden">
     <h2 class="section-title">Подать объявление</h2>
