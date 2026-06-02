@@ -309,6 +309,24 @@
     <div class="category" onclick="filterAds('Отдам даром', this)">🎁 Отдам даром</div>
     <div class="category" onclick="filterAds('Общение', this); document.getElementById('listTitle').textContent='💬 Общение и вопросы'">💬 Общение</div>
     <div class="category" onclick="filterAds('Новости', this); document.getElementById('listTitle').textContent='📢 Новости и события'">📢 Новости</div>
+    <div id="topicBlock" class="hidden" style="margin-top:25px;">
+  <h2 class="section-title">💬 Создать тему</h2>
+
+  <form id="topicForm">
+    <input id="topicName" placeholder="Ваше имя" required>
+
+    <select id="topicCategory" required>
+      <option value="Общение">💬 Общение</option>
+      <option value="Новости">📢 Новости</option>
+    </select>
+
+    <input id="topicTitle" placeholder="Заголовок темы" required>
+
+    <textarea id="topicText" placeholder="Напишите текст темы, вопрос или новость" required></textarea>
+
+    <button class="btn" type="submit">Опубликовать тему</button>
+  </form>
+</div>
   </div>
 
   <div class="filters">
@@ -561,6 +579,14 @@ function openAd(id){
 }
 
 function filterAds(category,el){
+  const topicBlock = document.getElementById("topicBlock");
+
+if (category === "Общение" || category === "Новости") {
+  topicBlock.classList.remove("hidden");
+  document.getElementById("topicCategory").value = category;
+} else {
+  topicBlock.classList.add("hidden");
+}
   currentCategory=category;
   document.getElementById("listTitle").textContent =
   category === "Все" ? "Свежие объявления" :
@@ -656,6 +682,24 @@ function escapeText(text) {
   });
 
   alert("Объявление поднято наверх.");
+  document.getElementById("topicForm").addEventListener("submit", async function(e){
+  e.preventDefault();
+
+  await fetch(WEB_APP_URL, {
+    method: "POST",
+    mode: "no-cors",
+    body: JSON.stringify({
+      action: "addTopic",
+      name: topicName.value,
+      category: topicCategory.value,
+      title: topicTitle.value,
+      text: topicText.value
+    })
+  });
+
+  alert("Тема опубликована.");
+  this.reset();
+});  
   loadAds();
   loadMyAds();
 }
