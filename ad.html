@@ -167,7 +167,11 @@ function renderAd(ad) {
 
       <div class="card">
         <h1>${ad.title || "Без названия"}</h1>
-        <div class="price">${ad.price || "Цена не указана"}</div>
+       <div class="price">
+  ${ad.category === "Отдам даром"
+    ? "🎁 Бесплатно"
+    : (ad.price || "Цена не указана")}
+</div>
 
         <div class="meta">
           № объявления: <b>#${ad.id}</b><br>
