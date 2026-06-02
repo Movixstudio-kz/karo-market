@@ -627,15 +627,17 @@ async function deleteMyAd(id) {
   if (!confirm("Удалить объявление #" + id + "?")) return;
 
   const phone = normalizePhone(document.getElementById("cabinetPhone").value);
+  const ownerCode = document.getElementById("cabinetCode").value.trim();
 
   await fetch(WEB_APP_URL, {
     method: "POST",
     mode: "no-cors",
-    body: JSON.stringify({
-      action: "deleteAd",
-      id,
-      phone
-    })
+   body: JSON.stringify({
+  action: "deleteAd",
+  id,
+  phone,
+  ownerCode
+})
   });
 
   alert("Объявление удалено.");
@@ -643,10 +645,16 @@ async function deleteMyAd(id) {
 }
 async function loadMyAds(){
   const phone=normalizePhone(document.getElementById("cabinetPhone").value);
+  const ownerCode = document.getElementById("cabinetCode").value.trim();
+
+if (!ownerCode) {
+  box.innerHTML = "<p>Введите код владельца объявления.</p>";
+  return;
+}
   const box=document.getElementById("myAds");
   if(!phone){box.innerHTML="<p>Введите телефон.</p>";return;}
   box.innerHTML="Загружаем...";
-  const res=await fetch(WEB_APP_URL+"?phone="+phone+"&t="+Date.now(),{method:"GET",redirect:"follow"});
+  const res=await fetch(WEB_APP_URL+"?phone="+phone+"&ownerCode="+encodeURIComponent(ownerCode)+"&t="+Date.now(),{method:"GET",redirect:"follow"});
   const ads=JSON.parse(await res.text());
 
   if(!ads.length){box.innerHTML="<p>По этому номеру объявлений не найдено.</p>";return;}
