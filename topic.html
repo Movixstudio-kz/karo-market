@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Обсуждение — KARO Market</title>
+
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:Arial,sans-serif;background:#f4f5f7;color:#111827}
+    header{background:linear-gradient(135deg,#111827,#2563eb);color:white;padding:25px 20px}
+    header a{color:white;text-decoration:none;font-weight:bold}
+    .container{max-width:900px;margin:auto;padding:25px 15px}
+    .card{background:white;padding:22px;border-radius:18px;box-shadow:0 4px 15px rgba(0,0,0,.08);margin-bottom:20px}
+    h1{margin-bottom:10px}
+    .meta{color:#666;font-size:14px;margin-bottom:15px}
+    .text{line-height:1.7;white-space:pre-line}
+    input,textarea{width:100%;padding:13px;border:1px solid #ddd;border-radius:10px;font-size:15px;margin-bottom:10px}
+    textarea{min-height:100px}
+    .btn{border:0;cursor:pointer;display:inline-block;padding:13px 20px;border-radius:12px;text-decoration:none;font-weight:bold;color:white;background:#2563eb}
+    .comment{border-top:1px solid #e5e7eb;padding-top:12px;margin-top:12px}
+  </style>
+</head>
+<body>
+
+<header>
+  <a href="index.html">← Назад на KARO Market</a>
+</header>
+
+<div class="container">
+  <div id="topicBox" class="card">Загружаем тему...</div>
+
+  <div class="card">
+    <h2>💬 Комментарии</h2>
+    <div id="commentsBox">Загружаем комментарии...</div>
+  </div>
+
+  <div class="card">
+    <h2>Написать комментарий</h2>
+    <input id="commentName" placeholder="Ваше имя">
+    <textarea id="commentText" placeholder="Ваш комментарий"></textarea>
+    <button class="btn" onclick="addComment()">Отправить комментарий</button>
+  </div>
+</div>
+
+<script>
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwaY69-aqRdGtPy_HVOs_QIYJKDODdTsPtujvSOdqBBTULG2Jb4W2V92zEtmF3Lp9oK/exec";
+
+function getId(){
+  return new URLSearchParams(window.location.search).get("id");
+}
+
+function formatDate(value){
+  const d = new Date(value);
+  return isNaN(d) ? "" : d.toLocaleString("ru-RU");
+}
+
+function loadTopic(){
+  const id = getId();
+  const callbackName = "topicCallback_" + Date.now();
+
+  window[callbackName] = function(data){
+    const box = document.getElementById("topicBox");
+
+    if (!data || !data.id) {
+      box.innerHTML = "Тема не найдена.";
+      return;
+    }
+
+    box.innerHTML = `
+      <h1>${data.title}</h1>
+      <div class="meta">${data.category} • ${data.name} • ${formatDate(data.date)}</div>
+      <div class="text">${data.text}</div>
+    `;
+
+    delete window[callbackName];
+    script.remove();
+  };
+
+  const script = document.createElement("script");
+  script.src = WEB_APP_URL + "?topicId=" + encodeURIComponent(id) + "&callback=" + callbackName + "&t=" + Date.now();
+  document.body.appendChild(script);
+}
+
+function loadComments(){
+  const id = getId();
+  const callbackName = "commentsCallback_" + Date.now();
+
+  window[callbackName] = function(comments){
+    const box = document.getElementById("commentsBox");
+
+    if (!comments.length) {
+      box.innerHTML = "<p>Комментариев пока нет.</p>";
+      return;
+    }
+
+    box.innerHTML = comments.map(c => `
+      <div class="comment">
+        <b>${c.name}</b>
+        <div class="meta">${formatDate(c.date)}</div>
+        <div class="text">${c.text}</div>
+      </div>
+    `).join("");
+
+    delete window[callbackName];
+    script.remove();
+  };
+
+  const script = document.createElement("script");
+  script.src = WEB_APP_URL + "?comments=1&topicId=" + encodeURIComponent(id) + "&callback=" + callbackName + "&t=" + Date.now();
+  document.body.appendChild(script);
+}
+
+async function addComment(){
+  const name = commentName.value.trim();
+  const text = commentText.value.trim();
+
+  if (!name || !text) {
+    alert("Введите имя и комментарий.");
+    return;
+  }
+
+  await fetch(WEB_APP_URL, {
+    method:"POST",
+    mode:"no-cors",
+    body:JSON.stringify({
+      action:"addComment",
+      topicId:getId(),
+      name:name,
+      text:text
+    })
+  });
+
+  alert("Комментарий отправлен на модерацию.");
+  commentName.value = "";
+  commentText.value = "";
+}
+
+loadTopic();
+loadComments();
+</script>
+
+</body>
+</html>
