@@ -141,6 +141,53 @@
       header h1{font-size:32px}
       .filters{grid-template-columns:1fr}
     }
+    .promo{
+  background:linear-gradient(135deg,#f59e0b,#ef4444);
+  color:white;
+  border-radius:24px;
+  padding:30px;
+  margin-bottom:25px;
+  display:grid;
+  grid-template-columns:2fr 1fr;
+  gap:25px;
+  align-items:center;
+}
+
+.promo h2{
+  margin-bottom:15px;
+  font-size:30px;
+}
+
+.promo ul{
+  margin:15px 0;
+  padding-left:20px;
+}
+
+.promo li{
+  margin-bottom:8px;
+}
+
+.promo-right{
+  display:grid;
+  gap:12px;
+}
+
+.promo-card{
+  background:rgba(255,255,255,.18);
+  padding:16px;
+  border-radius:16px;
+  text-align:center;
+}
+
+.promo-number{
+  font-size:34px;
+  font-weight:bold;
+}
+
+@media(max-width:800px){
+  .promo{
+    grid-template-columns:1fr;
+  }
   </style>
 </head>
 <body>
@@ -157,7 +204,42 @@
 </header>
 
 <div class="container">
+<section class="promo">
+  <div class="promo-left">
+    <h2>🎁 Розыгрыш призов среди первых 100 объявлений</h2>
 
+    <p>
+      Разместите объявление на KARO Market и участвуйте в розыгрыше призов.
+    </p>
+
+    <ul>
+      <li>🏆 1 место — 5000 ₸ на Kaspi</li>
+      <li>⭐ 2–3 место — VIP размещение на 7 дней</li>
+      <li>🔝 4–5 место — 2 поднятия объявления</li>
+    </ul>
+
+    <button class="btn" onclick="showForm()">
+      Участвовать
+    </button>
+  </div>
+
+  <div class="promo-right">
+    <div class="promo-card">
+      <div class="promo-number" id="promoCount">0</div>
+      <div>из 100 участников</div>
+    </div>
+
+    <div class="promo-card">
+      <div class="promo-number" id="promoLeft">100</div>
+      <div>мест осталось</div>
+    </div>
+
+    <div class="promo-card">
+      <div class="promo-number" id="promoDays">14</div>
+      <div>дней до розыгрыша</div>
+    </div>
+  </div>
+</section>
   <!-- HERO -->
 <section class="hero">
   <div class="hero-content">
