@@ -920,6 +920,9 @@ document.getElementById("category").addEventListener("change", function () {
   alert("Тема опубликована.");
   this.reset();
     });
+  function openTopic(id){
+  alert("Страница обсуждения будет добавлена следующим шагом. ID темы: " + id);
+}
   function loadTopics() {
 
   const callbackName = "topicsCallback_" + Date.now();
@@ -950,10 +953,10 @@ document.getElementById("category").addEventListener("change", function () {
         <div style="line-height:1.6;">
           ${topic.text}
         </div>
-        <div style="margin-top:15px;padding-top:12px;border-top:1px solid #e5e7eb;">
-  <input id="commentName_${topic.id}" placeholder="Ваше имя">
-  <textarea id="commentText_${topic.id}" placeholder="Написать комментарий"></textarea>
-  <button class="btn blue" onclick="addComment('${topic.id}')">Отправить комментарий</button>
+        <div style="margin-top:15px;">
+  <button class="btn blue" onclick="openTopic('${topic.id}')">
+    💬 Открыть обсуждение
+  </button>
 </div>
       </div>
     `).join("");
