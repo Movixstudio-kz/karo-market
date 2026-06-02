@@ -307,23 +307,7 @@
     <div class="category" onclick="filterAds('Животные', this)">🐶 Животные</div>
     <div class="category" onclick="filterAds('Разное', this)">📦 Разное</div>
     <div class="category" onclick="filterAds('Отдам даром', this)">🎁 Отдам даром</div>
-    <div class="category" onclick="filterAds('Общение', this); document.getElementById('listTitle').textContent='💬 Общение и вопросы'">💬 Общение</div>
-    <div class="category" onclick="filterAds('Новости', this); document.getElementById('listTitle').textContent='📢 Новости и события'">📢 Новости</div>
  
-  <form id="topicForm">
-    <input id="topicName" placeholder="Ваше имя" required>
-
-    <select id="topicCategory" required>
-      <option value="Общение">💬 Общение</option>
-      <option value="Новости">📢 Новости</option>
-    </select>
-
-    <input id="topicTitle" placeholder="Заголовок темы" required>
-
-    <textarea id="topicText" placeholder="Напишите текст темы, вопрос или новость" required></textarea>
-
-    <button class="btn" type="submit">Опубликовать тему</button>
-  </form>
 </div>
   </div>
 
@@ -349,6 +333,19 @@
   <input id="maxPrice" type="number" placeholder="Цена до" oninput="renderAds()">
 
   <button class="btn gray" onclick="clearFilters()">Сброс</button>
+    <div id="topicBlock" class="hidden" style="margin-top:20px;">
+  <h2 class="section-title">💬 Создать тему</h2>
+
+  <form id="topicForm">
+    <input id="topicName" placeholder="Ваше имя" required>
+    <select id="topicCategory" required>
+      <option value="Общение">💬 Общение</option>
+      <option value="Новости">📢 Новости</option>
+    </select>
+    <input id="topicTitle" placeholder="Заголовок темы" required>
+    <textarea id="topicText" placeholder="Напишите текст темы, вопрос или новость" required></textarea>
+    <button class="btn" type="submit">Опубликовать тему</button>
+  </form>
 </div>
 <div id="topicBlock" class="hidden" style="
 margin-top:20px;
