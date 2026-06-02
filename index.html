@@ -747,7 +747,6 @@ async function loadMyAds(){
   `;
 }).join("");
 }
-function toBase64(file){
   async function compressImage(file) {
   return new Promise((resolve) => {
 
@@ -795,6 +794,7 @@ function toBase64(file){
     reader.readAsDataURL(file);
   });
 }
+function toBase64(file){
   return new Promise((resolve,reject)=>{
     const reader=new FileReader();
     reader.onload=()=>resolve(reader.result);
@@ -823,7 +823,7 @@ photos.push({
   type:"image/jpeg",
   data:base64.split(",")[1]
 });
-
+}
   const data={
   name:name.value,
   phone:phone.value,
