@@ -178,6 +178,9 @@ function renderAd(ad) {
         </div>
 
        <a class="btn" href="${wa}" target="_blank" onclick="trackWhatsAppClick()">Написать в WhatsApp</a>
+       <button class="btn dark" onclick="shareAd()">
+  📤 Поделиться объявлением
+</button>
         <a class="btn dark" href="index.html">Назад к объявлениям</a>
 
         <div class="desc">${ad.description || ""}</div>
@@ -275,7 +278,20 @@ async function loadRelatedAds() {
     console.log(e);
   }
 }
+function shareAd() {
+  const url = window.location.href;
 
+  if (navigator.share) {
+    navigator.share({
+      title: document.title,
+      text: "Посмотрите объявление на KARO Market",
+      url: url
+    });
+  } else {
+    navigator.clipboard.writeText(url);
+    alert("Ссылка скопирована");
+  }
+}
 loadAd();
 </script>
 
