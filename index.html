@@ -535,9 +535,10 @@ filtered = [...vipAds, ...regularAds];
             <span>👁 ${ad.views||0}</span>
             ${count?`<span class="photo-count">📷 ${count}</span>`:""}
           </div>
-        </div>
-      </div>`;
+            </div>
+    </div>`;
   }).join("");
+}
 
 function openAd(id){
   if (!id) return;
