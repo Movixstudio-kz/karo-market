@@ -579,6 +579,27 @@ function escapeText(text) {
   loadAds();
   loadMyAds();
 }
+  function loadPromoStats() {
+  const callbackName = "promoCallback_" + Date.now();
+
+  window[callbackName] = function(data) {
+    document.getElementById("promoCount").textContent = data.participants || 0;
+    document.getElementById("promoLeft").textContent = data.left || 0;
+
+    delete window[callbackName];
+    script.remove();
+  };
+
+  const script = document.createElement("script");
+  script.src = WEB_APP_URL + "?stats=1&callback=" + callbackName + "&t=" + Date.now();
+  document.body.appendChild(script);
+
+  const end = new Date("2026-06-15T23:59:59+05:00");
+  const now = new Date();
+  const days = Math.max(0, Math.ceil((end - now) / (1000 * 60 * 60 * 24)));
+
+  document.getElementById("promoDays").textContent = days;
+}
 async function deleteMyAd(id) {
   if (!confirm("Удалить объявление #" + id + "?")) return;
 
@@ -702,6 +723,7 @@ document.getElementById("adForm").addEventListener("submit",async function(e){
 });
 
 loadAds();
+loadPromoStats();
 </script>
 </body>
 </html>
