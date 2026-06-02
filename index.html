@@ -140,6 +140,20 @@
     @media(max-width:700px){
       header h1{font-size:32px}
       .filters{grid-template-columns:1fr}
+      <select id="cityFilter" onchange="renderAds()">
+  <option value="">Все города</option>
+  <option>Караганда</option>
+  <option>Темиртау</option>
+  <option>Сарань</option>
+  <option>Шахтинск</option>
+  <option>Абай</option>
+  <option>Актас</option>
+  <option>Долинка</option>
+  <option>Топар</option>
+  <option>Осакаровка</option>
+  <option>Ботакара</option>
+  <option>Молодёжный</option>
+</select>
     }
     .promo{
   background:linear-gradient(135deg,#f59e0b,#ef4444);
@@ -331,6 +345,20 @@
 <option>Разное</option>
 <option>Отдам даром</option>
       </select>
+      <select id="city" required>
+  <option value="">Выберите город</option>
+  <option>Караганда</option>
+  <option>Темиртау</option>
+  <option>Сарань</option>
+  <option>Шахтинск</option>
+  <option>Абай</option>
+  <option>Актас</option>
+  <option>Долинка</option>
+  <option>Топар</option>
+  <option>Осакаровка</option>
+  <option>Ботакара</option>
+  <option>Молодёжный</option>
+</select>
       <input id="title" placeholder="Заголовок объявления" required>
       <input id="price" placeholder="Цена, например 150 000 ₸">
       <textarea id="description" placeholder="Описание объявления" required></textarea>
@@ -465,17 +493,18 @@ function renderAds(){
   const min=Number(minPrice.value)||0;
   const max=Number(maxPrice.value)||0;
   const favs=getFavs();
+  const city = document.getElementById("cityFilter")?.value || "";
 
   let filtered=allAds.filter(ad=>{
     const text=(String(ad.title||"")+" "+String(ad.description||"")).toLowerCase();
     const price=parsePrice(ad.price);
     return (currentCategory==="Все"||ad.category===currentCategory)
-      && (!search||text.includes(search))
-      && (!min||price>=min)
-      && (!max||price<=max)
-      && (!favoritesMode||favs.includes(String(ad.id)));
-  });
-
+  && (!city || ad.city === city)
+  && (!search||text.includes(search))
+  && (!min||price>=min)
+  && (!max||price<=max)
+  && (!favoritesMode||favs.includes(String(ad.id)));
+  
   filtered.sort((a,b)=>Number(b.id)-Number(a.id));
 const vipAds = filtered.filter(ad => ad.vip);
 const regularAds = filtered.filter(ad => !ad.vip);
@@ -748,6 +777,7 @@ document.getElementById("adForm").addEventListener("submit",async function(e){
   phone:phone.value,
   ownerCode: ownerCode.value,
   category:category.value,
+  city: city.value,
   title:title.value,
   price:price.value,
   description:description.value,
