@@ -474,7 +474,11 @@ filtered = [...vipAds, ...regularAds];
         <div class="ad-img">${firstPhoto?`<img src="${firstPhoto}">`:"Фото скоро добавим"}</div>
         <div class="ad-content">
           <h3>${ad.title||"Без названия"}</h3>
-         <div class="price">${formatPrice(ad.price)}</div>
+         <div class="price">
+  ${ad.category === "Отдам даром"
+    ? "🎁 Бесплатно"
+    : formatPrice(ad.price)}
+</div>
           <div class="meta">#${ad.id} • Караганда • ${ad.category||"Разное"}</div>
           <div class="desc">${String(ad.description||"").substring(0,90)}...</div>
           <div class="ad-footer">
