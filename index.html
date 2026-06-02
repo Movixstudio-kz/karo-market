@@ -440,6 +440,7 @@
 
   <h2 class="section-title" id="listTitle">Свежие объявления</h2>
   <div id="adsList" class="ads">Загружаем объявления...</div>
+  <div id="topicsList" style="margin-top:25px;"></div>
 
 </div>
 <br><br>
@@ -919,7 +920,56 @@ document.getElementById("category").addEventListener("change", function () {
   alert("Тема опубликована.");
   this.reset();
     });
+  function loadTopics() {
+
+  const callbackName = "topicsCallback_" + Date.now();
+
+  window[callbackName] = function(topics) {
+
+    const box = document.getElementById("topicsList");
+
+    if (!topics.length) {
+      box.innerHTML = "";
+      return;
+    }
+
+    box.innerHTML = topics.map(topic => `
+      <div style="
+        background:white;
+        padding:20px;
+        margin-bottom:15px;
+        border-radius:16px;
+        box-shadow:0 4px 15px rgba(0,0,0,.08);
+      ">
+        <h3>${topic.title}</h3>
+
+        <div style="color:#666;font-size:14px;margin:8px 0;">
+          ${topic.category} • ${topic.name}
+        </div>
+
+        <div style="line-height:1.6;">
+          ${topic.text}
+        </div>
+      </div>
+    `).join("");
+
+    delete window[callbackName];
+    script.remove();
+  };
+
+  const script = document.createElement("script");
+
+  script.src =
+    WEB_APP_URL +
+    "?topics=1&callback=" +
+    callbackName +
+    "&t=" +
+    Date.now();
+
+  document.body.appendChild(script);
+}
 loadAds();
+loadTopics();
 loadPromoStats();
 </script>
 </body>
