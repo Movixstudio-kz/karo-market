@@ -334,7 +334,27 @@
 
   <button class="btn gray" onclick="clearFilters()">Сброс</button>
     </div>
-  
+  <div id="topicBlock" style="
+background:#eef6ff;
+border:2px solid #229ed9;
+padding:20px;
+border-radius:18px;
+margin-top:25px;
+margin-bottom:25px;
+">
+
+<h2 style="margin-bottom:10px;">
+💬 Общение и новости
+</h2>
+
+<p style="
+color:#555;
+margin-bottom:15px;
+line-height:1.5;
+">
+Задавайте вопросы, публикуйте новости, ищите специалистов,
+обсуждайте городские события и общайтесь с жителями Караганды.
+</p>
   <form id="topicForm">
     <input id="topicName" placeholder="Ваше имя" required>
     <input id="topicPhone" placeholder="Ваш WhatsApp, его не увидят другие пользователи" required>
@@ -358,6 +378,7 @@
       Опубликовать тему
     </button>
   </form>
+    
 </div>
   <div id="formBlock" class="hidden">
     <h2 class="section-title">Подать объявление</h2>
@@ -946,14 +967,35 @@ document.getElementById("category").addEventListener("change", function () {
       ">
         <h3>${topic.title}</h3>
 
-        <div style="color:#666;font-size:14px;margin:8px 0;">
-          ${topic.category} • ${topic.name}
-        </div>
+      <div style="color:#666;font-size:14px;margin:8px 0;">
+  ${topic.category} • ${topic.name}
+</div>
+
+<div style="
+color:#6b7280;
+font-size:13px;
+margin-bottom:10px;
+">
+🕒 ${formatDate(topic.date)}
+</div>
 
         <div style="line-height:1.6;">
           ${topic.text}
         </div>
-        <div style="margin-top:15px;">
+       <div style="
+margin-top:15px;
+display:flex;
+gap:15px;
+align-items:center;
+flex-wrap:wrap;
+">
+<span style="
+font-size:14px;
+color:#666;
+font-weight:bold;
+">
+💬 ${topic.commentsCount || 0} комментариев
+</span>
   <button class="btn blue" onclick="openTopic('${topic.id}')">
     💬 Открыть обсуждение
   </button>
