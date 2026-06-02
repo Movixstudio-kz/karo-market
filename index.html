@@ -339,29 +339,6 @@
     <input id="topicName" placeholder="Ваше имя" required>
     <input id="topicPhone" placeholder="Ваш WhatsApp, его не увидят другие пользователи" required>
 <small>Номер нужен только для модерации и не публикуется на сайте.</small>
-    <select id="topicCategory" required>
-      <option value="Общение">💬 Общение</option>
-      <option value="Новости">📢 Новости</option>
-    </select>
-    <input id="topicTitle" placeholder="Заголовок темы" required>
-    <textarea id="topicText" placeholder="Напишите текст темы, вопрос или новость" required></textarea>
-    <button class="btn" type="submit">Опубликовать тему</button>
-  </form>
-</div>
-<div id="topicBlock" class="hidden" style="
-margin-top:25px;
-background:linear-gradient(135deg,#eff6ff,#dbeafe);
-padding:25px;
-border-radius:20px;
-border:3px solid #2563eb;
-box-shadow:0 8px 25px rgba(37,99,235,.15);
-">
-  <h2 style="color:#1d4ed8;margin-bottom:15px;">
-💬 Создать тему или новость
-</h2>
-
-  <form id="topicForm">
-    <input id="topicName" placeholder="Ваше имя" required>
 
     <select id="topicCategory" required>
       <option value="Общение">💬 Общение</option>
@@ -589,8 +566,8 @@ filtered = [...vipAds, ...regularAds];
     : formatPrice(ad.price)}
 </div>
           <div class="meta">
-  ${ad.city || "Караганда"} • ${formatDate(ad.date)}
-</div> • ${ad.city || "Караганда"} • ${ad.category || "Разное"}</div>
+  ${ad.city || "Караганда"} • ${ad.category || "Разное"} • ${formatDate(ad.date)}
+</div>
           <div class="desc">${String(ad.description||"").substring(0,90)}...</div>
           <div class="ad-footer">
             <span>${formatDate(ad.date)}</span>
