@@ -307,9 +307,9 @@
     <div class="category" onclick="filterAds('Животные', this)">🐶 Животные</div>
     <div class="category" onclick="filterAds('Разное', this)">📦 Разное</div>
     <div class="category" onclick="filterAds('Отдам даром', this)">🎁 Отдам даром</div>
- 
+<div class="category" onclick="filterAds('Общение', this)">💬 Общение</div>
+<div class="category" onclick="filterAds('Новости', this)">📢 Новости</div>
 </div>
-  </div>
 
   <div class="filters">
   <input id="searchInput" placeholder="Поиск по заголовку или описанию" oninput="renderAds()">
@@ -333,9 +333,8 @@
   <input id="maxPrice" type="number" placeholder="Цена до" oninput="renderAds()">
 
   <button class="btn gray" onclick="clearFilters()">Сброс</button>
-    <div id="topicBlock" class="hidden" style="margin-top:20px;">
-  <h2 class="section-title">💬 Создать тему</h2>
-
+    </div>
+  
   <form id="topicForm">
     <input id="topicName" placeholder="Ваше имя" required>
     <select id="topicCategory" required>
