@@ -711,26 +711,8 @@ function escapeText(text) {
   });
 
   alert("Объявление поднято наверх.");
-  document.getElementById("topicForm").addEventListener("submit", async function(e){
-  e.preventDefault();
 
-  await fetch(WEB_APP_URL, {
-    method: "POST",
-    mode: "no-cors",
-    body: JSON.stringify({
-      action: "addTopic",
-     name: topicName.value,
-phone: topicPhone.value,
-category: topicCategory.value,
-      title: topicTitle.value,
-      text: topicText.value
-    })
-  });
-
-  alert("Тема опубликована.");
-  this.reset();
-});  
-  loadAds();
+    loadAds();
   loadMyAds();
 }
   function loadPromoStats() {
@@ -941,6 +923,25 @@ document.getElementById("category").addEventListener("change", function () {
     priceField.placeholder = "Цена, например 150 000 ₸";
   }
 });
+  document.getElementById("topicForm").addEventListener("submit", async function(e){
+  e.preventDefault();
+
+  await fetch(WEB_APP_URL, {
+    method: "POST",
+    mode: "no-cors",
+    body: JSON.stringify({
+      action: "addTopic",
+      name: topicName.value,
+      phone: topicPhone.value,
+      category: topicCategory.value,
+      title: topicTitle.value,
+      text: topicText.value
+    })
+  });
+
+  alert("Тема опубликована.");
+  this.reset();
+    });
 loadAds();
 loadPromoStats();
 </script>
