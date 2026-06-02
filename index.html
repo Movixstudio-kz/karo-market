@@ -206,10 +206,10 @@
 <div class="container">
 <section class="promo">
   <div class="promo-left">
-    <h2>🎁 Розыгрыш призов среди первых 100 объявлений</h2>
+    <h2>🎁 Розыгрыш призов среди первых 100 одобренных объявлений</h2>
 
     <p>
-      Разместите объявление на KARO Market и участвуйте в розыгрыше призов.
+      Разместите объявление на KARO Market, дождитесь модерации и поделитесь ссылкой на своё объявление.
     </p>
 
     <ul>
@@ -218,25 +218,30 @@
       <li>🔝 4–5 место — 2 поднятия объявления</li>
     </ul>
 
-    <button class="btn" onclick="showForm()">
-      Участвовать
-    </button>
+    <p style="font-size:14px;opacity:.95;">
+      Участвуют только объявления, прошедшие модерацию. Для участия нужно сделать репост или отправить ссылку на объявление друзьям.
+    </p>
+
+    <button class="btn" onclick="showForm()">🚀 Подать объявление</button>
   </div>
 
   <div class="promo-right">
     <div class="promo-card">
-      promoCount = количество объявлений; promoLeft = 100 - количество объявлений;
+      <div class="promo-number" id="promoCount">0</div>
       <div>из 100 участников</div>
     </div>
 
- <div class="promo-number" id="promoCount">0</div>
-<div>из 100 участников</div>
+    <div class="promo-card">
+      <div class="promo-number" id="promoLeft">100</div>
+      <div>мест осталось</div>
+    </div>
 
     <div class="promo-card">
       <div class="promo-number" id="promoDays">14</div>
       <div>дней до розыгрыша</div>
     </div>
   </div>
+</section>
 </section>
   <!-- HERO -->
 <section class="hero">
