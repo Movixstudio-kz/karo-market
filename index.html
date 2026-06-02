@@ -210,7 +210,7 @@
   <h1>KARO Market</h1>
   <p>Бесплатные объявления Караганды</p>
   <div class="actions">
-    <button class="btn" onclick="showForm()">+ Подать объявление</button>
+    <button class="btn" onclick="document.getElementById('formBlock').classList.remove('hidden')">+ Подать объявление</button>
     <button class="btn dark" onclick="showCabinet()">Личный кабинет</button>
     <button class="btn gray" onclick="showFavorites()">❤️ Избранное</button>
   <a class="btn blue" href="https://t.me/karomarketkz" target="_blank">Telegram</a>
@@ -236,7 +236,7 @@
       Участвуют только объявления, прошедшие модерацию. Для участия нужно сделать репост или отправить ссылку на объявление друзьям.
     </p>
 
-    <button class="btn" onclick="showForm()">🚀 Подать объявление</button>
+    <button class="btn" onclick="document.getElementById('formBlock').classList.remove('hidden')">🚀 Подать объявление</button>
   </div>
 
   <div class="promo-right">
@@ -267,7 +267,7 @@
     </p>
 
     <div class="hero-buttons">
-      <button class="btn" onclick="showForm()">➕ Подать объявление</button>
+      <button class="btn" onclick="document.getElementById('formBlock').classList.remove('hidden')">➕ Подать объявление</button>
       <a href="#adsList" class="btn btn-secondary">🔍 Смотреть объявления</a>
     </div>
   </div>
@@ -504,6 +504,7 @@ function renderAds(){
   && (!min||price>=min)
   && (!max||price<=max)
   && (!favoritesMode||favs.includes(String(ad.id)));
+  });
   
   filtered.sort((a,b)=>Number(b.id)-Number(a.id));
 const vipAds = filtered.filter(ad => ad.vip);
@@ -679,22 +680,35 @@ async function deleteMyAd(id) {
   loadMyAds();
 }
 async function loadMyAds(){
-  const phone=normalizePhone(document.getElementById("cabinetPhone").value);
+  const box = document.getElementById("myAds");
+
+  const phone = normalizePhone(document.getElementById("cabinetPhone").value);
   const ownerCode = document.getElementById("cabinetCode").value.trim();
 
-if (!ownerCode) {
-  box.innerHTML = "<p>Введите код владельца объявления.</p>";
-  return;
-}
-  const box=document.getElementById("myAds");
-  if(!phone){box.innerHTML="<p>Введите телефон.</p>";return;}
-  box.innerHTML="Загружаем...";
-  const res=await fetch(WEB_APP_URL+"?phone="+phone+"&ownerCode="+encodeURIComponent(ownerCode)+"&t="+Date.now(),{method:"GET",redirect:"follow"});
-  const ads=JSON.parse(await res.text());
+  if (!ownerCode) {
+    box.innerHTML = "<p>Введите код владельца объявления.</p>";
+    return;
+  }
 
-  if(!ads.length){box.innerHTML="<p>По этому номеру объявлений не найдено.</p>";return;}
+  if (!phone) {
+    box.innerHTML = "<p>Введите телефон.</p>";
+    return;
+  }
 
-box.innerHTML = ads.map(ad => {
+  box.innerHTML = "Загружаем...";
+
+  const res = await fetch(WEB_APP_URL + "?phone=" + phone + "&ownerCode=" + encodeURIComponent(ownerCode) + "&t=" + Date.now(), {
+    method: "GET",
+    redirect: "follow"
+  });
+
+  const ads = JSON.parse(await res.text());
+
+  if (!ads.length) {
+    box.innerHTML = "<p>По этому номеру объявлений не найдено.</p>";
+    return;
+  }
+  box.innerHTML = ads.map(ad => {
   const st = ad.status === "Одобрено" ? "ok" : ad.status === "Отклонено" ? "bad" : "wait";
 
   return `
@@ -722,25 +736,6 @@ box.innerHTML = ads.map(ad => {
     </div>
   `;
 }).join("");
-}
-async function bumpMyAd(id) {
-  if (!confirm("Поднять объявление #" + id + " наверх списка?")) return;
-
-  const phone = normalizePhone(document.getElementById("cabinetPhone").value);
-
-  await fetch(WEB_APP_URL, {
-    method: "POST",
-    mode: "no-cors",
-    body: JSON.stringify({
-      action: "bumpAd",
-      id,
-      phone
-    })
-  });
-
-  alert("Объявление поднято наверх.");
-  loadAds();
-  loadMyAds();
 }
 function toBase64(file){
   return new Promise((resolve,reject)=>{
