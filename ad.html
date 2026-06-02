@@ -33,6 +33,14 @@
     .desc{line-height:1.7;white-space:pre-line;margin-top:16px}
     .btn{display:block;text-align:center;padding:15px 18px;border-radius:12px;text-decoration:none;font-weight:bold;color:white;background:#16a34a;margin-top:14px}
     .btn.dark{background:#111827}
+    .btn.share-btn{
+  background:linear-gradient(135deg,#229ed9,#2563eb);
+  box-shadow:0 6px 16px rgba(37,99,235,.25);
+}
+
+.btn.share-btn:hover{
+  transform:translateY(-2px);
+}
     .not-found{text-align:center;padding:60px;background:white;border-radius:18px}
     footer{text-align:center;padding:25px;color:#666;font-size:14px}
     .related{
@@ -182,7 +190,7 @@ function renderAd(ad) {
         </div>
 
        <a class="btn" href="${wa}" target="_blank" onclick="trackWhatsAppClick()">Написать в WhatsApp</a>
-       <button class="btn dark" onclick="shareAd()">
+    <button class="btn share-btn" onclick="shareAd()">
   📤 Поделиться объявлением
 </button>
         <a class="btn dark" href="index.html">Назад к объявлениям</a>
