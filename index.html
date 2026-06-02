@@ -307,8 +307,8 @@
     <div class="category" onclick="filterAds('Животные', this)">🐶 Животные</div>
     <div class="category" onclick="filterAds('Разное', this)">📦 Разное</div>
     <div class="category" onclick="filterAds('Отдам даром', this)">🎁 Отдам даром</div>
-    <div class="category" onclick="filterAds('Общение', this)">💬 Общение</div>
-    <div class="category" onclick="filterAds('Новости', this)">📢 Новости</div>
+    <div class="category" onclick="filterAds('Общение', this); document.getElementById('listTitle').textContent='💬 Общение и вопросы'">💬 Общение</div>
+    <div class="category" onclick="filterAds('Новости', this); document.getElementById('listTitle').textContent='📢 Новости и события'">📢 Новости</div>v>
   </div>
 
   <div class="filters">
@@ -560,6 +560,11 @@ function openAd(id){
 
 function filterAds(category,el){
   currentCategory=category;
+  document.getElementById("listTitle").textContent =
+  category === "Все" ? "Свежие объявления" :
+  category === "Общение" ? "💬 Общение и вопросы" :
+  category === "Новости" ? "📢 Новости и события" :
+  category;
   document.querySelectorAll(".category").forEach(c=>c.classList.remove("active"));
   el.classList.add("active");
   renderAds();
