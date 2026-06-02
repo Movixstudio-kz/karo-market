@@ -565,19 +565,20 @@ async function editMyAd(id, title, price, description) {
   }
 
   await fetch(WEB_APP_URL, {
-    method: "POST",
-    mode: "no-cors",
+  method: "POST",
+  mode: "no-cors",
   body: JSON.stringify({
-  action: "editAd",
-  id,
-  phone,
-  ownerCode,
-  title,
-  price,
-  description
-})
+    action: "editAd",
+    id,
+    phone,
+    ownerCode,
+    title,
+    price,
+    description
+  })
+});
 
-  alert("Объявление отправлено на повторную модерацию.");
+alert("Объявление отправлено на повторную модерацию.");
   
   loadMyAds();
 }
