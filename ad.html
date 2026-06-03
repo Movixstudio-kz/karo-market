@@ -128,6 +128,12 @@ function normalizePhone(phone) {
   return String(phone || "").replace(/\D/g, "").replace(/^8/, "7");
 }
 
+function trackEvent(name, params){
+  if (typeof gtag === "function") {
+    gtag("event", name, params || {});
+  }
+}
+
 function formatDate(value) {
   if (!value) return "";
   const d = new Date(value);
@@ -257,12 +263,33 @@ loadRelatedAds();
 
 async function trackWhatsAppClick() {
   if (!currentAd || !currentAd.id) return;
+  trackEvent("whatsapp_click", {
+    ad_id: currentAd.id,
+    category: currentAd.category || ""
+  });
 
   await fetch(WEB_APP_URL, {
     method: "POST",
     mode: "no-cors",
     body: JSON.stringify({
       action: "whatsappClick",
+      id: currentAd.id
+    })
+  });
+}
+
+async function trackPhotoClick() {
+  if (!currentAd || !currentAd.id) return;
+  trackEvent("photo_click", {
+    ad_id: currentAd.id,
+    photo_index: currentPhoto
+  });
+
+  await fetch(WEB_APP_URL, {
+    method: "POST",
+    mode: "no-cors",
+    body: JSON.stringify({
+      action: "photoClick",
       id: currentAd.id
     })
   });
@@ -306,12 +333,15 @@ async function loadRelatedAds() {
   }
 }
 function shareAd() {
-  const url = window.location.href;
+  const url = currentAd && currentAd.id
+    ? WEB_APP_URL + "?share=ad&id=" + encodeURIComponent(currentAd.id)
+    : window.location.href;
+  trackEvent("share_ad", {ad_id: currentAd && currentAd.id ? currentAd.id : ""});
 
   if (navigator.share) {
     navigator.share({
       title: document.title,
-      text: "Посмотрите объявление на KARO Market",
+      text: currentAd && currentAd.title ? currentAd.title : "Посмотрите объявление на KARO Market",
       url: url
     });
   } else {
