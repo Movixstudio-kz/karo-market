@@ -66,6 +66,15 @@ function formatDate(value){
   return isNaN(d) ? "" : d.toLocaleString("ru-RU");
 }
 
+function escapeHtml(value){
+  return String(value || "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
 function loadTopic(){
   const id = getId();
   const callbackName = "topicCallback_" + Date.now();
@@ -79,9 +88,9 @@ function loadTopic(){
     }
 
     box.innerHTML = `
-      <h1>${data.title}</h1>
-      <div class="meta">${data.category} • ${data.name} • ${formatDate(data.date)}</div>
-      <div class="text">${data.text}</div>
+      <h1>${escapeHtml(data.title)}</h1>
+      <div class="meta">${escapeHtml(data.category)} • ${escapeHtml(data.name)} • ${formatDate(data.date)}</div>
+      <div class="text">${escapeHtml(data.text)}</div>
     `;
 
     delete window[callbackName];
@@ -107,9 +116,9 @@ function loadComments(){
 
     box.innerHTML = comments.map(c => `
       <div class="comment">
-        <b>${c.name}</b>
+        <b>${escapeHtml(c.name)}</b>
         <div class="meta">${formatDate(c.date)}</div>
-        <div class="text">${c.text}</div>
+        <div class="text">${escapeHtml(c.text)}</div>
       </div>
     `).join("");
 

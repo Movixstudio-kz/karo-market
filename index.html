@@ -522,6 +522,18 @@ function formatDate(value){const d=new Date(value);return isNaN(d)?"":d.toLocale
 function getFavs(){return JSON.parse(localStorage.getItem("karoFavs")||"[]")}
 function saveFavs(favs){localStorage.setItem("karoFavs",JSON.stringify(favs))}
 function isFav(id){return getFavs().includes(String(id))}
+function escapeHtml(value){
+  return String(value || "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+function safeUrl(value){
+  const url = String(value || "").trim();
+  return /^https?:\/\//i.test(url) || /^data:image\//i.test(url) ? url : "";
+}
 
 function toggleFav(id,event){
   event.stopPropagation();
@@ -583,28 +595,28 @@ filtered = [...vipAds, ...regularAds];
   if(!filtered.length){adsList.innerHTML="<p>Пока нет подходящих объявлений.</p>";return;}
 
   adsList.innerHTML=filtered.map(ad=>{
-    const firstPhoto=ad.photos&&ad.photos.length?ad.photos[0]:"";
+    const firstPhoto=ad.photos&&ad.photos.length?safeUrl(ad.photos[0]):"";
     const count=ad.photos?ad.photos.length:0;
     return `
-    <div class="ad-card" style="${ad.vip ? 'border:3px solid #f59e0b;' : ''}" onclick="openAd('${ad.id}')">
+    <div class="ad-card" style="${ad.vip ? 'border:3px solid #f59e0b;' : ''}" onclick="openAd('${escapeHtml(ad.id)}')">
         ${isNew(ad.date)?`<div class="new-badge">NEW</div>`:""}
         ${ad.vip ? `<div class="new-badge" style="left:auto;right:55px;background:#f59e0b;">VIP</div>` : ""}
-        <button class="fav ${isFav(ad.id)?"active":""}" onclick="toggleFav('${ad.id}',event)">♥</button>
-        <div class="ad-img">${firstPhoto?`<img src="${firstPhoto}">`:"Фото скоро добавим"}</div>
+        <button class="fav ${isFav(ad.id)?"active":""}" onclick="toggleFav('${escapeHtml(ad.id)}',event)">♥</button>
+        <div class="ad-img">${firstPhoto?`<img src="${escapeHtml(firstPhoto)}">`:"Фото скоро добавим"}</div>
         <div class="ad-content">
-          <h3>${ad.title||"Без названия"}</h3>
+          <h3>${escapeHtml(ad.title||"Без названия")}</h3>
          <div class="price">
   ${ad.category === "Отдам даром"
     ? "🎁 Бесплатно"
-    : formatPrice(ad.price)}
+    : escapeHtml(formatPrice(ad.price))}
 </div>
           <div class="meta">
-  ${ad.city || "Караганда"} • ${ad.category || "Разное"} • ${formatDate(ad.date)}
+  ${escapeHtml(ad.city || "Караганда")} • ${escapeHtml(ad.category || "Разное")} • ${formatDate(ad.date)}
 </div>
-          <div class="desc">${String(ad.description||"").substring(0,90)}...</div>
+          <div class="desc">${escapeHtml(String(ad.description||"").substring(0,90))}...</div>
           <div class="ad-footer">
             <span>${formatDate(ad.date)}</span>
-            <span>👁 ${ad.views||0}</span>
+            <span>👁 ${escapeHtml(ad.views||0)}</span>
             ${count?`<span class="photo-count">📷 ${count}</span>`:""}
           </div>
             </div>
@@ -699,6 +711,9 @@ alert("Объявление отправлено на повторную мод�
 }
 function escapeText(text) {
   return String(text || "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
     .replace(/\\/g, "\\\\")
     .replace(/'/g, "\\'")
     .replace(/"/g, "&quot;")
@@ -800,25 +815,25 @@ async function loadMyAds(){
 
   return `
     <div style="padding:14px;border-bottom:1px solid #eee">
-      <b>#${ad.id} — ${ad.title || "Без названия"}</b><br>
-      <span class="status ${st}">${ad.status}</span><br>
-      Цена: ${formatPrice(ad.price)}<br>
+      <b>#${escapeHtml(ad.id)} — ${escapeHtml(ad.title || "Без названия")}</b><br>
+      <span class="status ${st}">${escapeHtml(ad.status)}</span><br>
+      Цена: ${escapeHtml(formatPrice(ad.price))}<br>
 
       <div style="margin:8px 0 10px;font-size:16px;line-height:1.5;">
-        👁 Просмотры: ${ad.views || 0}<br>
-        💬 WhatsApp: ${ad.whatsappClicks || 0}<br>
-        📷 Фото: ${ad.photoClicks || 0}
+        👁 Просмотры: ${escapeHtml(ad.views || 0)}<br>
+        💬 WhatsApp: ${escapeHtml(ad.whatsappClicks || 0)}<br>
+        📷 Фото: ${escapeHtml(ad.photoClicks || 0)}
       </div>
 
       Дата: ${formatDate(ad.date)}<br>
 
-      ${ad.status === "Одобрено" ? `<a href="ad.html?id=${ad.id}">Открыть объявление</a><br>` : ""}
-      ${ad.status === "Отклонено" ? `<p>Причина: ${ad.reason || "Не указана"}</p>` : ""}
+      ${ad.status === "Одобрено" ? `<a href="ad.html?id=${encodeURIComponent(ad.id)}">Открыть объявление</a><br>` : ""}
+      ${ad.status === "Отклонено" ? `<p>Причина: ${escapeHtml(ad.reason || "Не указана")}</p>` : ""}
 
       <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
-        ${ad.status === "Одобрено" ? `<button class="btn" onclick="bumpMyAd('${ad.id}')">⬆️ Поднять</button>` : ""}
+        ${ad.status === "Одобрено" ? `<button class="btn" onclick="bumpMyAd('${escapeHtml(ad.id)}')">⬆️ Поднять</button>` : ""}
         <button class="btn gray" onclick="openEditForm('${ad.id}', '${escapeText(ad.title)}', '${escapeText(ad.price)}', '${escapeText(ad.description)}')">✏️ Редактировать</button>
-        <button class="btn dark" onclick="deleteMyAd('${ad.id}')">🗑 Удалить</button>
+        <button class="btn dark" onclick="deleteMyAd('${escapeHtml(ad.id)}')">🗑 Удалить</button>
       </div>
     </div>
   `;
@@ -976,10 +991,10 @@ document.getElementById("category").addEventListener("change", function () {
         border-radius:16px;
         box-shadow:0 4px 15px rgba(0,0,0,.08);
       ">
-        <h3>${topic.title}</h3>
+        <h3>${escapeHtml(topic.title)}</h3>
 
       <div style="color:#666;font-size:14px;margin:8px 0;">
-  ${topic.category} • ${topic.name}
+  ${escapeHtml(topic.category)} • ${escapeHtml(topic.name)}
 </div>
 
 <div style="
@@ -991,7 +1006,7 @@ margin-bottom:10px;
 </div>
 
         <div style="line-height:1.6;">
-          ${topic.text}
+          ${escapeHtml(topic.text)}
         </div>
        <div style="
 margin-top:15px;
@@ -1005,9 +1020,9 @@ font-size:14px;
 color:#666;
 font-weight:bold;
 ">
-💬 ${topic.commentsCount || 0} комментариев
+💬 ${escapeHtml(topic.commentsCount || 0)} комментариев
 </span>
-  <button class="btn blue" onclick="openTopic('${topic.id}')">
+  <button class="btn blue" onclick="openTopic('${escapeHtml(topic.id)}')">
     💬 Открыть обсуждение
   </button>
 </div>

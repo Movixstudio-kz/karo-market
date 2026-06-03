@@ -90,8 +90,22 @@ function getKey(){
 }
 
 function saveKeyAndLoad(){
-  localStorage.setItem("karoAdminKey", getKey());
+  sessionStorage.setItem("karoAdminKey", getKey());
   loadCurrent();
+}
+
+function escapeHtml(value){
+  return String(value || "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
+function safeUrl(value){
+  const url = String(value || "").trim();
+  return /^https?:\/\//i.test(url) || /^data:image\//i.test(url) ? url : "";
 }
 
 function switchTab(tab, el){
@@ -153,14 +167,14 @@ async function loadCurrent(){
     });
 
     if (!data || data.ok === false) {
-      list.innerHTML = `<div class="empty">${(data && data.error) || "Нет доступа."}</div>`;
+      list.innerHTML = `<div class="empty">${escapeHtml((data && data.error) || "Нет доступа.")}</div>`;
       return;
     }
 
     renderStats(data.stats || {});
     renderItems(data.items || []);
   } catch(e) {
-    list.innerHTML = `<div class="empty">${e.message}</div>`;
+    list.innerHTML = `<div class="empty">${escapeHtml(e.message)}</div>`;
   }
 }
 
@@ -182,7 +196,12 @@ function statusClass(status){
 }
 
 function escapeAttr(value){
-  return String(value || "").replace(/"/g, "&quot;");
+  return String(value || "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "\\'");
 }
 
 function renderItems(items){
@@ -200,22 +219,22 @@ function renderItems(items){
 
     return `
       <article class="item">
-        <h3>#${item.id || ""} — ${title}</h3>
+        <h3>#${escapeHtml(item.id || "")} — ${escapeHtml(title)}</h3>
         <div class="meta">
-          <span class="status ${statusClass(status)}">${status}</span><br>
-          Тип: ${type} • Категория: ${item.category || "-"} • Город: ${item.city || "-"}<br>
-          Имя: ${item.name || "-"} • Телефон: ${item.phone || "-"} • Дата: ${item.date || "-"}<br>
-          Просмотры: ${item.views || 0} • WhatsApp: ${item.whatsappClicks || 0} • Фото-клики: ${item.photoClicks || 0}
+          <span class="status ${statusClass(status)}">${escapeHtml(status)}</span><br>
+          Тип: ${escapeHtml(type)} • Категория: ${escapeHtml(item.category || "-")} • Город: ${escapeHtml(item.city || "-")}<br>
+          Имя: ${escapeHtml(item.name || "-")} • Телефон: ${escapeHtml(item.phone || "-")} • Дата: ${escapeHtml(item.date || "-")}<br>
+          Просмотры: ${escapeHtml(item.views || 0)} • WhatsApp: ${escapeHtml(item.whatsappClicks || 0)} • Фото-клики: ${escapeHtml(item.photoClicks || 0)}
         </div>
-        ${photos.length ? `<div class="photos">${photos.map(src => `<img src="${src}" alt="">`).join("")}</div>` : ""}
-        <div class="text">${item.description || item.text || ""}</div>
-        ${item.reason ? `<div class="meta">Причина отклонения: ${item.reason}</div>` : ""}
+        ${photos.length ? `<div class="photos">${photos.map(src => safeUrl(src) ? `<img src="${escapeHtml(safeUrl(src))}" alt="">` : "").join("")}</div>` : ""}
+        <div class="text">${escapeHtml(item.description || item.text || "")}</div>
+        ${item.reason ? `<div class="meta">Причина отклонения: ${escapeHtml(item.reason)}</div>` : ""}
         <div class="actions">
-          <button class="btn green" onclick="moderate('${type}','${escapeAttr(item.id)}','approve')">Одобрить</button>
-          <button class="btn red" onclick="rejectItem('${type}','${escapeAttr(item.id)}')">Отклонить</button>
-          <button class="btn dark" onclick="moderate('${type}','${escapeAttr(item.id)}','delete')">Удалить</button>
-          ${type === "ads" ? `<button class="btn gold" onclick="moderate('${type}','${escapeAttr(item.id)}','vip')">VIP</button>
-          <button class="btn gray" onclick="moderate('${type}','${escapeAttr(item.id)}','bump')">Поднять</button>` : ""}
+          <button class="btn green" onclick="moderate('${escapeAttr(type)}','${escapeAttr(item.id)}','approve')">Одобрить</button>
+          <button class="btn red" onclick="rejectItem('${escapeAttr(type)}','${escapeAttr(item.id)}')">Отклонить</button>
+          <button class="btn dark" onclick="moderate('${escapeAttr(type)}','${escapeAttr(item.id)}','delete')">Удалить</button>
+          ${type === "ads" ? `<button class="btn gold" onclick="moderate('${escapeAttr(type)}','${escapeAttr(item.id)}','vip')">VIP</button>
+          <button class="btn gray" onclick="moderate('${escapeAttr(type)}','${escapeAttr(item.id)}','bump')">Поднять</button>` : ""}
         </div>
       </article>
     `;
@@ -232,7 +251,7 @@ function rejectItem(type, id){
   sendAction("moderate", {type, id, decision: "reject", reason});
 }
 
-document.getElementById("adminKey").value = localStorage.getItem("karoAdminKey") || "";
+document.getElementById("adminKey").value = sessionStorage.getItem("karoAdminKey") || "";
 </script>
 </body>
 </html>

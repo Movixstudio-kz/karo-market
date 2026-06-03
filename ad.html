@@ -168,6 +168,20 @@ function trackEvent(name, params){
   }
 }
 
+function escapeHtml(value) {
+  return String(value || "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
+function safeUrl(value) {
+  const url = String(value || "").trim();
+  return /^https?:\/\//i.test(url) || /^data:image\//i.test(url) ? url : "";
+}
+
 function formatDate(value) {
   if (!value) return "";
   const d = new Date(value);
@@ -288,6 +302,8 @@ function renderAd(ad) {
   const phone = normalizePhone(ad.phone);
   const whatsappText = encodeURIComponent("Здравствуйте! Интересует объявление #" + ad.id + ": " + (ad.title || ""));
   const wa = phone ? "https://wa.me/" + phone + "?text=" + whatsappText : "#";
+  const safePhotos = photos.map(safeUrl).filter(Boolean);
+  currentAd.photos = safePhotos;
 
   document.title = (ad.title || "Объявление") + " — KARO Market";
 
@@ -295,30 +311,30 @@ function renderAd(ad) {
     <div class="ad-page">
       <div class="card">
         <div class="main-photo">
-          ${photos.length ? `<img id="mainPhoto" src="${photos[0]}" alt="Фото объявления" onclick="openLightbox(currentPhoto)">` : "Фото нет"}
+          ${safePhotos.length ? `<img id="mainPhoto" src="${escapeHtml(safePhotos[0])}" alt="Фото объявления" onclick="openLightbox(currentPhoto)">` : "Фото нет"}
         </div>
 
-        ${photos.length > 1 ? `
+        ${safePhotos.length > 1 ? `
           <div class="thumbs">
-            ${photos.map((p,i)=>`<img src="${p}" class="${i===0?'active':''}" onclick="setPhoto(${i});">`).join("")}
+            ${safePhotos.map((p,i)=>`<img src="${escapeHtml(p)}" class="${i===0?'active':''}" onclick="setPhoto(${i});">`).join("")}
           </div>
         ` : ""}
       </div>
 
       <div class="card">
-        <h1>${ad.title || "Без названия"}</h1>
+        <h1>${escapeHtml(ad.title || "Без названия")}</h1>
        <div class="price">
   ${ad.category === "Отдам даром"
     ? "🎁 Бесплатно"
-    : (ad.price || "Цена не указана")}
+    : escapeHtml(ad.price || "Цена не указана")}
 </div>
 
         <div class="meta">
-          № объявления: <b>#${ad.id}</b><br>
-          Категория: ${ad.category || "Разное"}<br>
+          № объявления: <b>#${escapeHtml(ad.id)}</b><br>
+          Категория: ${escapeHtml(ad.category || "Разное")}<br>
           Город: Караганда<br>
           Дата: ${formatDate(ad.date)}<br>
-          Просмотры: 👁 ${ad.views || 0}
+          Просмотры: 👁 ${escapeHtml(ad.views || 0)}
         </div>
 
        <a class="btn" href="${wa}" target="_blank" onclick="trackWhatsAppClick()">Написать в WhatsApp</a>
@@ -330,7 +346,7 @@ function renderAd(ad) {
 </a>
         <a class="btn dark" href="index.html">Назад к объявлениям</a>
 
-        <div class="desc">${ad.description || ""}</div>
+        <div class="desc">${escapeHtml(ad.description || "")}</div>
       </div>
     </div>
   `;
@@ -432,13 +448,13 @@ async function loadRelatedAds() {
     }
 
     box.innerHTML = related.map(ad => `
-      <div class="related-item" onclick="location.href='ad.html?id=${ad.id}'">
+      <div class="related-item" onclick="location.href='ad.html?id=${encodeURIComponent(ad.id)}'">
         ${ad.photos && ad.photos[0]
-          ? `<img src="${ad.photos[0]}">`
+          ? `<img src="${escapeHtml(safeUrl(ad.photos[0]))}">`
           : ""
         }
-        <h3>${ad.title}</h3>
-        <div class="related-price">${ad.price || ""} ₸</div>
+        <h3>${escapeHtml(ad.title)}</h3>
+        <div class="related-price">${escapeHtml(ad.price || "")} ₸</div>
       </div>
     `).join("");
 
