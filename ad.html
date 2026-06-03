@@ -82,17 +82,20 @@
 }
     .lightbox{position:fixed;inset:0;background:rgba(0,0,0,.92);display:none;align-items:center;justify-content:center;z-index:9999;padding:18px}
     .lightbox.open{display:flex}
-    .lightbox-img{max-width:94vw;max-height:86vh;object-fit:contain;border-radius:10px;background:#111}
-    .lightbox-close,.lightbox-prev,.lightbox-next{position:absolute;border:0;cursor:pointer;color:white;background:rgba(17,24,39,.72);border-radius:999px;width:48px;height:48px;font-size:30px;display:flex;align-items:center;justify-content:center}
+    .lightbox-img{max-width:94vw;max-height:86vh;object-fit:contain;border-radius:10px;background:#111;cursor:grab;transition:transform .12s ease;user-select:none}
+    .lightbox-img.zoomed{cursor:move}
+    .lightbox-close,.lightbox-prev,.lightbox-next,.zoom-btn{position:absolute;border:0;cursor:pointer;color:white;background:rgba(17,24,39,.72);border-radius:999px;width:48px;height:48px;font-size:30px;display:flex;align-items:center;justify-content:center}
     .lightbox-close{top:18px;right:18px}
     .lightbox-prev{left:18px;top:50%;transform:translateY(-50%)}
     .lightbox-next{right:18px;top:50%;transform:translateY(-50%)}
+    .zoom-controls{position:absolute;top:18px;left:18px;display:flex;gap:8px}
+    .zoom-controls .zoom-btn{position:static;font-size:22px;font-weight:bold}
     .lightbox-counter{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);color:white;background:rgba(17,24,39,.72);border-radius:999px;padding:8px 13px;font-weight:bold}
     @media(max-width:800px){
       .ad-page{grid-template-columns:1fr}
       .main-photo{height:320px}
       header .wrap{flex-direction:column;align-items:flex-start}
-      .lightbox-prev,.lightbox-next{width:42px;height:42px;font-size:26px}
+      .lightbox-prev,.lightbox-next,.lightbox-close,.zoom-btn{width:42px;height:42px;font-size:26px}
     }
   </style>
 
@@ -126,8 +129,13 @@ gtag('config', 'G-7RVQ7B73D9');
 
 <div id="lightbox" class="lightbox" onclick="closeLightbox(event)">
   <button class="lightbox-close" onclick="closeLightbox(event)" aria-label="Закрыть">×</button>
+  <div class="zoom-controls" onclick="event.stopPropagation()">
+    <button class="zoom-btn" onclick="zoomPhoto(1)" aria-label="Увеличить">+</button>
+    <button class="zoom-btn" onclick="zoomPhoto(-1)" aria-label="Уменьшить">−</button>
+    <button class="zoom-btn" onclick="resetZoom()" aria-label="Сбросить зум">1×</button>
+  </div>
   <button class="lightbox-prev" onclick="prevPhoto(event)" aria-label="Предыдущее фото">‹</button>
-  <img id="lightboxImg" class="lightbox-img" alt="Фото объявления">
+  <img id="lightboxImg" class="lightbox-img" alt="Фото объявления" draggable="false">
   <button class="lightbox-next" onclick="nextPhoto(event)" aria-label="Следующее фото">›</button>
   <div id="lightboxCounter" class="lightbox-counter"></div>
 </div>
@@ -137,6 +145,14 @@ const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwaY69-aqRdGtPy_HVO
 
 let currentAd = null;
 let currentPhoto = 0;
+let zoomScale = 1;
+let zoomX = 0;
+let zoomY = 0;
+let isDraggingPhoto = false;
+let dragStartX = 0;
+let dragStartY = 0;
+let dragOriginX = 0;
+let dragOriginY = 0;
 
 function getId() {
   return new URLSearchParams(window.location.search).get("id");
@@ -175,12 +191,14 @@ function updateLightbox() {
   document.getElementById("lightboxImg").src = currentAd.photos[currentPhoto];
   document.getElementById("lightboxCounter").textContent =
     (currentPhoto + 1) + " / " + currentAd.photos.length;
+  applyZoom();
 }
 
 function openLightbox(index) {
   if (!currentAd || !currentAd.photos || !currentAd.photos.length) return;
 
   setPhoto(index);
+  resetZoom();
   updateLightbox();
   document.getElementById("lightbox").classList.add("open");
   document.body.style.overflow = "hidden";
@@ -199,6 +217,7 @@ function closeLightbox(event) {
 
   document.getElementById("lightbox").classList.remove("open");
   document.body.style.overflow = "";
+  resetZoom();
 }
 
 function nextPhoto(event) {
@@ -206,6 +225,7 @@ function nextPhoto(event) {
   if (!currentAd || !currentAd.photos || !currentAd.photos.length) return;
 
   setPhoto((currentPhoto + 1) % currentAd.photos.length);
+  resetZoom();
   updateLightbox();
 }
 
@@ -214,7 +234,32 @@ function prevPhoto(event) {
   if (!currentAd || !currentAd.photos || !currentAd.photos.length) return;
 
   setPhoto((currentPhoto - 1 + currentAd.photos.length) % currentAd.photos.length);
+  resetZoom();
   updateLightbox();
+}
+
+function applyZoom() {
+  const img = document.getElementById("lightboxImg");
+  if (!img) return;
+
+  img.style.transform = `translate(${zoomX}px, ${zoomY}px) scale(${zoomScale})`;
+  img.classList.toggle("zoomed", zoomScale > 1);
+}
+
+function zoomPhoto(direction) {
+  zoomScale = Math.max(1, Math.min(4, zoomScale + direction * 0.35));
+  if (zoomScale === 1) {
+    zoomX = 0;
+    zoomY = 0;
+  }
+  applyZoom();
+}
+
+function resetZoom() {
+  zoomScale = 1;
+  zoomX = 0;
+  zoomY = 0;
+  applyZoom();
 }
 
 function renderAd(ad) {
@@ -437,6 +482,42 @@ document.addEventListener("keydown", function(event) {
   if (event.key === "Escape") closeLightbox({target: lightbox});
   if (event.key === "ArrowRight") nextPhoto(event);
   if (event.key === "ArrowLeft") prevPhoto(event);
+  if (event.key === "+" || event.key === "=") zoomPhoto(1);
+  if (event.key === "-") zoomPhoto(-1);
+  if (event.key === "0") resetZoom();
+});
+
+document.getElementById("lightboxImg").addEventListener("wheel", function(event) {
+  event.preventDefault();
+  event.stopPropagation();
+  zoomPhoto(event.deltaY < 0 ? 1 : -1);
+}, {passive:false});
+
+document.getElementById("lightboxImg").addEventListener("pointerdown", function(event) {
+  if (zoomScale <= 1) return;
+  event.preventDefault();
+  event.stopPropagation();
+  isDraggingPhoto = true;
+  dragStartX = event.clientX;
+  dragStartY = event.clientY;
+  dragOriginX = zoomX;
+  dragOriginY = zoomY;
+  this.setPointerCapture(event.pointerId);
+});
+
+document.getElementById("lightboxImg").addEventListener("pointermove", function(event) {
+  if (!isDraggingPhoto) return;
+  event.preventDefault();
+  zoomX = dragOriginX + event.clientX - dragStartX;
+  zoomY = dragOriginY + event.clientY - dragStartY;
+  applyZoom();
+});
+
+document.getElementById("lightboxImg").addEventListener("pointerup", function(event) {
+  isDraggingPhoto = false;
+  try {
+    this.releasePointerCapture(event.pointerId);
+  } catch(e) {}
 });
 loadAd();
 </script>
