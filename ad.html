@@ -41,6 +41,7 @@
   background:linear-gradient(135deg,#229ed9,#2563eb);
   box-shadow:0 6px 16px rgba(37,99,235,.25);
 }
+.btn.whatsapp-share{background:#25d366}
 
 .btn.share-btn:hover{
   transform:translateY(-2px);
@@ -214,6 +215,9 @@ function renderAd(ad) {
     <button class="btn share-btn" onclick="shareAd()">
   📤 Поделиться объявлением
 </button>
+    <a class="btn whatsapp-share" href="${getWhatsAppShareUrl()}" target="_blank" onclick="trackEvent('whatsapp_share', {ad_id: currentAd && currentAd.id ? currentAd.id : ''})">
+  Поделиться в WhatsApp
+</a>
         <a class="btn dark" href="index.html">Назад к объявлениям</a>
 
         <div class="desc">${ad.description || ""}</div>
@@ -332,10 +336,22 @@ async function loadRelatedAds() {
     console.log(e);
   }
 }
-function shareAd() {
-  const url = currentAd && currentAd.id
+function getShareUrl() {
+  return currentAd && currentAd.id
     ? WEB_APP_URL + "?share=ad&id=" + encodeURIComponent(currentAd.id)
     : window.location.href;
+}
+
+function getWhatsAppShareUrl() {
+  const text = currentAd && currentAd.title
+    ? currentAd.title + "\n" + getShareUrl()
+    : getShareUrl();
+
+  return "https://wa.me/?text=" + encodeURIComponent(text);
+}
+
+function shareAd() {
+  const url = getShareUrl();
   trackEvent("share_ad", {ad_id: currentAd && currentAd.id ? currentAd.id : ""});
 
   if (navigator.share) {
