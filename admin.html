@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Модерация — KARO Market</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:Arial,sans-serif;background:#f4f5f7;color:#111827}
+    header{background:linear-gradient(135deg,#111827,#2563eb);color:white;padding:24px 18px}
+    header .wrap{max-width:1180px;margin:auto;display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap}
+    header a{color:white;text-decoration:none;font-weight:bold}
+    .container{max-width:1180px;margin:auto;padding:22px 14px}
+    .panel,.item{background:white;border-radius:16px;box-shadow:0 4px 14px rgba(0,0,0,.07);padding:18px}
+    .panel{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:end;margin-bottom:18px}
+    input,select,textarea{width:100%;padding:12px;border:1px solid #d1d5db;border-radius:10px;font-size:15px}
+    textarea{min-height:80px}
+    label{font-size:13px;color:#4b5563;font-weight:bold;display:grid;gap:6px}
+    .btn{border:0;cursor:pointer;padding:12px 16px;border-radius:10px;text-decoration:none;font-weight:bold;color:white;background:#2563eb}
+    .btn.green{background:#16a34a}.btn.red{background:#dc2626}.btn.gray{background:#6b7280}.btn.dark{background:#111827}.btn.gold{background:#f59e0b;color:#111827}
+    .tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+    .tab{background:#e5e7eb;color:#111827}.tab.active{background:#2563eb;color:white}
+    .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:16px}
+    .stat{background:white;border-radius:14px;padding:16px;box-shadow:0 4px 14px rgba(0,0,0,.07)}
+    .stat b{font-size:26px;display:block;margin-bottom:4px}
+    .list{display:grid;gap:14px}
+    .item h3{font-size:20px;margin-bottom:8px}
+    .meta{color:#6b7280;font-size:14px;line-height:1.55;margin-bottom:10px}
+    .text{line-height:1.55;white-space:pre-line;margin:10px 0}
+    .photos{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+    .photos img{width:90px;height:76px;object-fit:cover;border-radius:10px;border:1px solid #e5e7eb}
+    .actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+    .status{display:inline-block;padding:4px 8px;border-radius:999px;font-size:12px;font-weight:bold;background:#fef3c7;color:#92400e}
+    .status.ok{background:#dcfce7;color:#166534}.status.bad{background:#fee2e2;color:#991b1b}
+    .empty{padding:28px;text-align:center;color:#6b7280;background:white;border-radius:16px}
+    @media(max-width:700px){.panel{grid-template-columns:1fr}.btn{width:100%}}
+  </style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <a href="index.html">← KARO Market</a>
+    <strong>Модерация и статистика</strong>
+  </div>
+</header>
+
+<main class="container">
+  <section class="panel">
+    <label>
+      Ключ администратора
+      <input id="adminKey" type="password" placeholder="Введите ADMIN_KEY из Apps Script">
+    </label>
+    <button class="btn" onclick="saveKeyAndLoad()">Открыть админку</button>
+  </section>
+
+  <section class="stats" id="stats"></section>
+
+  <nav class="tabs">
+    <button class="btn tab active" data-tab="ads" onclick="switchTab('ads', this)">Объявления</button>
+    <button class="btn tab" data-tab="topics" onclick="switchTab('topics', this)">Посты</button>
+    <button class="btn tab" data-tab="comments" onclick="switchTab('comments', this)">Комментарии</button>
+    <button class="btn tab" data-tab="all" onclick="switchTab('all', this)">Все записи</button>
+  </nav>
+
+  <section class="panel">
+    <label>
+      Фильтр
+      <select id="statusFilter" onchange="loadCurrent()">
+        <option value="pending">Ожидают модерации</option>
+        <option value="approved">Одобренные</option>
+        <option value="rejected">Отклоненные</option>
+        <option value="deleted">Удаленные</option>
+        <option value="all">Все статусы</option>
+      </select>
+    </label>
+    <button class="btn gray" onclick="loadCurrent()">Обновить</button>
+  </section>
+
+  <div id="list" class="list">
+    <div class="empty">Введите ключ администратора и нажмите «Открыть админку».</div>
+  </div>
+</main>
+
+<script>
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwaY69-aqRdGtPy_HVOs_QIYJKDODdTsPtujvSOdqBBTULG2Jb4W2V92zEtmF3Lp9oK/exec";
+let currentTab = "ads";
+
+function getKey(){
+  return document.getElementById("adminKey").value.trim();
+}
+
+function saveKeyAndLoad(){
+  localStorage.setItem("karoAdminKey", getKey());
+  loadCurrent();
+}
+
+function switchTab(tab, el){
+  currentTab = tab;
+  document.querySelectorAll(".tab").forEach(btn => btn.classList.remove("active"));
+  el.classList.add("active");
+  loadCurrent();
+}
+
+function jsonp(params){
+  return new Promise((resolve, reject) => {
+    const callbackName = "adminCallback_" + Date.now() + "_" + Math.floor(Math.random() * 10000);
+    const query = new URLSearchParams({...params, callback: callbackName, t: Date.now()});
+    const script = document.createElement("script");
+
+    window[callbackName] = function(data){
+      resolve(data);
+      delete window[callbackName];
+      script.remove();
+    };
+
+    script.onerror = function(){
+      delete window[callbackName];
+      script.remove();
+      reject(new Error("Не удалось загрузить данные."));
+    };
+
+    script.src = WEB_APP_URL + "?" + query.toString();
+    document.body.appendChild(script);
+  });
+}
+
+async function sendAction(action, payload){
+  await fetch(WEB_APP_URL, {
+    method: "POST",
+    mode: "no-cors",
+    body: JSON.stringify({adminKey: getKey(), action, ...payload})
+  });
+  setTimeout(loadCurrent, 700);
+}
+
+async function loadCurrent(){
+  const key = getKey();
+  const list = document.getElementById("list");
+
+  if (!key) {
+    list.innerHTML = '<div class="empty">Введите ключ администратора.</div>';
+    return;
+  }
+
+  list.innerHTML = '<div class="empty">Загружаем...</div>';
+
+  try {
+    const data = await jsonp({
+      admin: "1",
+      key,
+      type: currentTab,
+      status: document.getElementById("statusFilter").value
+    });
+
+    if (!data || data.ok === false) {
+      list.innerHTML = `<div class="empty">${(data && data.error) || "Нет доступа."}</div>`;
+      return;
+    }
+
+    renderStats(data.stats || {});
+    renderItems(data.items || []);
+  } catch(e) {
+    list.innerHTML = `<div class="empty">${e.message}</div>`;
+  }
+}
+
+function renderStats(stats){
+  document.getElementById("stats").innerHTML = [
+    ["Ожидают", stats.pending || 0],
+    ["Одобрены", stats.approved || 0],
+    ["Отклонены", stats.rejected || 0],
+    ["Просмотры", stats.views || 0],
+    ["WhatsApp", stats.whatsappClicks || 0],
+    ["Комментарии", stats.comments || 0]
+  ].map(([label, value]) => `<div class="stat"><b>${value}</b>${label}</div>`).join("");
+}
+
+function statusClass(status){
+  if (status === "approved" || status === "Одобрено") return "ok";
+  if (status === "rejected" || status === "Отклонено") return "bad";
+  return "";
+}
+
+function escapeAttr(value){
+  return String(value || "").replace(/"/g, "&quot;");
+}
+
+function renderItems(items){
+  const list = document.getElementById("list");
+  if (!items.length) {
+    list.innerHTML = '<div class="empty">Записей нет.</div>';
+    return;
+  }
+
+  list.innerHTML = items.map(item => {
+    const type = item.type || currentTab;
+    const photos = item.photos || [];
+    const title = item.title || item.text || "Без названия";
+    const status = item.status || "pending";
+
+    return `
+      <article class="item">
+        <h3>#${item.id || ""} — ${title}</h3>
+        <div class="meta">
+          <span class="status ${statusClass(status)}">${status}</span><br>
+          Тип: ${type} • Категория: ${item.category || "-"} • Город: ${item.city || "-"}<br>
+          Имя: ${item.name || "-"} • Телефон: ${item.phone || "-"} • Дата: ${item.date || "-"}<br>
+          Просмотры: ${item.views || 0} • WhatsApp: ${item.whatsappClicks || 0} • Фото-клики: ${item.photoClicks || 0}
+        </div>
+        ${photos.length ? `<div class="photos">${photos.map(src => `<img src="${src}" alt="">`).join("")}</div>` : ""}
+        <div class="text">${item.description || item.text || ""}</div>
+        ${item.reason ? `<div class="meta">Причина отклонения: ${item.reason}</div>` : ""}
+        <div class="actions">
+          <button class="btn green" onclick="moderate('${type}','${escapeAttr(item.id)}','approve')">Одобрить</button>
+          <button class="btn red" onclick="rejectItem('${type}','${escapeAttr(item.id)}')">Отклонить</button>
+          <button class="btn dark" onclick="moderate('${type}','${escapeAttr(item.id)}','delete')">Удалить</button>
+          ${type === "ads" ? `<button class="btn gold" onclick="moderate('${type}','${escapeAttr(item.id)}','vip')">VIP</button>
+          <button class="btn gray" onclick="moderate('${type}','${escapeAttr(item.id)}','bump')">Поднять</button>` : ""}
+        </div>
+      </article>
+    `;
+  }).join("");
+}
+
+function moderate(type, id, decision){
+  sendAction("moderate", {type, id, decision});
+}
+
+function rejectItem(type, id){
+  const reason = prompt("Причина отклонения:", "Нарушает правила размещения");
+  if (reason === null) return;
+  sendAction("moderate", {type, id, decision: "reject", reason});
+}
+
+document.getElementById("adminKey").value = localStorage.getItem("karoAdminKey") || "";
+</script>
+</body>
+</html>
