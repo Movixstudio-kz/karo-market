@@ -27,7 +27,7 @@
     .ad-page{display:grid;grid-template-columns:1.3fr .7fr;gap:20px}
     .card{background:white;border-radius:18px;box-shadow:0 4px 15px rgba(0,0,0,.08);padding:18px}
     .main-photo{height:460px;background:#d1d5db;border-radius:16px;overflow:hidden;display:flex;align-items:center;justify-content:center}
-    .main-photo img{width:100%;height:100%;object-fit:contain;background:#111}
+    .main-photo img{width:100%;height:100%;object-fit:contain;background:#111;cursor:zoom-in}
     .thumbs{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
     .thumbs img{width:80px;height:70px;object-fit:cover;border-radius:10px;cursor:pointer;border:2px solid transparent}
     .thumbs img.active{border-color:#2563eb}
@@ -80,10 +80,19 @@
   font-weight:bold;
   margin-top:8px;
 }
+    .lightbox{position:fixed;inset:0;background:rgba(0,0,0,.92);display:none;align-items:center;justify-content:center;z-index:9999;padding:18px}
+    .lightbox.open{display:flex}
+    .lightbox-img{max-width:94vw;max-height:86vh;object-fit:contain;border-radius:10px;background:#111}
+    .lightbox-close,.lightbox-prev,.lightbox-next{position:absolute;border:0;cursor:pointer;color:white;background:rgba(17,24,39,.72);border-radius:999px;width:48px;height:48px;font-size:30px;display:flex;align-items:center;justify-content:center}
+    .lightbox-close{top:18px;right:18px}
+    .lightbox-prev{left:18px;top:50%;transform:translateY(-50%)}
+    .lightbox-next{right:18px;top:50%;transform:translateY(-50%)}
+    .lightbox-counter{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);color:white;background:rgba(17,24,39,.72);border-radius:999px;padding:8px 13px;font-weight:bold}
     @media(max-width:800px){
       .ad-page{grid-template-columns:1fr}
       .main-photo{height:320px}
       header .wrap{flex-direction:column;align-items:flex-start}
+      .lightbox-prev,.lightbox-next{width:42px;height:42px;font-size:26px}
     }
   </style>
 
@@ -114,6 +123,14 @@ gtag('config', 'G-7RVQ7B73D9');
 <footer>
   KARO Market © 2026
 </footer>
+
+<div id="lightbox" class="lightbox" onclick="closeLightbox(event)">
+  <button class="lightbox-close" onclick="closeLightbox(event)" aria-label="Закрыть">×</button>
+  <button class="lightbox-prev" onclick="prevPhoto(event)" aria-label="Предыдущее фото">‹</button>
+  <img id="lightboxImg" class="lightbox-img" alt="Фото объявления">
+  <button class="lightbox-next" onclick="nextPhoto(event)" aria-label="Следующее фото">›</button>
+  <div id="lightboxCounter" class="lightbox-counter"></div>
+</div>
 
 <script>
 const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwaY69-aqRdGtPy_HVOs_QIYJKDODdTsPtujvSOdqBBTULG2Jb4W2V92zEtmF3Lp9oK/exec";
@@ -152,6 +169,54 @@ function setPhoto(index) {
   });
 }
 
+function updateLightbox() {
+  if (!currentAd || !currentAd.photos || !currentAd.photos.length) return;
+
+  document.getElementById("lightboxImg").src = currentAd.photos[currentPhoto];
+  document.getElementById("lightboxCounter").textContent =
+    (currentPhoto + 1) + " / " + currentAd.photos.length;
+}
+
+function openLightbox(index) {
+  if (!currentAd || !currentAd.photos || !currentAd.photos.length) return;
+
+  setPhoto(index);
+  updateLightbox();
+  document.getElementById("lightbox").classList.add("open");
+  document.body.style.overflow = "hidden";
+  trackPhotoClick();
+}
+
+function closeLightbox(event) {
+  if (
+    event &&
+    event.target &&
+    event.target.id !== "lightbox" &&
+    !event.target.classList.contains("lightbox-close")
+  ) {
+    return;
+  }
+
+  document.getElementById("lightbox").classList.remove("open");
+  document.body.style.overflow = "";
+}
+
+function nextPhoto(event) {
+  if (event) event.stopPropagation();
+  if (!currentAd || !currentAd.photos || !currentAd.photos.length) return;
+
+  setPhoto((currentPhoto + 1) % currentAd.photos.length);
+  updateLightbox();
+}
+
+function prevPhoto(event) {
+  if (event) event.stopPropagation();
+  if (!currentAd || !currentAd.photos || !currentAd.photos.length) return;
+
+  setPhoto((currentPhoto - 1 + currentAd.photos.length) % currentAd.photos.length);
+  updateLightbox();
+}
+
 function renderAd(ad) {
   const content = document.getElementById("content");
 
@@ -185,12 +250,12 @@ function renderAd(ad) {
     <div class="ad-page">
       <div class="card">
         <div class="main-photo">
-          ${photos.length ? `<img id="mainPhoto" src="${photos[0]}" alt="Фото объявления" onclick="trackPhotoClick()">` : "Фото нет"}
+          ${photos.length ? `<img id="mainPhoto" src="${photos[0]}" alt="Фото объявления" onclick="openLightbox(currentPhoto)">` : "Фото нет"}
         </div>
 
         ${photos.length > 1 ? `
           <div class="thumbs">
-            ${photos.map((p,i)=>`<img src="${p}" class="${i===0?'active':''}" onclick="setPhoto(${i}); trackPhotoClick();">`).join("")}
+            ${photos.map((p,i)=>`<img src="${p}" class="${i===0?'active':''}" onclick="setPhoto(${i});">`).join("")}
           </div>
         ` : ""}
       </div>
@@ -365,6 +430,14 @@ function shareAd() {
     alert("Ссылка скопирована");
   }
 }
+document.addEventListener("keydown", function(event) {
+  const lightbox = document.getElementById("lightbox");
+  if (!lightbox || !lightbox.classList.contains("open")) return;
+
+  if (event.key === "Escape") closeLightbox({target: lightbox});
+  if (event.key === "ArrowRight") nextPhoto(event);
+  if (event.key === "ArrowLeft") prevPhoto(event);
+});
 loadAd();
 </script>
 
