@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Добавить мастера | KARO Master</title>
+  <meta name="description" content="Добавьте мастера или бригаду в каталог KARO Master. Заявка уходит на модерацию и в Telegram.">
+  <meta name="robots" content="index, follow">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="index.html"><span class="brand-mark">K</span><span>KARO <strong>Master</strong></span></a>
+    <nav class="top-nav">
+      <a href="index.html">Главная</a>
+      <a href="masters.html">Каталог</a>
+      <a href="vip.html">VIP</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="section split">
+      <div>
+        <p class="eyebrow">Заявка на модерацию</p>
+        <h1>Добавить мастера</h1>
+        <p class="muted">Заполните карточку. После отправки заявка сохранится в локальной админке MVP и откроется Telegram-сообщение для администратора.</p>
+        <div class="note" id="formSuccess" hidden>Ваша карточка отправлена на модерацию. После проверки она появится на сайте.</div>
+      </div>
+      <form class="add-form" id="addMasterForm">
+        <label><span>Имя мастера / название бригады</span><input name="name" required placeholder="Бригада Ерлана"></label>
+        <div class="form-row">
+          <label><span>Телефон</span><input name="phone" required placeholder="+77001234567"></label>
+          <label><span>WhatsApp</span><input name="whatsapp" required placeholder="+77001234567"></label>
+        </div>
+        <div class="form-row">
+          <label><span>Город</span><input name="city" required placeholder="Алматы"></label>
+          <label><span>Район</span><input name="district" required placeholder="Ауэзовский"></label>
+        </div>
+        <label><span>Категория</span><select name="category" required id="formCategory"></select></label>
+        <label><span>Услуги</span><textarea name="services" required placeholder="Установка смесителя, замена труб, прочистка канализации"></textarea></label>
+        <div class="form-row">
+          <label><span>Цена от, тг</span><input name="price" required inputmode="numeric" placeholder="10000"></label>
+          <label><span>Опыт работы</span><input name="experience" placeholder="8 лет"></label>
+        </div>
+        <label><span>Описание</span><textarea name="description" required placeholder="Кратко опишите опыт, районы выезда и сильные стороны"></textarea></label>
+        <label><span>Фото мастера или логотип</span><input name="photo" placeholder="Ссылка на фото"></label>
+        <label><span>Фото работ</span><textarea name="works" placeholder="Ссылки на фото через запятую"></textarea></label>
+        <div class="form-row">
+          <label><span>Telegram</span><input name="telegram" placeholder="@username"></label>
+          <label><span>Instagram</span><input name="instagram" placeholder="@instagram"></label>
+        </div>
+        <label><span>Сайт</span><input name="website" placeholder="https://"></label>
+        <label class="check-line"><input name="vip" type="checkbox"><span>Хочу VIP-размещение</span></label>
+        <button class="btn btn-primary" type="submit">Отправить заявку</button>
+      </form>
+    </section>
+  </main>
+
+  <footer class="site-footer"><span>KARO Master</span><span>Добавление мастера</span></footer>
+  <script src="script.js"></script>
+</body>
+</html>

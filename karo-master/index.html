@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KARO Master - мастера и услуги Казахстана</title>
+  <meta name="description" content="KARO Master - каталог мастеров Казахстана. Найдите сантехника, электрика, сварщика, кровельщика, бетонщика или бригаду рядом с вами.">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <meta name="geo.region" content="KZ">
+  <meta name="language" content="ru-KZ">
+  <meta property="og:title" content="KARO Master - мастера и услуги Казахстана">
+  <meta property="og:description" content="Поиск мастера по городу, району и услуге. WhatsApp, звонок, Telegram, отзывы и VIP-размещение.">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="ru_KZ">
+  <meta property="og:site_name" content="KARO Master">
+  <meta name="theme-color" content="#111827">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="index.html" aria-label="KARO Master">
+      <span class="brand-mark">K</span>
+      <span>KARO <strong>Master</strong></span>
+    </a>
+    <nav class="top-nav" aria-label="Основная навигация">
+      <a href="index.html">Главная</a>
+      <a href="#categories">Категории</a>
+      <a href="#cities">Города</a>
+      <a href="masters.html">Каталог</a>
+      <a href="vip.html">VIP</a>
+      <a class="nav-cta" href="add-master.html">Добавить мастера</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-media" aria-hidden="true"></div>
+      <div class="hero-content">
+        <p class="eyebrow">Каталог мастеров и услуг Казахстана</p>
+        <h1>KARO Master - мастера и услуги Казахстана</h1>
+        <p class="hero-copy">Найдите сантехника, электрика, сварщика, кровельщика или бригаду рядом с вами. Сравните цены, отзывы, статус VIP и свяжитесь напрямую через WhatsApp, звонок или Telegram.</p>
+
+        <form class="search-panel" id="heroSearch">
+          <label>
+            <span>Какая услуга нужна?</span>
+            <input id="searchInput" type="search" placeholder="Например: сантехник, сварка, ремонт крыши">
+          </label>
+          <label>
+            <span>Город</span>
+            <select id="citySelect" class="js-city-select"></select>
+          </label>
+          <label>
+            <span>Район</span>
+            <input id="districtInput" type="text" placeholder="Медеу, центр, микрорайон">
+          </label>
+          <button class="btn btn-primary" type="submit">Найти мастера</button>
+          <a class="btn btn-ghost" href="add-master.html">Добавить мастера</a>
+        </form>
+      </div>
+    </section>
+
+    <section class="section compact" id="categories" aria-labelledby="categoryTitle">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Популярные услуги</p>
+          <h2 id="categoryTitle">Категории</h2>
+        </div>
+        <button class="text-btn" id="resetFilters" type="button">Сбросить фильтры</button>
+      </div>
+      <div class="categories" id="categoryList"></div>
+    </section>
+
+    <section class="section compact" id="cities" aria-labelledby="citiesTitle">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">География запуска</p>
+          <h2 id="citiesTitle">Популярные города</h2>
+        </div>
+      </div>
+      <div class="seo-links city-links" id="cityList"></div>
+    </section>
+
+    <section class="section catalog" id="catalog" aria-labelledby="catalogTitle">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">VIP-мастера</p>
+          <h2 id="catalogTitle">Проверенные мастера выше в поиске</h2>
+        </div>
+        <a class="text-btn" href="masters.html">Открыть весь каталог</a>
+      </div>
+      <div class="masters-grid" id="vipMastersGrid"></div>
+    </section>
+
+    <section class="section steps-band" aria-labelledby="stepsTitle">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Как это работает</p>
+          <h2 id="stepsTitle">Для клиента и мастера</h2>
+        </div>
+      </div>
+      <div class="steps-grid">
+        <article>
+          <span>1</span>
+          <h3>Выберите услугу</h3>
+          <p>Укажите город, район и нужную работу.</p>
+        </article>
+        <article>
+          <span>2</span>
+          <h3>Найдите мастера</h3>
+          <p>Сравните цены, рейтинг, отзывы и статус.</p>
+        </article>
+        <article>
+          <span>3</span>
+          <h3>Свяжитесь напрямую</h3>
+          <p>Напишите в WhatsApp, Telegram или позвоните.</p>
+        </article>
+        <article>
+          <span>VIP</span>
+          <h3>Получайте клиентов</h3>
+          <p>Добавьте карточку и подключите VIP для большего числа заявок.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section vip-band" id="vip" aria-labelledby="vipTitle">
+      <div>
+        <p class="eyebrow">Монетизация</p>
+        <h2 id="vipTitle">Хотите получать больше заявок?</h2>
+        <p>Подключите VIP, и ваша карточка будет выше обычных мастеров, с золотым акцентом и отметкой "Проверенный мастер".</p>
+        <a class="btn btn-primary" href="vip.html">Подключить VIP</a>
+      </div>
+      <div class="vip-plans">
+        <article><strong>3 000 тг</strong><span>VIP на 7 дней</span></article>
+        <article><strong>5 000 тг</strong><span>VIP на 14 дней</span></article>
+        <article><strong>10 000 тг</strong><span>VIP на 30 дней</span></article>
+      </div>
+    </section>
+
+    <section class="section compact" aria-labelledby="seoTitle">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">SEO-страницы</p>
+          <h2 id="seoTitle">Страницы под запросы услуга + город</h2>
+        </div>
+      </div>
+      <div class="seo-links">
+        <a href="santehnik-almaty/">Сантехник Алматы</a>
+        <a href="elektrik-almaty.html">Электрик Алматы</a>
+        <a href="svarshik-talgar/">Сварщик Талгар</a>
+        <a href="betonshik-besagash/">Бетонщик Бесагаш</a>
+        <a href="remont-kryshi-almaty/">Ремонт крыши Алматы</a>
+        <a href="master-na-chas-astana.html">Мастер на час Астана</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <span>KARO Master</span>
+    <span>Мастера и услуги Казахстана в одном каталоге</span>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

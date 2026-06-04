@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Каталог мастеров Казахстана | KARO Master</title>
+  <meta name="description" content="Каталог мастеров KARO Master: фильтр по услуге, городу, району, категории, цене, VIP-статусу и отзывам.">
+  <meta name="robots" content="index, follow">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="index.html"><span class="brand-mark">K</span><span>KARO <strong>Master</strong></span></a>
+    <nav class="top-nav">
+      <a href="index.html">Главная</a>
+      <a href="masters.html">Каталог</a>
+      <a href="vip.html">VIP</a>
+      <a class="nav-cta" href="add-master.html">Добавить мастера</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="page-title">
+      <p class="eyebrow">Каталог мастеров</p>
+      <h1>Найдите мастера по городу, району и услуге</h1>
+    </section>
+
+    <section class="section filter-layout">
+      <form class="filters-card" id="catalogSearch">
+        <label><span>Поиск по услуге</span><input id="searchInput" type="search" placeholder="сантехник, электрик, сварка"></label>
+        <label><span>Город</span><select id="citySelect" class="js-city-select"></select></label>
+        <label><span>Район</span><input id="districtInput" placeholder="центр, Медеу, Юго-Восток"></label>
+        <label><span>Категория</span><select id="categorySelect" class="js-category-select"></select></label>
+        <div class="form-row">
+          <label><span>Цена от</span><input id="minPriceInput" inputmode="numeric" placeholder="5000"></label>
+          <label><span>Цена до</span><input id="maxPriceInput" inputmode="numeric" placeholder="50000"></label>
+        </div>
+        <label><span>Сортировка</span>
+          <select id="sortSelect">
+            <option value="recommended">VIP сначала</option>
+            <option value="new">Новые</option>
+            <option value="popular">Популярные</option>
+            <option value="rating">По рейтингу</option>
+            <option value="price">Дешевле</option>
+            <option value="price-desc">Дороже</option>
+          </select>
+        </label>
+        <label class="check-line"><input id="vipOnlyInput" type="checkbox"><span>Только VIP</span></label>
+        <label class="check-line"><input id="reviewsOnlyInput" type="checkbox"><span>С отзывами</span></label>
+        <button class="btn btn-primary" type="submit">Найти мастера</button>
+        <button class="text-btn" id="resetFilters" type="button">Сбросить фильтры</button>
+      </form>
+
+      <div class="catalog-results">
+        <div class="section-head">
+          <div><p class="eyebrow">Результаты</p><h2>Мастера</h2></div>
+          <div class="catalog-count" id="resultCount">0 мастеров</div>
+        </div>
+        <div class="masters-grid" id="mastersGrid"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer"><span>KARO Master</span><span>Каталог мастеров Казахстана</span></footer>
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Админка | KARO Master</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="index.html"><span class="brand-mark">K</span><span>KARO <strong>Master</strong></span></a>
+    <nav class="top-nav"><a href="masters.html">Каталог</a><a href="add-master.html">Добавить мастера</a></nav>
+  </header>
+  <main>
+    <section class="section">
+      <p class="eyebrow">Модерация MVP</p>
+      <h1>Админка KARO Master</h1>
+      <form class="filters-card admin-login" id="adminLogin">
+        <label><span>ADMIN_KEY</span><input name="key" type="password" placeholder="Введите ключ"></label>
+        <button class="btn btn-primary" type="submit">Войти</button>
+        <p class="muted" id="adminError" hidden>Неверный ключ.</p>
+      </form>
+      <div id="adminPanel" hidden>
+        <div class="section-head"><h2>Заявки и карточки</h2><span class="muted">Локальная MVP-модерация через localStorage</span></div>
+        <div class="admin-list" id="adminList"></div>
+      </div>
+    </section>
+  </main>
+  <footer class="site-footer"><span>KARO Master</span><span>Модерация</span></footer>
+  <script src="script.js"></script>
+</body>
+</html>
