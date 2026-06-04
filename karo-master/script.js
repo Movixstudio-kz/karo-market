@@ -235,6 +235,10 @@ function formatExperience(value) {
   return value || "Опыт указан в анкете";
 }
 
+function masterStats(master, reviewCount) {
+  return `Рейтинг ${master.rating} · ${reviewCount} отзывов · ${master.views || 0} просмотров · ${master.callClicks || 0} звонков`;
+}
+
 function initials(name) {
   return String(name || "K").split(/\s+/).slice(0, 2).map((part) => part[0]).join("").toUpperCase();
 }
@@ -321,7 +325,7 @@ function scoreMaster(master, sort) {
   if (sort === "price") return -Number(master.price || 0);
   if (sort === "price-desc") return Number(master.price || 0);
   if (sort === "experience") return Number(master.experience || 0);
-  return (master.vip ? 100000 : 0) + (master.verified ? 10000 : 0) + Number(master.rating || 0) * 100 + Number(master.views || 0);
+  return (master.vip ? 100000 : 0) + Number(master.rating || 0) * 100 + Number(master.views || 0);
 }
 
 function getFilters() {
@@ -400,11 +404,11 @@ function renderMasterCard(master) {
         <div class="badges">
           <span class="badge">${master.category}</span>
           ${master.vip ? `<span class="badge vip">VIP</span>` : `<span class="badge">Обычный</span>`}
-          ${master.verified ? `<span class="badge verified">Проверенный мастер</span>` : ""}
+          ${master.vip ? `<span class="badge verified">Партнер KARO Master</span>` : ""}
         </div>
         <p class="master-meta">${master.description || master.services.join(", ")}</p>
         <div class="price">от ${money(master.price)}</div>
-        <div class="reviews">${formatExperience(master.experience)} · рейтинг ${master.rating} · ${reviewCount} отзывов</div>
+        <div class="reviews">${formatExperience(master.experience)} · ${masterStats(master, reviewCount)}</div>
         <div class="card-actions">
           <a class="btn btn-dark" href="master.html?id=${master.id}">Смотреть карточку</a>
           <a class="btn btn-line" href="${links.whatsapp}" target="_blank" rel="noopener">WhatsApp</a>
@@ -487,7 +491,7 @@ function bindAddForm() {
       serviceArea: data.serviceArea,
       phone: data.phone,
       vip: data.vip === "on",
-      verified: data.vip === "on",
+      verified: false,
       photo: profilePhoto || "https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=900&q=80",
       works: workPhotos.length ? workPhotos.slice(0, 20) : [
         "https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=500&q=80"
@@ -553,13 +557,13 @@ function renderDetail() {
         <div class="badges">
           <span class="badge">${master.category}</span>
           ${master.vip ? `<span class="badge vip">VIP выше в поиске</span>` : `<span class="badge">Обычный статус</span>`}
-          ${master.verified ? `<span class="badge verified">Проверенный мастер</span>` : ""}
+          ${master.vip ? `<span class="badge verified">Партнер KARO Master</span>` : ""}
         </div>
         <h1>${master.name}</h1>
         <p class="master-meta">${master.city}, ${master.district}</p>
         <p>${master.description}</p>
         <div class="price">Цены от ${money(master.price)}</div>
-        <div class="reviews">${formatExperience(master.experience)} · рейтинг ${master.rating} · ${master.reviews.length} отзывов</div>
+        <div class="reviews">${formatExperience(master.experience)} · ${masterStats(master, master.reviews.length)}</div>
         <div class="card-actions">
           <a class="btn btn-line" href="${links.whatsapp}" target="_blank" rel="noopener">Написать в WhatsApp</a>
           <a class="btn btn-line" href="${links.telegram}" target="_blank" rel="noopener">Написать в Telegram</a>
@@ -646,7 +650,7 @@ function renderAdmin() {
       } else {
         next = next.map((item) => {
           if (item.id !== id) return item;
-          if (action === "vip") return { ...item, vip: true, verified: true };
+          if (action === "vip") return { ...item, vip: true, verified: false };
           if (action === "novip") return { ...item, vip: false };
           return { ...item, status: action };
         });

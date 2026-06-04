@@ -255,6 +255,12 @@ textarea:focus {
   background: var(--green-dark);
 }
 
+.hero .search-panel .btn-primary {
+  min-height: 58px;
+  padding: 16px 24px;
+  font-size: 18px;
+}
+
 .btn-ghost {
   color: #fff;
   border: 1px solid rgba(255, 255, 255, 0.24);
@@ -705,10 +711,25 @@ textarea:focus {
 .site-footer {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   gap: 12px;
   padding: 28px clamp(16px, 4vw, 44px);
   color: #d0d5dd;
   background: #111827;
+  line-height: 1.45;
+}
+
+.site-footer span:nth-child(2) {
+  max-width: 720px;
+}
+
+.legal-page {
+  line-height: 1.7;
+}
+
+.legal-page h2 {
+  margin-top: 22px;
+  font-size: 24px;
 }
 
 .empty {
