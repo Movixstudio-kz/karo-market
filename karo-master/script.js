@@ -1,6 +1,55 @@
 const ADMIN_KEY = "karo-master-admin";
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz1X-HR4VFr_gWeQiVSXaKOPwm1dFOMu9znTKrrW3pEqs9lvAXWggzIdoshFNlxVLHkBQ/exec";
 const ADMIN_WHATSAPP = "77009904003";
+const SITE_BASE_URL = "https://movixstudio-kz.github.io/karo-market/karo-master/";
+
+const translations = {
+  ru: {
+    navHome: "Главная",
+    navCategories: "Категории",
+    navCities: "Города",
+    navCatalog: "Каталог",
+    navAdd: "Добавить мастера",
+    heroEyebrow: "Каталог мастеров и услуг Казахстана",
+    heroTitle: "KARO Master - мастера и услуги Казахстана",
+    heroCopy: "Найдите сантехника, электрика, сварщика, кровельщика или бригаду рядом с вами. Сравните цены, отзывы, VIP-статус и свяжитесь напрямую через WhatsApp, звонок или Telegram.",
+    searchLabel: "Какая услуга нужна?",
+    cityLabel: "Город",
+    districtLabel: "Район",
+    findMaster: "Найти мастера",
+    addMaster: "Добавить мастера"
+  },
+  kk: {
+    navHome: "Басты бет",
+    navCategories: "Санаттар",
+    navCities: "Қалалар",
+    navCatalog: "Каталог",
+    navAdd: "Шебер қосу",
+    heroEyebrow: "Қазақстан шеберлері мен қызметтері каталогы",
+    heroTitle: "KARO Master - Қазақстандағы шеберлер мен қызметтер",
+    heroCopy: "Сантехник, электрик, дәнекерлеуші, шатыршы немесе бригаданы өз қалаңыздан табыңыз. Баға, пікір, VIP-мәртебе және байланыс батырмаларын салыстырыңыз.",
+    searchLabel: "Қандай қызмет керек?",
+    cityLabel: "Қала",
+    districtLabel: "Аудан",
+    findMaster: "Шебер табу",
+    addMaster: "Шебер қосу"
+  },
+  en: {
+    navHome: "Home",
+    navCategories: "Categories",
+    navCities: "Cities",
+    navCatalog: "Catalog",
+    navAdd: "Add a master",
+    heroEyebrow: "Directory of Kazakhstan masters and services",
+    heroTitle: "KARO Master - masters and services in Kazakhstan",
+    heroCopy: "Find a plumber, electrician, welder, roofer or team near you. Compare prices, reviews, VIP status and contact directly by WhatsApp, phone or Telegram.",
+    searchLabel: "What service do you need?",
+    cityLabel: "City",
+    districtLabel: "District",
+    findMaster: "Find a master",
+    addMaster: "Add a master"
+  }
+};
 
 const cities = ["Алматы", "Астана", "Шымкент", "Караганда", "Талгар", "Каскелен", "Бесагаш", "Конаев", "Семей", "Тараз"];
 
@@ -239,6 +288,92 @@ function masterStats(master, reviewCount) {
   return `Рейтинг ${master.rating} · ${reviewCount} отзывов · ${master.views || 0} просмотров · ${master.callClicks || 0} звонков`;
 }
 
+function deviceType() {
+  return window.matchMedia("(max-width: 760px)").matches ? "mobile" : "desktop";
+}
+
+function currentPageName() {
+  const path = location.pathname.split("/").pop() || "index.html";
+  return path;
+}
+
+function applyLanguage(lang) {
+  const pack = translations[lang] || translations.ru;
+  document.documentElement.lang = lang === "kk" ? "kk" : lang;
+  const pairs = [
+    ['.top-nav a[href="index.html"]', pack.navHome],
+    ['.top-nav a[href="#categories"]', pack.navCategories],
+    ['.top-nav a[href="#cities"]', pack.navCities],
+    ['.top-nav a[href="masters.html"]', pack.navCatalog],
+    ['.top-nav a[href="add-master.html"]', pack.navAdd],
+    [".hero .eyebrow", pack.heroEyebrow],
+    [".hero h1", pack.heroTitle],
+    [".hero-copy", pack.heroCopy],
+    ['label span', null]
+  ];
+  pairs.forEach(([selector, text]) => {
+    if (!text) return;
+    document.querySelectorAll(selector).forEach((node) => node.textContent = text);
+  });
+  const labels = document.querySelectorAll(".search-panel label span");
+  if (labels[0]) labels[0].textContent = pack.searchLabel;
+  if (labels[1]) labels[1].textContent = pack.cityLabel;
+  if (labels[2]) labels[2].textContent = pack.districtLabel;
+  const findButton = document.querySelector(".search-panel .btn-primary");
+  if (findButton) findButton.textContent = pack.findMaster;
+  const addButton = document.querySelector(".search-panel .btn-ghost");
+  if (addButton) addButton.textContent = pack.addMaster;
+}
+
+function initLanguageSwitcher() {
+  const nav = document.querySelector(".top-nav");
+  if (!nav || document.querySelector(".lang-switcher")) return;
+  const params = new URLSearchParams(location.search);
+  const current = params.get("lang") || localStorage.getItem("karoMasterLang") || "ru";
+  const switcher = document.createElement("div");
+  switcher.className = "lang-switcher";
+  switcher.innerHTML = ["ru", "kk", "en"].map((lang) => `<button type="button" data-lang="${lang}">${lang.toUpperCase()}</button>`).join("");
+  nav.appendChild(switcher);
+  switcher.addEventListener("click", (event) => {
+    const button = event.target.closest("[data-lang]");
+    if (!button) return;
+    const lang = button.dataset.lang;
+    localStorage.setItem("karoMasterLang", lang);
+    switcher.querySelectorAll("button").forEach((item) => item.classList.toggle("active", item.dataset.lang === lang));
+    applyLanguage(lang);
+    trackEvent("language_switch", {}, lang);
+  });
+  switcher.querySelectorAll("button").forEach((item) => item.classList.toggle("active", item.dataset.lang === current));
+  applyLanguage(current);
+}
+
+function trackEvent(eventName, master = {}, comment = "") {
+  if (!GOOGLE_SCRIPT_URL) return;
+  const payload = {
+    action: "stat",
+    event: eventName,
+    masterId: master.id || "",
+    masterName: master.name || "",
+    category: master.category || "",
+    city: master.city || "",
+    district: master.district || "",
+    source: document.referrer || "direct",
+    page: location.href,
+    device: deviceType(),
+    comment
+  };
+
+  try {
+    fetch(GOOGLE_SCRIPT_URL, {
+      method: "POST",
+      mode: "no-cors",
+      body: JSON.stringify(payload)
+    });
+  } catch (error) {
+    console.warn("Stats request failed", error);
+  }
+}
+
 function initials(name) {
   return String(name || "K").split(/\s+/).slice(0, 2).map((part) => part[0]).join("").toUpperCase();
 }
@@ -309,7 +444,7 @@ function renderCategories() {
 function renderCities() {
   const cityList = document.querySelector("#cityList");
   if (!cityList) return;
-  cityList.innerHTML = cities.map((city) => `<a href="masters.html?city=${encodeURIComponent(city)}">${city}</a>`).join("");
+  cityList.innerHTML = cities.map((city) => `<a href="masters.html?city=${encodeURIComponent(city)}" data-track="city_filter" data-comment="${city}">${city}</a>`).join("");
 }
 
 function renderVipMasters() {
@@ -390,7 +525,7 @@ function renderMasterCard(master) {
   const reviewCount = Array.isArray(master.reviews) ? master.reviews.length : Number(master.reviewCount || 0);
   return `
     <article class="master-card ${master.vip ? "vip" : ""}">
-      <a class="card-photo" href="master.html?id=${master.id}" aria-label="${master.name}">
+      <a class="card-photo" href="master.html?id=${master.id}" aria-label="${master.name}" data-track="master_card_open" data-master-id="${master.id}">
         <img src="${master.photo}" alt="${master.name}" loading="lazy">
       </a>
       <div class="card-body">
@@ -410,9 +545,9 @@ function renderMasterCard(master) {
         <div class="price">от ${money(master.price)}</div>
         <div class="reviews">${formatExperience(master.experience)} · ${masterStats(master, reviewCount)}</div>
         <div class="card-actions">
-          <a class="btn btn-dark" href="master.html?id=${master.id}">Смотреть карточку</a>
-          <a class="btn btn-line" href="${links.whatsapp}" target="_blank" rel="noopener">WhatsApp</a>
-          <a class="btn btn-primary" href="${links.phone}">Позвонить</a>
+          <a class="btn btn-dark" href="master.html?id=${master.id}" data-track="master_card_open" data-master-id="${master.id}">Смотреть карточку</a>
+          <a class="btn btn-line" href="${links.whatsapp}" target="_blank" rel="noopener" data-track="whatsapp_click" data-master-id="${master.id}">WhatsApp</a>
+          <a class="btn btn-primary" href="${links.phone}" data-track="call_click" data-master-id="${master.id}">Позвонить</a>
         </div>
       </div>
     </article>
@@ -424,6 +559,7 @@ function bindSearch() {
 
   document.querySelector("#heroSearch")?.addEventListener("submit", (event) => {
     event.preventDefault();
+    trackEvent("service_search", {}, document.querySelector("#searchInput")?.value || "");
     if (!document.querySelector("#mastersGrid")) {
       const params = new URLSearchParams();
       const search = document.querySelector("#searchInput")?.value;
@@ -441,12 +577,16 @@ function bindSearch() {
 
   document.querySelector("#catalogSearch")?.addEventListener("submit", (event) => {
     event.preventDefault();
+    trackEvent("service_search", {}, document.querySelector("#searchInput")?.value || "");
     renderCatalog();
   });
 
   ["#searchInput", "#citySelect", "#districtInput", "#categorySelect", "#sortSelect", "#minPriceInput", "#maxPriceInput", "#vipOnlyInput", "#reviewsOnlyInput"].forEach((selector) => {
     document.querySelector(selector)?.addEventListener("input", renderCatalog);
-    document.querySelector(selector)?.addEventListener("change", renderCatalog);
+    document.querySelector(selector)?.addEventListener("change", (event) => {
+      if (selector === "#citySelect") trackEvent("city_filter", {}, event.target.value);
+      renderCatalog();
+    });
   });
 
   document.querySelector("#resetFilters")?.addEventListener("click", () => {
@@ -499,6 +639,7 @@ function bindAddForm() {
     };
 
     setDrafts([draft, ...getDrafts()]);
+    trackEvent("add_master_submit", draft, data.category || "");
     await sendLead(data, draft);
     form.reset();
     const success = document.querySelector("#formSuccess");
@@ -527,7 +668,6 @@ async function sendLead(data, draft) {
       await fetch(GOOGLE_SCRIPT_URL, {
         method: "POST",
         mode: "no-cors",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ type: "master_request", data, draft })
       });
     } catch (error) {
@@ -547,6 +687,7 @@ function renderDetail() {
     .filter((item) => item.id !== master.id && item.category === master.category && item.city === master.city)
     .slice(0, 3);
   document.title = `${master.name} - ${master.category} | KARO Master`;
+  trackEvent("master_profile_view", master);
 
   detail.innerHTML = `
     <article class="detail-card">
@@ -556,7 +697,7 @@ function renderDetail() {
       <div class="detail-content">
         <div class="badges">
           <span class="badge">${master.category}</span>
-          ${master.vip ? `<span class="badge vip">VIP выше в поиске</span>` : `<span class="badge">Обычный статус</span>`}
+          ${master.vip ? `<span class="badge vip">VIP выше в поиске</span>` : `<span class="badge">Обычное размещение</span>`}
           ${master.vip ? `<span class="badge verified">Партнер KARO Master</span>` : ""}
         </div>
         <h1>${master.name}</h1>
@@ -565,9 +706,9 @@ function renderDetail() {
         <div class="price">Цены от ${money(master.price)}</div>
         <div class="reviews">${formatExperience(master.experience)} · ${masterStats(master, master.reviews.length)}</div>
         <div class="card-actions">
-          <a class="btn btn-line" href="${links.whatsapp}" target="_blank" rel="noopener">Написать в WhatsApp</a>
-          <a class="btn btn-line" href="${links.telegram}" target="_blank" rel="noopener">Написать в Telegram</a>
-          <a class="btn btn-primary" href="${links.phone}">Позвонить</a>
+          <a class="btn btn-line" href="${links.whatsapp}" target="_blank" rel="noopener" data-track="whatsapp_click" data-master-id="${master.id}">Написать в WhatsApp</a>
+          <a class="btn btn-line" href="${links.telegram}" target="_blank" rel="noopener" data-track="telegram_click" data-master-id="${master.id}">Написать в Telegram</a>
+          <a class="btn btn-primary" href="${links.phone}" data-track="call_click" data-master-id="${master.id}">Позвонить</a>
         </div>
         <section>
           <h2>Список услуг</h2>
@@ -597,8 +738,19 @@ function bindVipButtons() {
     button.addEventListener("click", () => {
       const plan = button.dataset.vipPlan;
       const text = `Здравствуйте! Хочу подключить VIP-размещение KARO Master: ${plan}`;
+      trackEvent("vip_click", {}, plan);
       window.open(`https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(text)}`, "_blank", "noopener");
     });
+  });
+}
+
+function bindTrackingLinks() {
+  document.addEventListener("click", (event) => {
+    const target = event.target.closest("[data-track]");
+    if (!target) return;
+    const masterId = target.dataset.masterId;
+    const master = masterId ? getAllMasters().find((item) => item.id === masterId) || {} : {};
+    trackEvent(target.dataset.track, master, target.dataset.comment || target.textContent.trim());
   });
 }
 
@@ -663,12 +815,15 @@ function renderAdmin() {
 }
 
 initSelects();
+initLanguageSwitcher();
+trackEvent("site_view", {}, currentPageName());
 renderCategories();
 renderCities();
 renderVipMasters();
 bindSearch();
 bindAddForm();
 bindVipButtons();
+bindTrackingLinks();
 bindAdmin();
 renderCatalog();
 renderDetail();

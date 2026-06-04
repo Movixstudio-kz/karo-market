@@ -23,10 +23,15 @@ function setupKaroMasterSheets() {
     "VIP до",
     "Статус оплаты"
   ]);
+  ensureHeader_(ss.getSheetByName("Stats") || ss.insertSheet("Stats"), statsHeader_());
 }
 
 function doPost(e) {
   const payload = JSON.parse(e.postData.contents || "{}");
+  if (payload.action === "stat") {
+    appendStat(payload);
+    return json_({ ok: true });
+  }
   const data = payload.data || {};
   const draft = payload.draft || {};
 
@@ -35,6 +40,12 @@ function doPost(e) {
 
   return ContentService
     .createTextOutput(JSON.stringify({ ok: true }))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+
+function json_(data) {
+  return ContentService
+    .createTextOutput(JSON.stringify(data))
     .setMimeType(ContentService.MimeType.JSON);
 }
 
@@ -108,6 +119,44 @@ function mastersHeader_() {
     "Клики WhatsApp",
     "Клики звонка",
     "Ссылка на карточку"
+  ];
+}
+
+function appendStat(payload) {
+  const ss = SpreadsheetApp.openById(SHEET_ID);
+  const sheet = ss.getSheetByName("Stats") || ss.insertSheet("Stats");
+  ensureHeader_(sheet, statsHeader_());
+  const now = new Date();
+  sheet.appendRow([
+    Utilities.formatDate(now, Session.getScriptTimeZone(), "yyyy-MM-dd"),
+    Utilities.formatDate(now, Session.getScriptTimeZone(), "HH:mm:ss"),
+    payload.event || "",
+    payload.masterId || "",
+    payload.masterName || "",
+    payload.category || "",
+    payload.city || "",
+    payload.district || "",
+    payload.source || "",
+    payload.page || "",
+    payload.device || "",
+    payload.comment || ""
+  ]);
+}
+
+function statsHeader_() {
+  return [
+    "Дата",
+    "Время",
+    "Событие",
+    "ID мастера",
+    "Имя мастера",
+    "Категория",
+    "Город",
+    "Район",
+    "Источник",
+    "Страница",
+    "Устройство",
+    "Комментарий"
   ];
 }
 
