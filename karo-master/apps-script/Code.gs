@@ -1,4 +1,5 @@
 const SHEET_ID = "PASTE_GOOGLE_SHEET_ID_HERE";
+const DRIVE_FOLDER_ID = "1cpH-QZN7u36VINvXz5gI_8i_E8JHPnAi";
 const TELEGRAM_BOT_TOKEN = "PASTE_TELEGRAM_BOT_TOKEN_HERE";
 const TELEGRAM_CHAT_ID = "PASTE_ADMIN_CHAT_ID_HERE";
 
@@ -41,6 +42,7 @@ function appendMaster(data, draft) {
   const ss = SpreadsheetApp.openById(SHEET_ID);
   const sheet = ss.getSheetByName("Masters") || ss.insertSheet("Masters");
   ensureHeader_(sheet, mastersHeader_());
+  const files = saveMasterPhotos_(data, draft);
 
   sheet.appendRow([
     draft.id || Utilities.getUuid(),
@@ -60,8 +62,9 @@ function appendMaster(data, draft) {
     data.serviceArea || "",
     data.price || "",
     data.description || "",
-    draft.photo || "",
-    Array.isArray(draft.works) ? draft.works.slice(0, 10).join("\n") : "",
+    files.folderUrl,
+    files.profileUrl,
+    files.workUrls.join("\n"),
     0,
     0,
     0,
@@ -90,6 +93,7 @@ function mastersHeader_() {
     "Районы выезда",
     "Цена от",
     "Описание",
+    "Папка с фото",
     "Фото профиля",
     "Фото работ до 10",
     "Рейтинг",
@@ -99,6 +103,46 @@ function mastersHeader_() {
     "Клики звонка",
     "Ссылка на карточку"
   ];
+}
+
+function saveMasterPhotos_(data, draft) {
+  const root = DriveApp.getFolderById(DRIVE_FOLDER_ID);
+  const safeName = String(data.name || "master").replace(/[\\/:*?"<>|#%{}~&]/g, " ").trim();
+  const folderName = (draft.id || Utilities.getUuid()) + " - " + safeName;
+  const folder = root.createFolder(folderName);
+  const result = {
+    folderUrl: folder.getUrl(),
+    profileUrl: "",
+    workUrls: []
+  };
+
+  if (draft.photo && String(draft.photo).indexOf("data:image/") === 0) {
+    result.profileUrl = saveDataUrl_(folder, draft.photo, "profile");
+  } else if (draft.photo) {
+    result.profileUrl = draft.photo;
+  }
+
+  const works = Array.isArray(draft.works) ? draft.works.slice(0, 10) : [];
+  works.forEach(function(photo, index) {
+    if (photo && String(photo).indexOf("data:image/") === 0) {
+      result.workUrls.push(saveDataUrl_(folder, photo, "work-" + (index + 1)));
+    } else if (photo) {
+      result.workUrls.push(photo);
+    }
+  });
+
+  return result;
+}
+
+function saveDataUrl_(folder, dataUrl, baseName) {
+  const match = String(dataUrl).match(/^data:(image\/[a-zA-Z0-9.+-]+);base64,(.+)$/);
+  if (!match) return "";
+  const mimeType = match[1];
+  const extension = mimeType.split("/")[1].replace("jpeg", "jpg");
+  const bytes = Utilities.base64Decode(match[2]);
+  const blob = Utilities.newBlob(bytes, mimeType, baseName + "." + extension);
+  const file = folder.createFile(blob);
+  return file.getUrl();
 }
 
 function sendTelegram(data, draft) {
