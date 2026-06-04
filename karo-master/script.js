@@ -1,5 +1,5 @@
 const ADMIN_KEY = "karo-master-admin";
-const GOOGLE_SCRIPT_URL = "";
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz1X-HR4VFr_gWeQiVSXaKOPwm1dFOMu9znTKrrW3pEqs9lvAXWggzIdoshFNlxVLHkBQ/exec";
 const ADMIN_WHATSAPP = "77009904003";
 
 const cities = ["Алматы", "Астана", "Шымкент", "Караганда", "Талгар", "Каскелен", "Бесагаш", "Конаев", "Семей", "Тараз"];
