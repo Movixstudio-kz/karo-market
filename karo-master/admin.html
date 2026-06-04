@@ -14,15 +14,15 @@
   </header>
   <main>
     <section class="section">
-      <p class="eyebrow">Модерация MVP</p>
+      <p class="eyebrow">Модерация</p>
       <h1>Админка KARO Master</h1>
       <form class="filters-card admin-login" id="adminLogin">
-        <label><span>ADMIN_KEY</span><input name="key" type="password" placeholder="Введите ключ"></label>
+        <label><span>Ключ администратора</span><input name="key" type="password" placeholder="Введите ключ"></label>
         <button class="btn btn-primary" type="submit">Войти</button>
         <p class="muted" id="adminError" hidden>Неверный ключ.</p>
       </form>
       <div id="adminPanel" hidden>
-        <div class="section-head"><h2>Заявки и карточки</h2><span class="muted">Локальная MVP-модерация через localStorage</span></div>
+        <div class="section-head"><h2>Заявки и карточки</h2><span class="muted">Проверка новых анкет мастеров</span></div>
         <div class="admin-list" id="adminList"></div>
       </div>
     </section>

@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://movixstudio-kz.github.io/karo-master/sitemap.xml
+Sitemap: https://movixstudio-kz.github.io/karo-market/karo-master/sitemap.xml
