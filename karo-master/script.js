@@ -17,7 +17,40 @@ const translations = {
     cityLabel: "Город",
     districtLabel: "Район",
     findMaster: "Найти мастера",
-    addMaster: "Добавить мастера"
+    addMaster: "Добавить мастера",
+    anyCity: "Любой город",
+    allCategories: "Все категории",
+    chooseCategory: "Выберите категорию",
+    showMasters: "Показать мастеров",
+    normal: "Обычный",
+    partner: "Партнер KARO Master",
+    from: "от",
+    pricesFrom: "Цены от",
+    tenge: "тг",
+    yearsExperience: "лет опыта",
+    experienceFromForm: "Опыт указан в анкете",
+    rating: "Рейтинг",
+    reviews: "отзывов",
+    views: "просмотров",
+    calls: "звонков",
+    viewCard: "Смотреть карточку",
+    call: "Позвонить",
+    writeWhatsapp: "Написать в WhatsApp",
+    writeTelegram: "Написать в Telegram",
+    vipSearch: "VIP выше в поиске",
+    normalPlacement: "Обычное размещение",
+    servicesList: "Список услуг",
+    workPhotos: "Фото работ",
+    reviewTitle: "Отзывы",
+    noReviews: "Отзывов пока нет.",
+    leaveReview: "Оставить отзыв",
+    similarMasters: "Похожие мастера",
+    resultMasters: "мастеров",
+    emptyTitle: "Мастера не найдены",
+    emptyText: "Попробуйте изменить город, услугу, цену или район.",
+    resetFilters: "Сбросить фильтры",
+    footerAgreement: "Соглашение",
+    footerPrivacy: "Конфиденциальность"
   },
   kk: {
     navHome: "Басты бет",
@@ -32,7 +65,40 @@ const translations = {
     cityLabel: "Қала",
     districtLabel: "Аудан",
     findMaster: "Шебер табу",
-    addMaster: "Шебер қосу"
+    addMaster: "Шебер қосу",
+    anyCity: "Кез келген қала",
+    allCategories: "Барлық санаттар",
+    chooseCategory: "Санатты таңдаңыз",
+    showMasters: "Шеберлерді көрсету",
+    normal: "Қарапайым",
+    partner: "KARO Master серіктесі",
+    from: "бастап",
+    pricesFrom: "Бағасы",
+    tenge: "тг",
+    yearsExperience: "жыл тәжірибе",
+    experienceFromForm: "Тәжірибе анкетаға енгізілген",
+    rating: "Рейтинг",
+    reviews: "пікір",
+    views: "қаралым",
+    calls: "қоңырау",
+    viewCard: "Карточканы көру",
+    call: "Қоңырау шалу",
+    writeWhatsapp: "WhatsApp-қа жазу",
+    writeTelegram: "Telegram-ға жазу",
+    vipSearch: "VIP іздеуде жоғары",
+    normalPlacement: "Қарапайым орналастыру",
+    servicesList: "Қызметтер тізімі",
+    workPhotos: "Жұмыс фотолары",
+    reviewTitle: "Пікірлер",
+    noReviews: "Әзірге пікір жоқ.",
+    leaveReview: "Пікір қалдыру",
+    similarMasters: "Ұқсас шеберлер",
+    resultMasters: "шебер",
+    emptyTitle: "Шеберлер табылмады",
+    emptyText: "Қаланы, қызметті, бағаны немесе ауданды өзгертіп көріңіз.",
+    resetFilters: "Сүзгілерді тазарту",
+    footerAgreement: "Келісім",
+    footerPrivacy: "Құпиялылық"
   },
   en: {
     navHome: "Home",
@@ -47,7 +113,329 @@ const translations = {
     cityLabel: "City",
     districtLabel: "District",
     findMaster: "Find a master",
-    addMaster: "Add a master"
+    addMaster: "Add a master",
+    anyCity: "Any city",
+    allCategories: "All categories",
+    chooseCategory: "Choose a category",
+    showMasters: "Show masters",
+    normal: "Standard",
+    partner: "KARO Master partner",
+    from: "from",
+    pricesFrom: "Prices from",
+    tenge: "KZT",
+    yearsExperience: "years of experience",
+    experienceFromForm: "Experience is listed in the form",
+    rating: "Rating",
+    reviews: "reviews",
+    views: "views",
+    calls: "calls",
+    viewCard: "View profile",
+    call: "Call",
+    writeWhatsapp: "Write on WhatsApp",
+    writeTelegram: "Write on Telegram",
+    vipSearch: "VIP higher in search",
+    normalPlacement: "Standard placement",
+    servicesList: "Services",
+    workPhotos: "Work photos",
+    reviewTitle: "Reviews",
+    noReviews: "No reviews yet.",
+    leaveReview: "Leave a review",
+    similarMasters: "Similar masters",
+    resultMasters: "masters",
+    emptyTitle: "No masters found",
+    emptyText: "Try changing the city, service, price or district.",
+    resetFilters: "Reset filters",
+    footerAgreement: "Terms",
+    footerPrivacy: "Privacy"
+  }
+};
+
+let currentLang = "ru";
+
+const categoryTranslations = {
+  kk: {
+    "Ремонт квартир": "Пәтер жөндеу",
+    "Сантехники": "Сантехниктер",
+    "Электрики": "Электриктер",
+    "Сварщики": "Дәнекерлеушілер",
+    "Кровельщики": "Шатыршылар",
+    "Бетонщики": "Бетоншылар",
+    "Мастер на час": "Бір сағаттық шебер",
+    "Мебельщики": "Жиһаз шеберлері",
+    "Автоэлектрики": "Автоэлектриктер",
+    "Грузчики": "Жүк тасушылар",
+    "Уборка": "Тазалау",
+    "Спецтехника": "Арнайы техника",
+    "Штукатур": "Сылақшы",
+    "Маляр": "Бояушы",
+    "Плиточник": "Плиткашы",
+    "Гипсокартонщик": "Гипсокартон шебері",
+    "Окна и двери": "Терезе және есік",
+    "Натяжные потолки": "Керме төбелер",
+    "Сборка мебели": "Жиһаз құрастыру",
+    "Установка техники": "Техника орнату",
+    "Химчистка": "Химиялық тазалау",
+    "Переезды": "Көшу",
+    "Автомеханик": "Автомеханик",
+    "Шиномонтаж": "Шиномонтаж",
+    "Эвакуатор": "Эвакуатор",
+    "Детейлинг": "Детейлинг",
+    "Автомойка": "Автожуу",
+    "Заборы": "Қоршаулар",
+    "Навесы": "Бастырмалар",
+    "Ворота": "Қақпалар",
+    "Благоустройство": "Абаттандыру",
+    "Садовник": "Бағбан",
+    "Вывоз мусора": "Қоқыс шығару",
+    "Экскаватор": "Экскаватор",
+    "Манипулятор": "Манипулятор",
+    "КамАЗ": "КамАЗ",
+    "Автовышка": "Автомұнара",
+    "Бобкат": "Бобкат",
+    "Бетономешалка": "Бетон араластырғыш"
+  },
+  en: {
+    "Ремонт квартир": "Apartment renovation",
+    "Сантехники": "Plumbers",
+    "Электрики": "Electricians",
+    "Сварщики": "Welders",
+    "Кровельщики": "Roofers",
+    "Бетонщики": "Concrete workers",
+    "Мастер на час": "Handyman",
+    "Мебельщики": "Furniture makers",
+    "Автоэлектрики": "Auto electricians",
+    "Грузчики": "Movers",
+    "Уборка": "Cleaning",
+    "Спецтехника": "Special equipment",
+    "Штукатур": "Plasterer",
+    "Маляр": "Painter",
+    "Плиточник": "Tile installer",
+    "Гипсокартонщик": "Drywall specialist",
+    "Окна и двери": "Windows and doors",
+    "Натяжные потолки": "Stretch ceilings",
+    "Сборка мебели": "Furniture assembly",
+    "Установка техники": "Appliance installation",
+    "Химчистка": "Dry cleaning",
+    "Переезды": "Moving",
+    "Автомеханик": "Auto mechanic",
+    "Шиномонтаж": "Tire service",
+    "Эвакуатор": "Tow truck",
+    "Детейлинг": "Detailing",
+    "Автомойка": "Car wash",
+    "Заборы": "Fences",
+    "Навесы": "Canopies",
+    "Ворота": "Gates",
+    "Благоустройство": "Landscaping",
+    "Садовник": "Gardener",
+    "Вывоз мусора": "Waste removal",
+    "Экскаватор": "Excavator",
+    "Манипулятор": "Crane truck",
+    "КамАЗ": "KamAZ truck",
+    "Автовышка": "Aerial lift",
+    "Бобкат": "Bobcat",
+    "Бетономешалка": "Concrete mixer"
+  }
+};
+
+const cityTranslations = {
+  kk: {
+    "Алматы": "Алматы",
+    "Астана": "Астана",
+    "Шымкент": "Шымкент",
+    "Караганда": "Қарағанды",
+    "Талгар": "Талғар",
+    "Каскелен": "Қаскелең",
+    "Бесагаш": "Бесағаш",
+    "Конаев": "Қонаев",
+    "Семей": "Семей",
+    "Тараз": "Тараз"
+  },
+  en: {
+    "Алматы": "Almaty",
+    "Астана": "Astana",
+    "Шымкент": "Shymkent",
+    "Караганда": "Karaganda",
+    "Талгар": "Talgar",
+    "Каскелен": "Kaskelen",
+    "Бесагаш": "Besagash",
+    "Конаев": "Konaev",
+    "Семей": "Semey",
+    "Тараз": "Taraz"
+  }
+};
+
+const uiTextTranslations = {
+  kk: {
+    "Главная": "Басты бет",
+    "Категории": "Санаттар",
+    "Города": "Қалалар",
+    "Каталог": "Каталог",
+    "Добавить мастера": "Шебер қосу",
+    "Каталог мастеров": "Шеберлер каталогы",
+    "Найдите мастера по городу, району и услуге": "Қала, аудан және қызмет бойынша шебер табыңыз",
+    "Поиск по услуге": "Қызмет бойынша іздеу",
+    "Город": "Қала",
+    "Район": "Аудан",
+    "Категория": "Санат",
+    "Цена от": "Бағасы бастап",
+    "Цена до": "Бағасы дейін",
+    "Сортировка": "Сұрыптау",
+    "VIP сначала": "Алдымен VIP",
+    "Новые": "Жаңа",
+    "Популярные": "Танымал",
+    "По рейтингу": "Рейтинг бойынша",
+    "Дешевле": "Арзанырақ",
+    "Дороже": "Қымбатырақ",
+    "Только VIP": "Тек VIP",
+    "С отзывами": "Пікірлері бар",
+    "Найти мастера": "Шебер табу",
+    "Сбросить фильтры": "Сүзгілерді тазарту",
+    "Результаты": "Нәтижелер",
+    "Мастера": "Шеберлер",
+    "Популярные услуги": "Танымал қызметтер",
+    "Популярные города": "Танымал қалалар",
+    "VIP-мастера": "VIP шеберлер",
+    "VIP-мастера выше в поиске": "VIP шеберлер іздеуде жоғары",
+    "Открыть весь каталог": "Каталогты толық ашу",
+    "Как это работает": "Бұл қалай жұмыс істейді",
+    "Для клиента и мастера": "Клиент пен шебер үшін",
+    "Выберите услугу": "Қызметті таңдаңыз",
+    "Укажите город, район и нужную работу.": "Қаланы, ауданды және қажетті жұмысты көрсетіңіз.",
+    "Найдите мастера": "Шеберді табыңыз",
+    "Сравните цены, рейтинг, отзывы и VIP-статус.": "Баға, рейтинг, пікір және VIP-мәртебені салыстырыңыз.",
+    "Свяжитесь напрямую": "Тікелей байланысыңыз",
+    "Напишите в WhatsApp, Telegram или позвоните.": "WhatsApp, Telegram арқылы жазыңыз немесе қоңырау шалыңыз.",
+    "Получайте клиентов": "Клиенттер алыңыз",
+    "Добавьте карточку и подключите VIP для большего числа заявок.": "Карточка қосып, көбірек өтінім үшін VIP қосыңыз.",
+    "VIP-размещение": "VIP орналастыру",
+    "Хотите получать больше заявок?": "Көбірек өтінім алғыңыз келе ме?",
+    "Подключите VIP, и ваша карточка будет выше обычных мастеров, с золотым акцентом и дополнительным вниманием клиентов.": "VIP қоссаңыз, карточкаңыз қарапайым шеберлерден жоғары тұрады, алтын түспен ерекшеленеді және клиенттердің назарын көбірек аударады.",
+    "Подключить VIP": "VIP қосу",
+    "VIP на 7 дней": "VIP 7 күнге",
+    "VIP на 14 дней": "VIP 14 күнге",
+    "VIP на 30 дней": "VIP 30 күнге",
+    "Пользовательское соглашение": "Пайдаланушы келісімі",
+    "Политика конфиденциальности": "Құпиялылық саясаты",
+    "Соглашение": "Келісім",
+    "Конфиденциальность": "Құпиялылық",
+    "Заявка на модерацию": "Модерацияға өтінім",
+    "Заполните карточку мастера. Мы проверим анкету перед публикацией и добавим ее в каталог после модерации.": "Шебер карточкасын толтырыңыз. Анкетаны жариялау алдында қарап, модерациядан кейін каталогқа қосамыз.",
+    "Имя мастера / название бригады": "Шебердің аты / бригада атауы",
+    "Телефон для связи": "Байланыс телефоны",
+    "Бригада Ерлана": "Ерлан бригадасы",
+    "Алматы": "Алматы",
+    "Ауэзовский": "Әуезов ауданы",
+    "Например: сантехника, замена труб, установка смесителей. Опыт 8 лет, выезд по Алматы.": "Мысалы: сантехника, құбыр ауыстыру, араластырғыш орнату. 8 жыл тәжірибе, Алматы бойынша шығу.",
+    "10000": "10000",
+    "Ауэзовский, Бостандыкский": "Әуезов, Бостандық аудандары",
+    "Кратко опишите опыт, районы выезда и сильные стороны": "Тәжірибені, баратын аудандарды және артықшылықтарды қысқаша сипаттаңыз",
+    "Например: сантехник, сварка, ремонт крыши": "Мысалы: сантехник, дәнекерлеу, шатыр жөндеу",
+    "Медеу, центр, микрорайон": "Медеу, орталық, шағын аудан",
+    "сантехник, электрик, сварка": "сантехник, электрик, дәнекерлеу",
+    "центр, Медеу, Юго-Восток": "орталық, Медеу, Оңтүстік-Шығыс",
+    "5000": "5000",
+    "50000": "50000",
+    "Услуги и опыт": "Қызметтер және тәжірибе",
+    "Цена от, тг": "Бағасы бастап, тг",
+    "Районы выезда": "Баратын аудандар",
+    "Описание": "Сипаттама",
+    "Фото мастера или логотип": "Шебер фотосы немесе логотип",
+    "Фото работ, до 10 фото": "Жұмыс фотолары, 10 фотоға дейін",
+    "Сайт": "Сайт",
+    "Хочу VIP-размещение": "VIP орналастыруды қалаймын",
+    "Я подтверждаю достоверность данных.": "Деректердің дұрыстығын растаймын.",
+    "Согласен с публикацией информации на сайте.": "Ақпаратты сайтта жариялауға келісемін.",
+    "Отправить заявку": "Өтінімді жіберу",
+    "Ваша заявка принята. После проверки карточка появится в каталоге.": "Өтінім қабылданды. Тексеруден кейін карточка каталогта пайда болады.",
+    "Информационный каталог специалистов. Размещение анкеты не является гарантией качества услуг.": "Мамандардың ақпараттық каталогы. Анкетаны орналастыру қызмет сапасына кепілдік бермейді.",
+    "Информационный каталог специалистов. Администрация сайта не является стороной сделки.": "Мамандардың ақпараттық каталогы. Сайт әкімшілігі мәміле тарапы емес.",
+    "Информационный каталог специалистов. Условия, сроки и качество работ согласуются с мастером напрямую.": "Мамандардың ақпараттық каталогы. Шарттар, мерзімдер және жұмыс сапасы шебермен тікелей келісіледі."
+  },
+  en: {
+    "Главная": "Home",
+    "Категории": "Categories",
+    "Города": "Cities",
+    "Каталог": "Catalog",
+    "Добавить мастера": "Add a master",
+    "Каталог мастеров": "Master catalog",
+    "Найдите мастера по городу, району и услуге": "Find a master by city, district and service",
+    "Поиск по услуге": "Search by service",
+    "Город": "City",
+    "Район": "District",
+    "Категория": "Category",
+    "Цена от": "Price from",
+    "Цена до": "Price to",
+    "Сортировка": "Sort",
+    "VIP сначала": "VIP first",
+    "Новые": "New",
+    "Популярные": "Popular",
+    "По рейтингу": "By rating",
+    "Дешевле": "Cheaper",
+    "Дороже": "More expensive",
+    "Только VIP": "VIP only",
+    "С отзывами": "With reviews",
+    "Найти мастера": "Find a master",
+    "Сбросить фильтры": "Reset filters",
+    "Результаты": "Results",
+    "Мастера": "Masters",
+    "Популярные услуги": "Popular services",
+    "Популярные города": "Popular cities",
+    "VIP-мастера": "VIP masters",
+    "VIP-мастера выше в поиске": "VIP masters higher in search",
+    "Открыть весь каталог": "Open full catalog",
+    "Как это работает": "How it works",
+    "Для клиента и мастера": "For clients and masters",
+    "Выберите услугу": "Choose a service",
+    "Укажите город, район и нужную работу.": "Select a city, district and the work you need.",
+    "Найдите мастера": "Find a master",
+    "Сравните цены, рейтинг, отзывы и VIP-статус.": "Compare prices, ratings, reviews and VIP status.",
+    "Свяжитесь напрямую": "Contact directly",
+    "Напишите в WhatsApp, Telegram или позвоните.": "Write on WhatsApp, Telegram or call.",
+    "Получайте клиентов": "Get clients",
+    "Добавьте карточку и подключите VIP для большего числа заявок.": "Add a profile and connect VIP for more leads.",
+    "VIP-размещение": "VIP placement",
+    "Хотите получать больше заявок?": "Want to get more leads?",
+    "Подключите VIP, и ваша карточка будет выше обычных мастеров, с золотым акцентом и дополнительным вниманием клиентов.": "Connect VIP and your profile will appear above standard masters, with a gold accent and more client attention.",
+    "Подключить VIP": "Connect VIP",
+    "VIP на 7 дней": "VIP for 7 days",
+    "VIP на 14 дней": "VIP for 14 days",
+    "VIP на 30 дней": "VIP for 30 days",
+    "Пользовательское соглашение": "Terms of use",
+    "Политика конфиденциальности": "Privacy policy",
+    "Соглашение": "Terms",
+    "Конфиденциальность": "Privacy",
+    "Заявка на модерацию": "Moderation request",
+    "Заполните карточку мастера. Мы проверим анкету перед публикацией и добавим ее в каталог после модерации.": "Fill in the master profile. We will review the form before publication and add it to the catalog after moderation.",
+    "Имя мастера / название бригады": "Master name / team name",
+    "Телефон для связи": "Contact phone",
+    "Бригада Ерлана": "Yerlan team",
+    "Алматы": "Almaty",
+    "Ауэзовский": "Auezov district",
+    "Например: сантехника, замена труб, установка смесителей. Опыт 8 лет, выезд по Алматы.": "Example: plumbing, pipe replacement, faucet installation. 8 years of experience, service across Almaty.",
+    "10000": "10000",
+    "Ауэзовский, Бостандыкский": "Auezov, Bostandyk districts",
+    "Кратко опишите опыт, районы выезда и сильные стороны": "Briefly describe experience, service areas and strengths",
+    "Например: сантехник, сварка, ремонт крыши": "Example: plumber, welding, roof repair",
+    "Медеу, центр, микрорайон": "Medeu, center, microdistrict",
+    "сантехник, электрик, сварка": "plumber, electrician, welding",
+    "центр, Медеу, Юго-Восток": "center, Medeu, South-East",
+    "5000": "5000",
+    "50000": "50000",
+    "Услуги и опыт": "Services and experience",
+    "Цена от, тг": "Price from, KZT",
+    "Районы выезда": "Service areas",
+    "Описание": "Description",
+    "Фото мастера или логотип": "Master photo or logo",
+    "Фото работ, до 10 фото": "Work photos, up to 10",
+    "Сайт": "Website",
+    "Хочу VIP-размещение": "I want VIP placement",
+    "Я подтверждаю достоверность данных.": "I confirm the accuracy of the data.",
+    "Согласен с публикацией информации на сайте.": "I agree to publish the information on the site.",
+    "Отправить заявку": "Submit request",
+    "Ваша заявка принята. После проверки карточка появится в каталоге.": "Your request has been received. After review, the profile will appear in the catalog.",
+    "Информационный каталог специалистов. Размещение анкеты не является гарантией качества услуг.": "Information directory of specialists. Publishing a profile is not a guarantee of service quality.",
+    "Информационный каталог специалистов. Администрация сайта не является стороной сделки.": "Information directory of specialists. The site administration is not a party to the deal.",
+    "Информационный каталог специалистов. Условия, сроки и качество работ согласуются с мастером напрямую.": "Information directory of specialists. Terms, timing and work quality are agreed directly with the master."
   }
 };
 
@@ -275,17 +663,50 @@ function normalize(value) {
   return String(value || "").toLowerCase().trim();
 }
 
+function t(key) {
+  return (translations[currentLang] && translations[currentLang][key]) || translations.ru[key] || key;
+}
+
+function translateCategory(category) {
+  return (categoryTranslations[currentLang] && categoryTranslations[currentLang][category]) || category;
+}
+
+function translateCity(city) {
+  return (cityTranslations[currentLang] && cityTranslations[currentLang][city]) || city;
+}
+
+function translateUiText(text) {
+  const source = String(text || "").trim();
+  return (uiTextTranslations[currentLang] && uiTextTranslations[currentLang][source]) || source;
+}
+
+function translateStaticText(root = document) {
+  root.querySelectorAll("a, button, h1, h2, h3, p, span, label > span, option").forEach((node) => {
+    if (node.children.length && !node.matches("option")) return;
+    if (!node.dataset.i18nSource) node.dataset.i18nSource = node.textContent.trim();
+    const source = node.dataset.i18nSource;
+    const next = currentLang === "ru" ? source : translateUiText(source);
+    if (next !== node.textContent.trim()) node.textContent = next;
+  });
+  root.querySelectorAll("input[placeholder], textarea[placeholder]").forEach((node) => {
+    if (!node.dataset.placeholderSource) node.dataset.placeholderSource = node.getAttribute("placeholder") || "";
+    const source = node.dataset.placeholderSource;
+    const translated = currentLang === "ru" ? source : translateUiText(source);
+    if (translated) node.setAttribute("placeholder", translated);
+  });
+}
+
 function money(value) {
-  return new Intl.NumberFormat("ru-KZ").format(Number(value || 0)) + " тг";
+  return new Intl.NumberFormat(currentLang === "en" ? "en-US" : "ru-KZ").format(Number(value || 0)) + " " + t("tenge");
 }
 
 function formatExperience(value) {
-  if (typeof value === "number") return `${value} лет опыта`;
-  return value || "Опыт указан в анкете";
+  if (typeof value === "number") return `${value} ${t("yearsExperience")}`;
+  return value || t("experienceFromForm");
 }
 
 function masterStats(master, reviewCount) {
-  return `Рейтинг ${master.rating} · ${reviewCount} отзывов · ${master.views || 0} просмотров · ${master.callClicks || 0} звонков`;
+  return `${t("rating")} ${master.rating} · ${reviewCount} ${t("reviews")} · ${master.views || 0} ${t("views")} · ${master.callClicks || 0} ${t("calls")}`;
 }
 
 function deviceType() {
@@ -298,6 +719,7 @@ function currentPageName() {
 }
 
 function applyLanguage(lang) {
+  currentLang = translations[lang] ? lang : "ru";
   const pack = translations[lang] || translations.ru;
   document.documentElement.lang = lang === "kk" ? "kk" : lang;
   const pairs = [
@@ -323,6 +745,13 @@ function applyLanguage(lang) {
   if (findButton) findButton.textContent = pack.findMaster;
   const addButton = document.querySelector(".search-panel .btn-ghost");
   if (addButton) addButton.textContent = pack.addMaster;
+  refreshSelectLabels();
+  renderCategories();
+  renderCities();
+  renderVipMasters();
+  renderCatalog();
+  renderDetail({ skipTrack: true });
+  translateStaticText();
 }
 
 function initLanguageSwitcher() {
@@ -400,11 +829,31 @@ function contactLinks(master) {
   };
 }
 
+function optionHtml(item) {
+  const label = cities.includes(item) ? translateCity(item) : translateCategory(item);
+  return `<option value="${item}">${label}</option>`;
+}
+
 function fillSelect(selector, items, placeholder) {
   document.querySelectorAll(selector).forEach((select) => {
     if (select.dataset.filled) return;
-    select.innerHTML = `<option value="">${placeholder}</option>${items.map((item) => `<option>${item}</option>`).join("")}`;
+    select.dataset.items = JSON.stringify(items);
+    select.dataset.placeholderKey = placeholder;
+    select.innerHTML = `<option value="">${placeholder}</option>${items.map(optionHtml).join("")}`;
     select.dataset.filled = "true";
+  });
+}
+
+function refreshSelectLabels() {
+  document.querySelectorAll("select[data-items]").forEach((select) => {
+    const value = select.value;
+    const items = JSON.parse(select.dataset.items || "[]");
+    let placeholder = select.dataset.placeholderKey || "";
+    if (placeholder === "Любой город") placeholder = t("anyCity");
+    if (placeholder === "Все категории") placeholder = t("allCategories");
+    if (placeholder === "Выберите категорию") placeholder = t("chooseCategory");
+    select.innerHTML = `<option value="">${placeholder}</option>${items.map(optionHtml).join("")}`;
+    select.value = value;
   });
 }
 
@@ -420,11 +869,13 @@ function renderCategories() {
   const visible = categories.slice(0, 24);
   categoryList.innerHTML = visible.map((category) => `
     <button class="category-btn" type="button" data-category="${category}">
-      <strong>${category}</strong>
-      <span>Показать мастеров</span>
+      <strong>${translateCategory(category)}</strong>
+      <span>${t("showMasters")}</span>
     </button>
   `).join("");
 
+  if (categoryList.dataset.bound) return;
+  categoryList.dataset.bound = "true";
   categoryList.addEventListener("click", (event) => {
     const button = event.target.closest(".category-btn");
     if (!button) return;
@@ -444,7 +895,7 @@ function renderCategories() {
 function renderCities() {
   const cityList = document.querySelector("#cityList");
   if (!cityList) return;
-  cityList.innerHTML = cities.map((city) => `<a href="masters.html?city=${encodeURIComponent(city)}" data-track="city_filter" data-comment="${city}">${city}</a>`).join("");
+  cityList.innerHTML = cities.map((city) => `<a href="masters.html?city=${encodeURIComponent(city)}" data-track="city_filter" data-comment="${city}">${translateCity(city)}</a>`).join("");
 }
 
 function renderVipMasters() {
@@ -510,10 +961,10 @@ function renderCatalog() {
 
   const filtered = filterMasters(getAllMasters());
   const resultCount = document.querySelector("#resultCount");
-  if (resultCount) resultCount.textContent = `${filtered.length} мастеров`;
+  if (resultCount) resultCount.textContent = `${filtered.length} ${t("resultMasters")}`;
 
   if (!filtered.length) {
-    grid.innerHTML = `<div class="empty"><h3>Мастера не найдены</h3><p class="muted">Попробуйте изменить город, услугу, цену или район.</p></div>`;
+    grid.innerHTML = `<div class="empty"><h3>${t("emptyTitle")}</h3><p class="muted">${t("emptyText")}</p></div>`;
     return;
   }
 
@@ -533,21 +984,21 @@ function renderMasterCard(master) {
           <div class="avatar">${initials(master.name)}</div>
           <div>
             <h3>${master.name}</h3>
-            <div class="master-meta">${master.city}, ${master.district}</div>
+            <div class="master-meta">${translateCity(master.city)}, ${master.district}</div>
           </div>
         </div>
         <div class="badges">
-          <span class="badge">${master.category}</span>
-          ${master.vip ? `<span class="badge vip">VIP</span>` : `<span class="badge">Обычный</span>`}
-          ${master.vip ? `<span class="badge verified">Партнер KARO Master</span>` : ""}
+          <span class="badge">${translateCategory(master.category)}</span>
+          ${master.vip ? `<span class="badge vip">VIP</span>` : `<span class="badge">${t("normal")}</span>`}
+          ${master.vip ? `<span class="badge verified">${t("partner")}</span>` : ""}
         </div>
         <p class="master-meta">${master.description || master.services.join(", ")}</p>
-        <div class="price">от ${money(master.price)}</div>
+        <div class="price">${t("from")} ${money(master.price)}</div>
         <div class="reviews">${formatExperience(master.experience)} · ${masterStats(master, reviewCount)}</div>
         <div class="card-actions">
-          <a class="btn btn-dark" href="master.html?id=${master.id}" data-track="master_card_open" data-master-id="${master.id}">Смотреть карточку</a>
+          <a class="btn btn-dark" href="master.html?id=${master.id}" data-track="master_card_open" data-master-id="${master.id}">${t("viewCard")}</a>
           <a class="btn btn-line" href="${links.whatsapp}" target="_blank" rel="noopener" data-track="whatsapp_click" data-master-id="${master.id}">WhatsApp</a>
-          <a class="btn btn-primary" href="${links.phone}" data-track="call_click" data-master-id="${master.id}">Позвонить</a>
+          <a class="btn btn-primary" href="${links.phone}" data-track="call_click" data-master-id="${master.id}">${t("call")}</a>
         </div>
       </div>
     </article>
@@ -676,7 +1127,7 @@ async function sendLead(data, draft) {
   }
 }
 
-function renderDetail() {
+function renderDetail(options = {}) {
   const detail = document.querySelector("#masterDetail");
   if (!detail) return;
 
@@ -686,8 +1137,8 @@ function renderDetail() {
   const related = getAllMasters()
     .filter((item) => item.id !== master.id && item.category === master.category && item.city === master.city)
     .slice(0, 3);
-  document.title = `${master.name} - ${master.category} | KARO Master`;
-  trackEvent("master_profile_view", master);
+  document.title = `${master.name} - ${translateCategory(master.category)} | KARO Master`;
+  if (!options.skipTrack) trackEvent("master_profile_view", master);
 
   detail.innerHTML = `
     <article class="detail-card">
@@ -696,40 +1147,40 @@ function renderDetail() {
       </div>
       <div class="detail-content">
         <div class="badges">
-          <span class="badge">${master.category}</span>
-          ${master.vip ? `<span class="badge vip">VIP выше в поиске</span>` : `<span class="badge">Обычное размещение</span>`}
-          ${master.vip ? `<span class="badge verified">Партнер KARO Master</span>` : ""}
+          <span class="badge">${translateCategory(master.category)}</span>
+          ${master.vip ? `<span class="badge vip">${t("vipSearch")}</span>` : `<span class="badge">${t("normalPlacement")}</span>`}
+          ${master.vip ? `<span class="badge verified">${t("partner")}</span>` : ""}
         </div>
         <h1>${master.name}</h1>
-        <p class="master-meta">${master.city}, ${master.district}</p>
+        <p class="master-meta">${translateCity(master.city)}, ${master.district}</p>
         <p>${master.description}</p>
-        <div class="price">Цены от ${money(master.price)}</div>
+        <div class="price">${t("pricesFrom")} ${money(master.price)}</div>
         <div class="reviews">${formatExperience(master.experience)} · ${masterStats(master, master.reviews.length)}</div>
         <div class="card-actions">
-          <a class="btn btn-line" href="${links.whatsapp}" target="_blank" rel="noopener" data-track="whatsapp_click" data-master-id="${master.id}">Написать в WhatsApp</a>
-          <a class="btn btn-line" href="${links.telegram}" target="_blank" rel="noopener" data-track="telegram_click" data-master-id="${master.id}">Написать в Telegram</a>
-          <a class="btn btn-primary" href="${links.phone}" data-track="call_click" data-master-id="${master.id}">Позвонить</a>
+          <a class="btn btn-line" href="${links.whatsapp}" target="_blank" rel="noopener" data-track="whatsapp_click" data-master-id="${master.id}">${t("writeWhatsapp")}</a>
+          <a class="btn btn-line" href="${links.telegram}" target="_blank" rel="noopener" data-track="telegram_click" data-master-id="${master.id}">${t("writeTelegram")}</a>
+          <a class="btn btn-primary" href="${links.phone}" data-track="call_click" data-master-id="${master.id}">${t("call")}</a>
         </div>
         <section>
-          <h2>Список услуг</h2>
+          <h2>${t("servicesList")}</h2>
           <div class="badges">${master.services.map((service) => `<span class="badge">${service}</span>`).join("")}</div>
         </section>
         <section>
-          <h2>Фото работ</h2>
+          <h2>${t("workPhotos")}</h2>
           <div class="works">
-            ${master.works.map((src) => `<img src="${src}" alt="Работа ${master.name}" loading="lazy">`).join("")}
+            ${master.works.map((src) => `<img src="${src}" alt="${t("workPhotos")} ${master.name}" loading="lazy">`).join("")}
           </div>
         </section>
         <section>
-          <h2>Отзывы</h2>
+          <h2>${t("reviewTitle")}</h2>
           <div class="review-list">
-            ${master.reviews.map((review) => `<blockquote><strong>${review.name} · ${review.rating}/5</strong><br>${review.text}<small>${review.date}</small></blockquote>`).join("") || "<p class='muted'>Отзывов пока нет.</p>"}
+            ${master.reviews.map((review) => `<blockquote><strong>${review.name} · ${review.rating}/5</strong><br>${review.text}<small>${review.date}</small></blockquote>`).join("") || `<p class='muted'>${t("noReviews")}</p>`}
           </div>
-          <a class="btn btn-line" href="https://t.me/share/url?text=${encodeURIComponent(`Отзыв для ${master.name} на KARO Master`)}" target="_blank" rel="noopener">Оставить отзыв</a>
+          <a class="btn btn-line" href="https://t.me/share/url?text=${encodeURIComponent(`Отзыв для ${master.name} на KARO Master`)}" target="_blank" rel="noopener">${t("leaveReview")}</a>
         </section>
       </div>
     </article>
-    ${related.length ? `<section class="section catalog"><h2>Похожие мастера</h2><div class="masters-grid">${related.map(renderMasterCard).join("")}</div></section>` : ""}
+    ${related.length ? `<section class="section catalog"><h2>${t("similarMasters")}</h2><div class="masters-grid">${related.map(renderMasterCard).join("")}</div></section>` : ""}
   `;
 }
 
