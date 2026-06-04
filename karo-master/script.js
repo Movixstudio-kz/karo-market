@@ -457,6 +457,8 @@ function bindAddForm() {
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
     const data = Object.fromEntries(new FormData(form).entries());
+    const profilePhoto = await readFileAsDataUrl(form.elements.photoFile?.files?.[0]);
+    const workPhotos = await readFilesAsDataUrls(form.elements.workFiles?.files || []);
     const draft = {
       id: `draft-${Date.now()}`,
       createdAt: new Date().toISOString().slice(0, 10),
@@ -479,8 +481,10 @@ function bindAddForm() {
       phone: data.phone || data.whatsapp,
       vip: data.vip === "on",
       verified: data.vip === "on",
-      photo: data.photo || "https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=900&q=80",
-      works: String(data.works || "").split(",").map((item) => item.trim()).filter(Boolean).slice(0, 20)
+      photo: profilePhoto || "https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=900&q=80",
+      works: workPhotos.length ? workPhotos.slice(0, 20) : [
+        "https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=500&q=80"
+      ]
     };
 
     setDrafts([draft, ...getDrafts()]);
@@ -490,6 +494,20 @@ function bindAddForm() {
     if (success) success.hidden = false;
     renderCatalog();
   });
+}
+
+function readFileAsDataUrl(file) {
+  if (!file) return Promise.resolve("");
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = () => reject(reader.error);
+    reader.readAsDataURL(file);
+  });
+}
+
+function readFilesAsDataUrls(files) {
+  return Promise.all(Array.from(files).map(readFileAsDataUrl));
 }
 
 async function sendLead(data, draft) {
