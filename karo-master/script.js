@@ -518,21 +518,6 @@ function readFilesAsDataUrls(files) {
 }
 
 async function sendLead(data, draft) {
-  const message = [
-    "Новая заявка KARO Master",
-    `Имя: ${data.name}`,
-    `Телефон: ${data.phone}`,
-    `Город: ${data.city}`,
-    `Район: ${data.district}`,
-    `Категория: ${data.category}`,
-    `Услуги и опыт: ${data.servicesExperience}`,
-    `Районы выезда: ${data.serviceArea || ""}`,
-    `Цена от: ${data.price} тг`,
-    `Описание: ${data.description || ""}`,
-    `VIP: ${data.vip === "on" ? "да" : "нет"}`,
-    `ID: ${draft.id}`
-  ].join("\n");
-
   if (GOOGLE_SCRIPT_URL) {
     try {
       await fetch(GOOGLE_SCRIPT_URL, {
@@ -545,8 +530,6 @@ async function sendLead(data, draft) {
       console.warn("Google Apps Script request failed", error);
     }
   }
-
-  window.open(`https://t.me/share/url?url=${encodeURIComponent(location.href)}&text=${encodeURIComponent(message)}`, "_blank", "noopener");
 }
 
 function renderDetail() {
