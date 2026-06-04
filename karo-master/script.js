@@ -230,6 +230,11 @@ function money(value) {
   return new Intl.NumberFormat("ru-KZ").format(Number(value || 0)) + " тг";
 }
 
+function formatExperience(value) {
+  if (typeof value === "number") return `${value} лет опыта`;
+  return value || "Опыт указан в анкете";
+}
+
 function initials(name) {
   return String(name || "K").split(/\s+/).slice(0, 2).map((part) => part[0]).join("").toUpperCase();
 }
@@ -399,7 +404,7 @@ function renderMasterCard(master) {
         </div>
         <p class="master-meta">${master.description || master.services.join(", ")}</p>
         <div class="price">от ${money(master.price)}</div>
-        <div class="reviews">${master.experience} лет опыта · рейтинг ${master.rating} · ${reviewCount} отзывов</div>
+        <div class="reviews">${formatExperience(master.experience)} · рейтинг ${master.rating} · ${reviewCount} отзывов</div>
         <div class="card-actions">
           <a class="btn btn-dark" href="master.html?id=${master.id}">Смотреть карточку</a>
           <a class="btn btn-line" href="${links.whatsapp}" target="_blank" rel="noopener">WhatsApp</a>
@@ -458,7 +463,8 @@ function bindAddForm() {
     event.preventDefault();
     const data = Object.fromEntries(new FormData(form).entries());
     const profilePhoto = await readFileAsDataUrl(form.elements.photoFile?.files?.[0]);
-    const workPhotos = await readFilesAsDataUrls(form.elements.workFiles?.files || []);
+    const workPhotos = await readFilesAsDataUrls(Array.from(form.elements.workFiles?.files || []).slice(0, 10));
+    const servicesText = data.servicesExperience || "";
     const draft = {
       id: `draft-${Date.now()}`,
       createdAt: new Date().toISOString().slice(0, 10),
@@ -467,18 +473,19 @@ function bindAddForm() {
       category: data.category,
       city: data.city,
       district: data.district,
-      services: String(data.services || "").split(",").map((item) => item.trim()).filter(Boolean),
-      description: data.description || data.services,
-      experience: parseInt(data.experience, 10) || 1,
+      services: servicesText.split(/[,\n]/).map((item) => item.trim()).filter(Boolean).slice(0, 8),
+      description: data.description || servicesText,
+      experience: servicesText,
       price: parseInt(data.price, 10) || 0,
       rating: 5,
       views: 0,
       reviews: [],
-      whatsapp: data.whatsapp,
+      whatsapp: data.phone,
       telegram: data.telegram,
       instagram: data.instagram,
       website: data.website,
-      phone: data.phone || data.whatsapp,
+      serviceArea: data.serviceArea,
+      phone: data.phone,
       vip: data.vip === "on",
       verified: data.vip === "on",
       photo: profilePhoto || "https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=900&q=80",
@@ -514,12 +521,12 @@ async function sendLead(data, draft) {
   const message = [
     "Новая заявка KARO Master",
     `Имя: ${data.name}`,
-    `Телефон: ${data.phone || data.whatsapp}`,
-    `WhatsApp: ${data.whatsapp}`,
+    `Телефон: ${data.phone}`,
     `Город: ${data.city}`,
     `Район: ${data.district}`,
     `Категория: ${data.category}`,
-    `Услуги: ${data.services}`,
+    `Услуги и опыт: ${data.servicesExperience}`,
+    `Районы выезда: ${data.serviceArea || ""}`,
     `Цена от: ${data.price} тг`,
     `Описание: ${data.description || ""}`,
     `VIP: ${data.vip === "on" ? "да" : "нет"}`,
@@ -569,7 +576,7 @@ function renderDetail() {
         <p class="master-meta">${master.city}, ${master.district}</p>
         <p>${master.description}</p>
         <div class="price">Цены от ${money(master.price)}</div>
-        <div class="reviews">${master.experience} лет опыта · рейтинг ${master.rating} · ${master.reviews.length} отзывов</div>
+        <div class="reviews">${formatExperience(master.experience)} · рейтинг ${master.rating} · ${master.reviews.length} отзывов</div>
         <div class="card-actions">
           <a class="btn btn-line" href="${links.whatsapp}" target="_blank" rel="noopener">Написать в WhatsApp</a>
           <a class="btn btn-line" href="${links.telegram}" target="_blank" rel="noopener">Написать в Telegram</a>

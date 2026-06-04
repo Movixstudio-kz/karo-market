@@ -28,23 +28,20 @@
       </div>
       <form class="add-form" id="addMasterForm">
         <label><span>Имя мастера / название бригады</span><input name="name" required placeholder="Бригада Ерлана"></label>
-        <div class="form-row">
-          <label><span>Телефон</span><input name="phone" required placeholder="+77001234567"></label>
-          <label><span>WhatsApp</span><input name="whatsapp" required placeholder="+77001234567"></label>
-        </div>
+        <label><span>Телефон для связи</span><input name="phone" required placeholder="+77001234567"></label>
         <div class="form-row">
           <label><span>Город</span><input name="city" required placeholder="Алматы"></label>
           <label><span>Район</span><input name="district" required placeholder="Ауэзовский"></label>
         </div>
         <label><span>Категория</span><select name="category" required id="formCategory"></select></label>
-        <label><span>Услуги</span><textarea name="services" required placeholder="Установка смесителя, замена труб, прочистка канализации"></textarea></label>
+        <label><span>Услуги и опыт</span><textarea name="servicesExperience" required placeholder="Например: сантехника, замена труб, установка смесителей. Опыт 8 лет, выезд по Алматы."></textarea></label>
         <div class="form-row">
           <label><span>Цена от, тг</span><input name="price" required inputmode="numeric" placeholder="10000"></label>
-          <label><span>Опыт работы</span><input name="experience" placeholder="8 лет"></label>
+          <label><span>Районы выезда</span><input name="serviceArea" placeholder="Ауэзовский, Бостандыкский"></label>
         </div>
         <label><span>Описание</span><textarea name="description" required placeholder="Кратко опишите опыт, районы выезда и сильные стороны"></textarea></label>
         <label><span>Фото мастера или логотип</span><input name="photoFile" type="file" accept="image/*"></label>
-        <label><span>Фото работ</span><input name="workFiles" type="file" accept="image/*" multiple></label>
+        <label><span>Фото работ, до 10 фото</span><input name="workFiles" type="file" accept="image/*" multiple></label>
         <div class="form-row">
           <label><span>Telegram</span><input name="telegram" placeholder="@username"></label>
           <label><span>Instagram</span><input name="instagram" placeholder="@instagram"></label>
