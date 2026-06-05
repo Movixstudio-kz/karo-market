@@ -2,8 +2,8 @@ const ADMIN_KEY = "karo-master-admin";
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz1X-HR4VFr_gWeQiVSXaKOPwm1dFOMu9znTKrrW3pEqs9lvAXWggzIdoshFNlxVLHkBQ/exec";
 const ADMIN_WHATSAPP = "77009904003";
 const SITE_BASE_URL = "https://movixstudio-kz.github.io/karo-market/karo-master/";
-const GA4_MEASUREMENT_ID = "";
-const YANDEX_METRIKA_ID = "";
+const GA4_MEASUREMENT_ID = "G-2GWFPRL359";
+const YANDEX_METRIKA_ID = "109658430";
 
 const translations = {
   ru: {
@@ -61,11 +61,16 @@ const translations = {
     whatsappClicks: "WhatsApp",
     telegramClicks: "Telegram",
     reportMaster: "Пожаловаться на мастера",
+    reviewName: "Ваше имя",
+    reviewRating: "Оценка",
+    reviewText: "Текст отзыва",
+    reviewSubmit: "Отправить на модерацию",
+    reviewSuccess: "Спасибо! Отзыв отправлен на модерацию.",
+    reviewModeration: "Отзыв появится в карточке после проверки модератором.",
     openPhoto: "Открыть фото",
     close: "Закрыть",
     nextPhoto: "Следующее фото",
     prevPhoto: "Предыдущее фото",
-    reviewWhatsappText: "Здравствуйте! Хочу оставить отзыв для",
     reportWhatsappText: "Здравствуйте! Хочу пожаловаться на мастера"
   },
   kk: {
@@ -123,11 +128,16 @@ const translations = {
     whatsappClicks: "WhatsApp",
     telegramClicks: "Telegram",
     reportMaster: "Шеберге шағымдану",
+    reviewName: "Атыңыз",
+    reviewRating: "Баға",
+    reviewText: "Пікір мәтіні",
+    reviewSubmit: "Модерацияға жіберу",
+    reviewSuccess: "Рахмет! Пікір модерацияға жіберілді.",
+    reviewModeration: "Пікір модератор тексергеннен кейін карточкада пайда болады.",
     openPhoto: "Фотоны ашу",
     close: "Жабу",
     nextPhoto: "Келесі фото",
     prevPhoto: "Алдыңғы фото",
-    reviewWhatsappText: "Сәлеметсіз бе! Пікір қалдырғым келеді:",
     reportWhatsappText: "Сәлеметсіз бе! Шеберге шағым қалдырғым келеді:"
   },
   en: {
@@ -185,11 +195,16 @@ const translations = {
     whatsappClicks: "WhatsApp",
     telegramClicks: "Telegram",
     reportMaster: "Report this master",
+    reviewName: "Your name",
+    reviewRating: "Rating",
+    reviewText: "Review text",
+    reviewSubmit: "Send for moderation",
+    reviewSuccess: "Thanks! The review has been sent for moderation.",
+    reviewModeration: "The review will appear on the profile after moderator approval.",
     openPhoto: "Open photo",
     close: "Close",
     nextPhoto: "Next photo",
     prevPhoto: "Previous photo",
-    reviewWhatsappText: "Hello! I want to leave a review for",
     reportWhatsappText: "Hello! I want to report this master:"
   }
 };
@@ -1005,8 +1020,31 @@ function setDrafts(items) {
   localStorage.setItem("karoMasterDrafts", JSON.stringify(items));
 }
 
+function getApprovedReviews() {
+  return JSON.parse(localStorage.getItem("karoMasterApprovedReviews") || "[]");
+}
+
+function applyApprovedReviews(items) {
+  const grouped = getApprovedReviews().reduce((acc, review) => {
+    if (!review.masterId) return acc;
+    acc[review.masterId] = acc[review.masterId] || [];
+    acc[review.masterId].push({
+      name: review.name || "Клиент",
+      rating: Number(review.rating || 5),
+      date: review.date || "",
+      text: review.text || ""
+    });
+    return acc;
+  }, {});
+  return items.map((master) => {
+    const extraReviews = grouped[master.id] || [];
+    if (!extraReviews.length) return master;
+    return { ...master, reviews: [...(master.reviews || []), ...extraReviews] };
+  });
+}
+
 function getAllMasters() {
-  return [...getDrafts().filter((item) => item.status !== "rejected"), ...masters];
+  return applyApprovedReviews([...getDrafts().filter((item) => item.status !== "rejected"), ...masters]);
 }
 
 function contactLinks(master) {
@@ -1329,6 +1367,34 @@ async function sendLead(data, draft) {
   }
 }
 
+async function loadApprovedReviews() {
+  if (!GOOGLE_SCRIPT_URL) return;
+  try {
+    const response = await fetch(`${GOOGLE_SCRIPT_URL}?action=reviews`, { method: "GET" });
+    const payload = await response.json();
+    if (!payload.ok || !Array.isArray(payload.reviews)) return;
+    localStorage.setItem("karoMasterApprovedReviews", JSON.stringify(payload.reviews));
+    renderVipMasters();
+    renderCatalog();
+    renderDetail({ skipTrack: true });
+  } catch (error) {
+    console.warn("Approved reviews request failed", error);
+  }
+}
+
+async function sendReview(data) {
+  if (!GOOGLE_SCRIPT_URL) return;
+  try {
+    await fetch(GOOGLE_SCRIPT_URL, {
+      method: "POST",
+      mode: "no-cors",
+      body: JSON.stringify({ action: "review", data })
+    });
+  } catch (error) {
+    console.warn("Review request failed", error);
+  }
+}
+
 function renderDetail(options = {}) {
   const detail = document.querySelector("#masterDetail");
   if (!detail) return;
@@ -1383,13 +1449,50 @@ function renderDetail(options = {}) {
           <div class="review-list">
             ${master.reviews.map((review) => `<blockquote><strong>${review.name} · ${review.rating}/5</strong><br>${review.text}<small>${review.date}</small></blockquote>`).join("") || `<p class='muted'>${t("noReviews")}</p>`}
           </div>
-          <a class="btn btn-line" href="${adminWhatsAppUrl(`${t("reviewWhatsappText")} ${master.name}`)}" target="_blank" rel="noopener" data-track="review_click" data-master-id="${master.id}">${t("leaveReview")}</a>
+          <form class="review-form" id="reviewForm">
+            <div class="form-row">
+              <label><span>${t("reviewName")}</span><input name="name" required placeholder="${t("reviewName")}"></label>
+              <label><span>${t("reviewRating")}</span>
+                <select name="rating" required>
+                  <option value="5">5</option>
+                  <option value="4">4</option>
+                  <option value="3">3</option>
+                  <option value="2">2</option>
+                  <option value="1">1</option>
+                </select>
+              </label>
+            </div>
+            <label><span>${t("reviewText")}</span><textarea name="text" required minlength="10" placeholder="${t("reviewText")}"></textarea></label>
+            <button class="btn btn-line" type="submit">${t("reviewSubmit")}</button>
+            <p class="muted review-success" hidden>${t("reviewSuccess")} ${t("reviewModeration")}</p>
+          </form>
         </section>
       </div>
     </article>
     ${related.length ? `<section class="section catalog"><h2>${t("similarMasters")}</h2><div class="masters-grid">${related.map(renderMasterCard).join("")}</div></section>` : ""}
   `;
   bindGallery(gallery, master);
+  bindReviewForm(master);
+}
+
+function bindReviewForm(master) {
+  const form = document.querySelector("#reviewForm");
+  if (!form) return;
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const data = Object.fromEntries(new FormData(form).entries());
+    const review = {
+      masterId: master.id,
+      masterName: master.name,
+      name: data.name,
+      rating: data.rating,
+      text: data.text
+    };
+    trackEvent("review_submit", master, data.rating);
+    await sendReview(review);
+    form.reset();
+    form.querySelector(".review-success").hidden = false;
+  });
 }
 
 function bindGallery(images, master) {
@@ -1533,6 +1636,7 @@ renderCategories();
 renderCities();
 renderVipMasters();
 renderHomeStats();
+loadApprovedReviews();
 bindSearch();
 bindAddForm();
 bindVipButtons();

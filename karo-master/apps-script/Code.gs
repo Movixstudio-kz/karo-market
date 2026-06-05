@@ -6,15 +6,7 @@ const TELEGRAM_CHAT_ID = "PASTE_ADMIN_CHAT_ID_HERE";
 function setupKaroMasterSheets() {
   const ss = SpreadsheetApp.openById(SHEET_ID);
   ensureHeader_(ss.getSheetByName("Masters") || ss.insertSheet("Masters"), mastersHeader_());
-  ensureHeader_(ss.getSheetByName("Reviews") || ss.insertSheet("Reviews"), [
-    "ID отзыва",
-    "ID мастера",
-    "Имя клиента",
-    "Оценка",
-    "Текст отзыва",
-    "Дата",
-    "Статус"
-  ]);
+  ensureHeader_(ss.getSheetByName("Reviews") || ss.insertSheet("Reviews"), reviewsHeader_());
   ensureHeader_(ss.getSheetByName("VIP") || ss.insertSheet("VIP"), [
     "ID мастера",
     "Тариф",
@@ -32,6 +24,10 @@ function doPost(e) {
     appendStat(payload);
     return json_({ ok: true });
   }
+  if (payload.action === "review") {
+    appendReview(payload.data || {});
+    return json_({ ok: true });
+  }
   const data = payload.data || {};
   const draft = payload.draft || {};
 
@@ -41,6 +37,14 @@ function doPost(e) {
   return ContentService
     .createTextOutput(JSON.stringify({ ok: true }))
     .setMimeType(ContentService.MimeType.JSON);
+}
+
+function doGet(e) {
+  const action = e && e.parameter ? e.parameter.action : "";
+  if (action === "reviews") {
+    return json_({ ok: true, reviews: getApprovedReviews() });
+  }
+  return json_({ ok: true });
 }
 
 function json_(data) {
@@ -141,6 +145,54 @@ function appendStat(payload) {
     payload.device || "",
     payload.comment || ""
   ]);
+}
+
+function appendReview(data) {
+  const ss = SpreadsheetApp.openById(SHEET_ID);
+  const sheet = ss.getSheetByName("Reviews") || ss.insertSheet("Reviews");
+  ensureHeader_(sheet, reviewsHeader_());
+  sheet.appendRow([
+    Utilities.getUuid(),
+    data.masterId || "",
+    data.name || "",
+    data.rating || "",
+    data.text || "",
+    new Date(),
+    "На модерации"
+  ]);
+}
+
+function getApprovedReviews() {
+  const ss = SpreadsheetApp.openById(SHEET_ID);
+  const sheet = ss.getSheetByName("Reviews") || ss.insertSheet("Reviews");
+  ensureHeader_(sheet, reviewsHeader_());
+  const values = sheet.getDataRange().getValues();
+  if (values.length <= 1) return [];
+  return values.slice(1).filter(function(row) {
+    const status = String(row[6] || "").toLowerCase().trim();
+    return status === "одобрено" || status === "approved";
+  }).map(function(row) {
+    return {
+      id: row[0] || "",
+      masterId: row[1] || "",
+      name: row[2] || "",
+      rating: row[3] || "",
+      text: row[4] || "",
+      date: row[5] ? Utilities.formatDate(new Date(row[5]), Session.getScriptTimeZone(), "dd.MM.yyyy") : ""
+    };
+  });
+}
+
+function reviewsHeader_() {
+  return [
+    "ID отзыва",
+    "ID мастера",
+    "Имя клиента",
+    "Оценка",
+    "Текст отзыва",
+    "Дата",
+    "Статус"
+  ];
 }
 
 function statsHeader_() {
