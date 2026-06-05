@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
@@ -21,19 +21,58 @@
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "WebSite",
-      "name": "KARO Master",
-      "url": "https://movixstudio-kz.github.io/karo-market/karo-master/",
-      "description": "Каталог мастеров и услуг Казахстана",
-      "inLanguage": ["ru-KZ", "kk-KZ", "en"],
-      "potentialAction": {
-        "@type": "SearchAction",
-        "target": "https://movixstudio-kz.github.io/karo-market/karo-master/masters.html?service={search_term_string}",
-        "query-input": "required name=search_term_string"
-      }
+      "@graph": [
+        {
+          "@type": "WebSite",
+          "name": "KARO Master",
+          "url": "https://movixstudio-kz.github.io/karo-market/karo-master/",
+          "description": "Каталог мастеров и услуг Казахстана",
+          "inLanguage": ["ru-KZ", "kk-KZ", "en"],
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": "https://movixstudio-kz.github.io/karo-market/karo-master/masters.html?service={search_term_string}",
+            "query-input": "required name=search_term_string"
+          }
+        },
+        {
+          "@type": "LocalBusiness",
+          "name": "KARO Master",
+          "url": "https://movixstudio-kz.github.io/karo-market/karo-master/",
+          "areaServed": "Kazakhstan",
+          "description": "Информационный каталог мастеров и услуг Казахстана"
+        },
+        {
+          "@type": "Service",
+          "name": "Поиск мастеров в Казахстане",
+          "provider": { "@type": "LocalBusiness", "name": "KARO Master" },
+          "areaServed": "Kazakhstan",
+          "serviceType": "Каталог мастеров"
+        },
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Главная", "item": "https://movixstudio-kz.github.io/karo-market/karo-master/" }
+          ]
+        },
+        {
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "KARO Master оказывает услуги?",
+              "acceptedAnswer": { "@type": "Answer", "text": "Нет. KARO Master является информационным каталогом специалистов. Условия работ клиент и мастер согласуют напрямую." }
+            },
+            {
+              "@type": "Question",
+              "name": "Что дает VIP-размещение?",
+              "acceptedAnswer": { "@type": "Answer", "text": "VIP-размещение поднимает карточку выше в каталоге и выделяет ее визуально. Это рекламный приоритет, а не гарантия качества услуг." }
+            }
+          ]
+        }
+      ]
     }
   </script>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=7161766-2">
 </head>
 <body>
   <header class="site-header">
@@ -75,6 +114,11 @@
           <button class="btn btn-primary" type="submit">Найти мастера</button>
           <a class="btn btn-ghost" href="add-master.html">Добавить мастера</a>
         </form>
+        <div class="promo-strip">
+          <strong>Первые 100 мастеров получают VIP бесплатно на 30 дней</strong>
+          <span>Добавьте анкету сейчас, и мы поднимем карточку выше обычных размещений на старте каталога.</span>
+        </div>
+        <div class="home-stats" id="homeStats" aria-label="Статистика каталога"></div>
       </div>
     </section>
 
@@ -163,6 +207,7 @@
     <span><a href="terms.html">Пользовательское соглашение</a> · <a href="privacy.html">Политика конфиденциальности</a></span>
   </footer>
 
-  <script src="script.js"></script>
+  <script src="script.js?v=7161766-2"></script>
 </body>
 </html>
+

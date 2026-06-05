@@ -2,6 +2,8 @@ const ADMIN_KEY = "karo-master-admin";
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz1X-HR4VFr_gWeQiVSXaKOPwm1dFOMu9znTKrrW3pEqs9lvAXWggzIdoshFNlxVLHkBQ/exec";
 const ADMIN_WHATSAPP = "77009904003";
 const SITE_BASE_URL = "https://movixstudio-kz.github.io/karo-market/karo-master/";
+const GA4_MEASUREMENT_ID = "";
+const YANDEX_METRIKA_ID = "";
 
 const translations = {
   ru: {
@@ -50,7 +52,21 @@ const translations = {
     emptyText: "Попробуйте изменить город, услугу, цену или район.",
     resetFilters: "Сбросить фильтры",
     footerAgreement: "Соглашение",
-    footerPrivacy: "Конфиденциальность"
+    footerPrivacy: "Конфиденциальность",
+    promoTitle: "Первые 100 мастеров получают VIP бесплатно на 30 дней",
+    promoText: "Добавьте анкету сейчас, и мы поднимем карточку выше обычных размещений на старте каталога.",
+    totalMasters: "Всего мастеров",
+    totalCities: "Городов",
+    totalCategories: "Категорий",
+    whatsappClicks: "WhatsApp",
+    telegramClicks: "Telegram",
+    reportMaster: "Пожаловаться на мастера",
+    openPhoto: "Открыть фото",
+    close: "Закрыть",
+    nextPhoto: "Следующее фото",
+    prevPhoto: "Предыдущее фото",
+    reviewWhatsappText: "Здравствуйте! Хочу оставить отзыв для",
+    reportWhatsappText: "Здравствуйте! Хочу пожаловаться на мастера"
   },
   kk: {
     navHome: "Басты бет",
@@ -98,7 +114,21 @@ const translations = {
     emptyText: "Қаланы, қызметті, бағаны немесе ауданды өзгертіп көріңіз.",
     resetFilters: "Сүзгілерді тазарту",
     footerAgreement: "Келісім",
-    footerPrivacy: "Құпиялылық"
+    footerPrivacy: "Құпиялылық",
+    promoTitle: "Алғашқы 100 шебер 30 күнге тегін VIP алады",
+    promoText: "Анкетаны қазір қосыңыз, каталог басталғанда карточкаңыз қарапайым орналастырулардан жоғары тұрады.",
+    totalMasters: "Барлық шебер",
+    totalCities: "Қала",
+    totalCategories: "Санат",
+    whatsappClicks: "WhatsApp",
+    telegramClicks: "Telegram",
+    reportMaster: "Шеберге шағымдану",
+    openPhoto: "Фотоны ашу",
+    close: "Жабу",
+    nextPhoto: "Келесі фото",
+    prevPhoto: "Алдыңғы фото",
+    reviewWhatsappText: "Сәлеметсіз бе! Пікір қалдырғым келеді:",
+    reportWhatsappText: "Сәлеметсіз бе! Шеберге шағым қалдырғым келеді:"
   },
   en: {
     navHome: "Home",
@@ -146,7 +176,21 @@ const translations = {
     emptyText: "Try changing the city, service, price or district.",
     resetFilters: "Reset filters",
     footerAgreement: "Terms",
-    footerPrivacy: "Privacy"
+    footerPrivacy: "Privacy",
+    promoTitle: "First 100 masters get VIP free for 30 days",
+    promoText: "Add your profile now and we will place it above standard listings at the catalog launch.",
+    totalMasters: "Masters",
+    totalCities: "Cities",
+    totalCategories: "Categories",
+    whatsappClicks: "WhatsApp",
+    telegramClicks: "Telegram",
+    reportMaster: "Report this master",
+    openPhoto: "Open photo",
+    close: "Close",
+    nextPhoto: "Next photo",
+    prevPhoto: "Previous photo",
+    reviewWhatsappText: "Hello! I want to leave a review for",
+    reportWhatsappText: "Hello! I want to report this master:"
   }
 };
 
@@ -349,7 +393,52 @@ const uiTextTranslations = {
     "Ваша заявка принята. После проверки карточка появится в каталоге.": "Өтінім қабылданды. Тексеруден кейін карточка каталогта пайда болады.",
     "Информационный каталог специалистов. Размещение анкеты не является гарантией качества услуг.": "Мамандардың ақпараттық каталогы. Анкетаны орналастыру қызмет сапасына кепілдік бермейді.",
     "Информационный каталог специалистов. Администрация сайта не является стороной сделки.": "Мамандардың ақпараттық каталогы. Сайт әкімшілігі мәміле тарапы емес.",
-    "Информационный каталог специалистов. Условия, сроки и качество работ согласуются с мастером напрямую.": "Мамандардың ақпараттық каталогы. Шарттар, мерзімдер және жұмыс сапасы шебермен тікелей келісіледі."
+    "Информационный каталог специалистов. Условия, сроки и качество работ согласуются с мастером напрямую.": "Мамандардың ақпараттық каталогы. Шарттар, мерзімдер және жұмыс сапасы шебермен тікелей келісіледі.",
+    "Первые 100 мастеров получают VIP бесплатно на 30 дней": "Алғашқы 100 шебер 30 күнге тегін VIP алады",
+    "Добавьте анкету сейчас, и мы поднимем карточку выше обычных размещений на старте каталога.": "Анкетаны қазір қосыңыз, каталог басталғанда карточкаңыз қарапайым орналастырулардан жоғары тұрады.",
+    "Поднимите карточку выше обычных мастеров": "Карточканы қарапайым шеберлерден жоғары көтеріңіз",
+    "VIP дает больше просмотров, золотой акцент, значок VIP и приоритет в городе и категории.": "VIP көбірек қаралым, алтын акцент, VIP белгісі және қала мен санатта басымдық береді.",
+    "VIP 7 дней": "VIP 7 күн",
+    "VIP 14 дней": "VIP 14 күн",
+    "VIP 30 дней": "VIP 30 күн",
+    "Выше обычных мастеров, яркая карточка, больше просмотров.": "Қарапайым шеберлерден жоғары, көзге түсетін карточка, көбірек қаралым.",
+    "Оптимально для стабильного потока заявок на две недели.": "Екі аптаға тұрақты өтінім ағыны үшін ыңғайлы.",
+    "Максимальный срок размещения и приоритет в каталоге.": "Ең ұзақ орналастыру мерзімі және каталогтағы басымдық.",
+    "Что дает VIP": "VIP не береді",
+    "Показ выше": "Жоғары көрсету",
+    "VIP-мастера сортируются выше обычных карточек.": "VIP шеберлер қарапайым карточкалардан жоғары сұрыпталады.",
+    "Золотой акцент": "Алтын акцент",
+    "Карточка заметнее в каталоге и на главной.": "Карточка каталогта және басты бетте көбірек көзге түседі.",
+    "Больше внимания": "Көбірек назар",
+    "VIP-метка и приоритетное размещение помогают карточке выделяться в каталоге.": "VIP белгісі және басым орналастыру карточканы каталогта ерекшелейді.",
+    "Правовые условия": "Құқықтық шарттар",
+    "Пользовательское соглашение": "Пайдаланушы келісімі",
+    "Политика конфиденциальности": "Құпиялылық саясаты",
+    "Персональные данные": "Жеке деректер",
+    "Статус площадки": "Платформа мәртебесі",
+    "Ответственность": "Жауапкершілік",
+    "Размещение анкеты": "Анкетаны орналастыру",
+    "Модерация": "Модерация",
+    "Какие данные собираются": "Қандай деректер жиналады",
+    "Для чего используются данные": "Деректер не үшін қолданылады",
+    "Публикация данных": "Деректерді жариялау",
+    "Хранение": "Сақтау",
+    "Удаление и изменение": "Өшіру және өзгерту",
+    "Сантехники Алматы": "Алматы сантехниктері",
+    "Сантехник Алматы - мастера с отзывами и WhatsApp": "Алматы сантехнигі - пікірлері және WhatsApp бар шеберлер",
+    "Сварщики Талгара": "Талғар дәнекерлеушілері",
+    "Сварщик Талгар - услуги сварки рядом с вами": "Талғар дәнекерлеушісі - жаныңыздағы дәнекерлеу қызметтері",
+    "Бетонные работы": "Бетон жұмыстары",
+    "Бетонщик Бесагаш - заливка, фундамент, стяжка": "Бесағаш бетоншысы - құю, іргетас, стяжка",
+    "Кровельщики Алматы": "Алматы шатыршылары",
+    "Ремонт крыши Алматы - кровельщики с WhatsApp": "Алматыда шатыр жөндеу - WhatsApp бар шатыршылар",
+    "Электрики Караганды": "Қарағанды электриктері",
+    "Электрик Караганда - мастера с отзывами и WhatsApp": "Қарағанды электригі - пікірлері және WhatsApp бар шеберлер",
+    "Электрики Алматы": "Алматы электриктері",
+    "Электрик Алматы - мастера с WhatsApp и отзывами": "Алматы электригі - WhatsApp және пікірлері бар шеберлер",
+    "Мастер на час": "Бір сағаттық шебер",
+    "Мастер на час Астана - мелкий ремонт рядом": "Астана бір сағаттық шебері - жаныңыздағы ұсақ жөндеу",
+    "Условия работ согласуются напрямую с мастером.": "Жұмыс шарттары шебермен тікелей келісіледі."
   },
   en: {
     "Главная": "Home",
@@ -435,7 +524,52 @@ const uiTextTranslations = {
     "Ваша заявка принята. После проверки карточка появится в каталоге.": "Your request has been received. After review, the profile will appear in the catalog.",
     "Информационный каталог специалистов. Размещение анкеты не является гарантией качества услуг.": "Information directory of specialists. Publishing a profile is not a guarantee of service quality.",
     "Информационный каталог специалистов. Администрация сайта не является стороной сделки.": "Information directory of specialists. The site administration is not a party to the deal.",
-    "Информационный каталог специалистов. Условия, сроки и качество работ согласуются с мастером напрямую.": "Information directory of specialists. Terms, timing and work quality are agreed directly with the master."
+    "Информационный каталог специалистов. Условия, сроки и качество работ согласуются с мастером напрямую.": "Information directory of specialists. Terms, timing and work quality are agreed directly with the master.",
+    "Первые 100 мастеров получают VIP бесплатно на 30 дней": "First 100 masters get VIP free for 30 days",
+    "Добавьте анкету сейчас, и мы поднимем карточку выше обычных размещений на старте каталога.": "Add your profile now and we will place it above standard listings at the catalog launch.",
+    "Поднимите карточку выше обычных мастеров": "Move your profile above standard masters",
+    "VIP дает больше просмотров, золотой акцент, значок VIP и приоритет в городе и категории.": "VIP gives more views, a gold accent, a VIP badge and priority in the city and category.",
+    "VIP 7 дней": "VIP 7 days",
+    "VIP 14 дней": "VIP 14 days",
+    "VIP 30 дней": "VIP 30 days",
+    "Выше обычных мастеров, яркая карточка, больше просмотров.": "Higher than standard masters, brighter profile, more views.",
+    "Оптимально для стабильного потока заявок на две недели.": "Best for a stable two-week flow of leads.",
+    "Максимальный срок размещения и приоритет в каталоге.": "Maximum placement period and catalog priority.",
+    "Что дает VIP": "What VIP gives",
+    "Показ выше": "Higher placement",
+    "VIP-мастера сортируются выше обычных карточек.": "VIP masters are sorted above standard profiles.",
+    "Золотой акцент": "Gold accent",
+    "Карточка заметнее в каталоге и на главной.": "The profile stands out more in the catalog and on the homepage.",
+    "Больше внимания": "More attention",
+    "VIP-метка и приоритетное размещение помогают карточке выделяться в каталоге.": "The VIP badge and priority placement help the profile stand out in the catalog.",
+    "Правовые условия": "Legal terms",
+    "Пользовательское соглашение": "Terms of use",
+    "Политика конфиденциальности": "Privacy policy",
+    "Персональные данные": "Personal data",
+    "Статус площадки": "Platform status",
+    "Ответственность": "Responsibility",
+    "Размещение анкеты": "Profile placement",
+    "Модерация": "Moderation",
+    "Какие данные собираются": "What data is collected",
+    "Для чего используются данные": "How data is used",
+    "Публикация данных": "Data publication",
+    "Хранение": "Storage",
+    "Удаление и изменение": "Deletion and updates",
+    "Сантехники Алматы": "Plumbers in Almaty",
+    "Сантехник Алматы - мастера с отзывами и WhatsApp": "Plumber Almaty - masters with reviews and WhatsApp",
+    "Сварщики Талгара": "Welders in Talgar",
+    "Сварщик Талгар - услуги сварки рядом с вами": "Welder Talgar - welding services near you",
+    "Бетонные работы": "Concrete work",
+    "Бетонщик Бесагаш - заливка, фундамент, стяжка": "Concrete worker Besagash - pouring, foundation, screed",
+    "Кровельщики Алматы": "Roofers in Almaty",
+    "Ремонт крыши Алматы - кровельщики с WhatsApp": "Roof repair Almaty - roofers with WhatsApp",
+    "Электрики Караганды": "Electricians in Karaganda",
+    "Электрик Караганда - мастера с отзывами и WhatsApp": "Electrician Karaganda - masters with reviews and WhatsApp",
+    "Электрики Алматы": "Electricians in Almaty",
+    "Электрик Алматы - мастера с WhatsApp и отзывами": "Electrician Almaty - masters with WhatsApp and reviews",
+    "Мастер на час": "Handyman",
+    "Мастер на час Астана - мелкий ремонт рядом": "Handyman Astana - small repairs nearby",
+    "Условия работ согласуются напрямую с мастером.": "Work terms are agreed directly with the master."
   }
 };
 
@@ -709,6 +843,19 @@ function masterStats(master, reviewCount) {
   return `${t("rating")} ${master.rating} · ${reviewCount} ${t("reviews")} · ${master.views || 0} ${t("views")} · ${master.callClicks || 0} ${t("calls")}`;
 }
 
+function masterPerformance(master) {
+  return [
+    `${master.views || 0} ${t("views")}`,
+    `${master.whatsappClicks || 0} ${t("whatsappClicks")}`,
+    `${master.callClicks || 0} ${t("calls")}`,
+    `${master.telegramClicks || 0} ${t("telegramClicks")}`
+  ].join(" · ");
+}
+
+function adminWhatsAppUrl(text) {
+  return `https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(text)}`;
+}
+
 function deviceType() {
   return window.matchMedia("(max-width: 760px)").matches ? "mobile" : "desktop";
 }
@@ -749,6 +896,7 @@ function applyLanguage(lang) {
   renderCategories();
   renderCities();
   renderVipMasters();
+  renderHomeStats();
   renderCatalog();
   renderDetail({ skipTrack: true });
   translateStaticText();
@@ -777,6 +925,22 @@ function initLanguageSwitcher() {
 }
 
 function trackEvent(eventName, master = {}, comment = "") {
+  if (window.gtag) {
+    window.gtag("event", eventName, {
+      master_id: master.id || "",
+      master_name: master.name || "",
+      category: master.category || "",
+      city: master.city || "",
+      comment
+    });
+  }
+  if (window.ym && YANDEX_METRIKA_ID) {
+    window.ym(Number(YANDEX_METRIKA_ID), "reachGoal", eventName, {
+      masterId: master.id || "",
+      category: master.category || "",
+      city: master.city || ""
+    });
+  }
   if (!GOOGLE_SCRIPT_URL) return;
   const payload = {
     action: "stat",
@@ -800,6 +964,32 @@ function trackEvent(eventName, master = {}, comment = "") {
     });
   } catch (error) {
     console.warn("Stats request failed", error);
+  }
+}
+
+function initExternalAnalytics() {
+  if (GA4_MEASUREMENT_ID) {
+    const ga = document.createElement("script");
+    ga.async = true;
+    ga.src = `https://www.googletagmanager.com/gtag/js?id=${GA4_MEASUREMENT_ID}`;
+    document.head.appendChild(ga);
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = function gtag(){ window.dataLayer.push(arguments); };
+    window.gtag("js", new Date());
+    window.gtag("config", GA4_MEASUREMENT_ID);
+  }
+  if (YANDEX_METRIKA_ID) {
+    (function(m,e,t,r,i,k,a){
+      m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+      m[i].l=1*new Date();
+      k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a);
+    })(window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+    window.ym(Number(YANDEX_METRIKA_ID), "init", {
+      clickmap: true,
+      trackLinks: true,
+      accurateTrackBounce: true,
+      webvisor: true
+    });
   }
 }
 
@@ -904,6 +1094,17 @@ function renderVipMasters() {
   grid.innerHTML = getAllMasters().filter((master) => master.vip).slice(0, 12).map(renderMasterCard).join("");
 }
 
+function renderHomeStats() {
+  const stats = document.querySelector("#homeStats");
+  if (!stats) return;
+  const items = getAllMasters();
+  stats.innerHTML = `
+    <article><strong>${items.length}</strong><span>${t("totalMasters")}</span></article>
+    <article><strong>${new Set(items.map((item) => item.city)).size}</strong><span>${t("totalCities")}</span></article>
+    <article><strong>${categories.length}</strong><span>${t("totalCategories")}</span></article>
+  `;
+}
+
 function scoreMaster(master, sort) {
   if (sort === "new") return Date.parse(master.createdAt || "2026-01-01");
   if (sort === "popular") return Number(master.views || 0);
@@ -995,6 +1196,7 @@ function renderMasterCard(master) {
         <p class="master-meta">${master.description || master.services.join(", ")}</p>
         <div class="price">${t("from")} ${money(master.price)}</div>
         <div class="reviews">${formatExperience(master.experience)} · ${masterStats(master, reviewCount)}</div>
+        <div class="master-performance">${masterPerformance(master)}</div>
         <div class="card-actions">
           <a class="btn btn-dark" href="master.html?id=${master.id}" data-track="master_card_open" data-master-id="${master.id}">${t("viewCard")}</a>
           <a class="btn btn-line" href="${links.whatsapp}" target="_blank" rel="noopener" data-track="whatsapp_click" data-master-id="${master.id}">WhatsApp</a>
@@ -1134,6 +1336,7 @@ function renderDetail(options = {}) {
   const id = new URLSearchParams(window.location.search).get("id") || masters[0].id;
   const master = getAllMasters().find((item) => item.id === id) || masters[0];
   const links = contactLinks(master);
+  const gallery = [master.photo, ...(Array.isArray(master.works) ? master.works : [])].filter(Boolean);
   const related = getAllMasters()
     .filter((item) => item.id !== master.id && item.category === master.category && item.city === master.city)
     .slice(0, 3);
@@ -1143,7 +1346,9 @@ function renderDetail(options = {}) {
   detail.innerHTML = `
     <article class="detail-card">
       <div class="detail-photo">
-        <img src="${master.photo}" alt="${master.name}">
+        <button class="photo-open" type="button" data-gallery-index="0" aria-label="${t("openPhoto")}">
+          <img src="${master.photo}" alt="${master.name}">
+        </button>
       </div>
       <div class="detail-content">
         <div class="badges">
@@ -1156,10 +1361,12 @@ function renderDetail(options = {}) {
         <p>${master.description}</p>
         <div class="price">${t("pricesFrom")} ${money(master.price)}</div>
         <div class="reviews">${formatExperience(master.experience)} · ${masterStats(master, master.reviews.length)}</div>
+        <div class="master-performance">${masterPerformance(master)}</div>
         <div class="card-actions">
           <a class="btn btn-line" href="${links.whatsapp}" target="_blank" rel="noopener" data-track="whatsapp_click" data-master-id="${master.id}">${t("writeWhatsapp")}</a>
           <a class="btn btn-line" href="${links.telegram}" target="_blank" rel="noopener" data-track="telegram_click" data-master-id="${master.id}">${t("writeTelegram")}</a>
           <a class="btn btn-primary" href="${links.phone}" data-track="call_click" data-master-id="${master.id}">${t("call")}</a>
+          <a class="btn btn-line" href="${adminWhatsAppUrl(`${t("reportWhatsappText")} ${master.name} (${SITE_BASE_URL}master.html?id=${master.id})`)}" target="_blank" rel="noopener" data-track="report_master" data-master-id="${master.id}">${t("reportMaster")}</a>
         </div>
         <section>
           <h2>${t("servicesList")}</h2>
@@ -1168,7 +1375,7 @@ function renderDetail(options = {}) {
         <section>
           <h2>${t("workPhotos")}</h2>
           <div class="works">
-            ${master.works.map((src) => `<img src="${src}" alt="${t("workPhotos")} ${master.name}" loading="lazy">`).join("")}
+            ${master.works.map((src, index) => `<button class="photo-open work-photo" type="button" data-gallery-index="${index + 1}" aria-label="${t("openPhoto")}"><img src="${src}" alt="${t("workPhotos")} ${master.name}" loading="lazy"></button>`).join("")}
           </div>
         </section>
         <section>
@@ -1176,12 +1383,65 @@ function renderDetail(options = {}) {
           <div class="review-list">
             ${master.reviews.map((review) => `<blockquote><strong>${review.name} · ${review.rating}/5</strong><br>${review.text}<small>${review.date}</small></blockquote>`).join("") || `<p class='muted'>${t("noReviews")}</p>`}
           </div>
-          <a class="btn btn-line" href="https://t.me/share/url?text=${encodeURIComponent(`Отзыв для ${master.name} на KARO Master`)}" target="_blank" rel="noopener">${t("leaveReview")}</a>
+          <a class="btn btn-line" href="${adminWhatsAppUrl(`${t("reviewWhatsappText")} ${master.name}`)}" target="_blank" rel="noopener" data-track="review_click" data-master-id="${master.id}">${t("leaveReview")}</a>
         </section>
       </div>
     </article>
     ${related.length ? `<section class="section catalog"><h2>${t("similarMasters")}</h2><div class="masters-grid">${related.map(renderMasterCard).join("")}</div></section>` : ""}
   `;
+  bindGallery(gallery, master);
+}
+
+function bindGallery(images, master) {
+  if (!images.length) return;
+  let activeIndex = 0;
+  let modal = document.querySelector("#photoLightbox");
+  if (!modal) {
+    modal = document.createElement("div");
+    modal.id = "photoLightbox";
+    modal.className = "photo-lightbox";
+    modal.hidden = true;
+    modal.innerHTML = `
+      <div class="photo-lightbox-backdrop" data-close-gallery></div>
+      <div class="photo-lightbox-panel" role="dialog" aria-modal="true">
+        <button class="photo-lightbox-close" type="button" data-close-gallery aria-label="${t("close")}">×</button>
+        <button class="photo-lightbox-nav prev" type="button" data-gallery-prev aria-label="${t("prevPhoto")}">‹</button>
+        <img alt="">
+        <button class="photo-lightbox-nav next" type="button" data-gallery-next aria-label="${t("nextPhoto")}">›</button>
+        <div class="photo-lightbox-count"></div>
+      </div>
+    `;
+    document.body.appendChild(modal);
+  }
+  const image = modal.querySelector("img");
+  const count = modal.querySelector(".photo-lightbox-count");
+  const show = (index) => {
+    activeIndex = (index + images.length) % images.length;
+    image.src = images[activeIndex];
+    image.alt = `${master.name} ${activeIndex + 1}`;
+    count.textContent = `${activeIndex + 1} / ${images.length}`;
+    modal.hidden = false;
+    document.body.classList.add("modal-open");
+  };
+  const close = () => {
+    modal.hidden = true;
+    document.body.classList.remove("modal-open");
+  };
+  document.querySelectorAll("[data-gallery-index]").forEach((button) => {
+    button.addEventListener("click", () => {
+      trackEvent("photo_open", master, String(Number(button.dataset.galleryIndex) + 1));
+      show(Number(button.dataset.galleryIndex || 0));
+    });
+  });
+  modal.querySelector("[data-gallery-prev]").onclick = () => show(activeIndex - 1);
+  modal.querySelector("[data-gallery-next]").onclick = () => show(activeIndex + 1);
+  modal.querySelectorAll("[data-close-gallery]").forEach((button) => button.onclick = close);
+  document.onkeydown = (event) => {
+    if (modal.hidden) return;
+    if (event.key === "Escape") close();
+    if (event.key === "ArrowLeft") show(activeIndex - 1);
+    if (event.key === "ArrowRight") show(activeIndex + 1);
+  };
 }
 
 function bindVipButtons() {
@@ -1265,12 +1525,14 @@ function renderAdmin() {
   });
 }
 
+initExternalAnalytics();
 initSelects();
 initLanguageSwitcher();
 trackEvent("site_view", {}, currentPageName());
 renderCategories();
 renderCities();
 renderVipMasters();
+renderHomeStats();
 bindSearch();
 bindAddForm();
 bindVipButtons();
