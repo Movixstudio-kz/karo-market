@@ -1057,6 +1057,11 @@ function contactLinks(master) {
   };
 }
 
+function masterUrl(master) {
+  const staticIds = new Set(masters.map((item) => item.id));
+  return staticIds.has(master.id) ? `m/${master.id}.html` : `master.html?id=${encodeURIComponent(master.id)}`;
+}
+
 function optionHtml(item) {
   const label = cities.includes(item) ? translateCity(item) : translateCategory(item);
   return `<option value="${item}">${label}</option>`;
@@ -1215,7 +1220,7 @@ function renderMasterCard(master) {
   const reviewCount = Array.isArray(master.reviews) ? master.reviews.length : Number(master.reviewCount || 0);
   return `
     <article class="master-card ${master.vip ? "vip" : ""}">
-      <a class="card-photo" href="master.html?id=${master.id}" aria-label="${master.name}" data-track="master_card_open" data-master-id="${master.id}">
+      <a class="card-photo" href="${masterUrl(master)}" aria-label="${master.name}" data-track="master_card_open" data-master-id="${master.id}">
         <img src="${master.photo}" alt="${master.name}" loading="lazy">
       </a>
       <div class="card-body">
@@ -1236,7 +1241,7 @@ function renderMasterCard(master) {
         <div class="reviews">${formatExperience(master.experience)} · ${masterStats(master, reviewCount)}</div>
         <div class="master-performance">${masterPerformance(master)}</div>
         <div class="card-actions">
-          <a class="btn btn-dark" href="master.html?id=${master.id}" data-track="master_card_open" data-master-id="${master.id}">${t("viewCard")}</a>
+          <a class="btn btn-dark" href="${masterUrl(master)}" data-track="master_card_open" data-master-id="${master.id}">${t("viewCard")}</a>
           <a class="btn btn-line" href="${links.whatsapp}" target="_blank" rel="noopener" data-track="whatsapp_click" data-master-id="${master.id}">WhatsApp</a>
           <a class="btn btn-primary" href="${links.phone}" data-track="call_click" data-master-id="${master.id}">${t("call")}</a>
         </div>
@@ -1399,7 +1404,7 @@ function renderDetail(options = {}) {
   const detail = document.querySelector("#masterDetail");
   if (!detail) return;
 
-  const id = new URLSearchParams(window.location.search).get("id") || masters[0].id;
+  const id = new URLSearchParams(window.location.search).get("id") || document.body.dataset.masterId || masters[0].id;
   const master = getAllMasters().find((item) => item.id === id) || masters[0];
   const links = contactLinks(master);
   const gallery = [master.photo, ...(Array.isArray(master.works) ? master.works : [])].filter(Boolean);
